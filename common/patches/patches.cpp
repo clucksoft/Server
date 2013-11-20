@@ -17,7 +17,7 @@ void RegisterAllPatches(EQStreamIdentifier &into) {
 	SoD::Register(into);
 	Underfoot::Register(into);
 	RoF1::Register(into);
-	//RoF2::Register(into); // not ready (should be remarked out, if not already)
+	RoF2::Register(into); // not ready (should be remarked out, if not already)
 }
 
 void ReloadAllPatches() {
@@ -27,5 +27,5 @@ void ReloadAllPatches() {
 	SoD::Reload();
 	Underfoot::Reload();
 	RoF1::Reload();
-	//RoF2::Reload(); // not ready (should be remarked out, if not already)
+	RoF2::Reload(); // not ready (should be remarked out, if not already)
 }
