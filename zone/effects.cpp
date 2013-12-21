@@ -237,6 +237,7 @@ int32 Client::Additional_Heal(uint16 spell_id)
 
 	heal_amt += GetFocusEffect(focusAdditionalHeal, spell_id);
 	heal_amt += GetFocusEffect(focusAdditionalHeal2, spell_id);
+	heal_amt -= GetFocusEffect(focusReduceHeal, spell_id);
 
 	if (heal_amt){
 		int duration = CalcBuffDuration(this, this, spell_id);
@@ -611,6 +612,7 @@ bool Client::UseDiscipline(uint32 spell_id, uint32 target) {
 
 	if(GetEndurance() > spell.EndurCost) {
 		SetEndurance(GetEndurance() - spell.EndurCost);
+		TryTriggerOnValueAmount(false, false, true);
 	} else {
 		Message(11, "You are too fatigued to use this skill right now.");
 		return(false);

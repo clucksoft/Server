@@ -220,6 +220,7 @@ public:
 	virtual bool HasGroup() { return (GetGroup() ? true : false); }
 	virtual Raid* GetRaid() { return entity_list.GetRaidByClient(this); }
 	virtual Group* GetGroup() { return entity_list.GetGroupByClient(this); }
+	virtual inline bool IsBerserk() { return berserk; }
 
 	void	AI_Init();
 	void	AI_Start(uint32 iMoveDelay = 0);
@@ -818,6 +819,7 @@ public:
 	void	LinkDead();
 	void	Insight(uint32 t_id);
 	bool	CheckDoubleAttack(bool tripleAttack = false);
+	bool	CheckArcheryDoubleAttack();
 
 	//remove charges/multiple objects from inventory:
 	//bool	DecreaseByType(uint32 type, uint8 amt);
@@ -827,7 +829,7 @@ public:
 	void	RemoveNoRent(bool client_update = true);
 	void	RemoveDuplicateLore(bool client_update = true);
 	void	MoveSlotNotAllowed(bool client_update = true);
-	virtual void	RangedAttack(Mob* other);
+	virtual void	RangedAttack(Mob* other, bool CanDoubleAttack = false);
 	virtual void	ThrowingAttack(Mob* other);
 	void	DoClassAttacks(Mob *ca_target, uint16 skill = -1, bool IsRiposte=false);
 
@@ -1198,6 +1200,8 @@ protected:
 	VERTEX aa_los_them;
 	Mob *aa_los_them_mob;
 	bool los_status;
+	float aa_los_me_heading;
+	bool los_status_facing;
 	QGlobalCache *qGlobals;
 
 	/** Adventure Variables **/

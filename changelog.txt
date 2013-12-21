@@ -1,6 +1,54 @@
 EQEMu Changelog (Started on Sept 24, 2003 15:50)
 -------------------------------------------------------
+== 12/16/2013 ==
+Kayen: Implemented SE_ArcheryDoubleAttack (Chance to do an extra archery attack)
+Kayen: Implemented SE_ShieldEquipDmgMod (Increase damage in primary hand if shield equiped)
+Kayen: Implemented SE_ShieldEquipHateMod (Increase hate generated if shield equiped)
+Kayen: Implemented SE_TriggerOnAmountValue (Trigger spell if HP/Mana/End bellow X value or num pet on target)
+
+== 12/16/2013 ==
+Kayen: Fix to SE_BlockNextSpellFocus to make it functional again.
+
+== 12/15/2013 ==
+demonstar55: Moved the blocked buff check down so we get spell effects like on live
+Kayen: Implemented SE_ReduceHealing (Reduces amount of healing on target by X amount)
+Kayen: Implemented SE_CastonFocusEffect (Triggers spell as part of a focus, when that focus effect is used)
+Kayen: Implemented SE_IncreaseHitDmgTaken (Effect is triggered when X amount of damage is taken)
+Kayen: More fixes for various spell triggers/procs to now properly use their resist modifier.
+
+== 12/14/2013 ==
+demonstar55: Blocked buffs shouldn't fail, they should just not be applied.
+JJ: Changed enable/disable recipe to confirm change made.
+
+== 12/13/2013 ==
+Kayen: Implemented additional functionality for SE_CurrentHP utilizing base2 values. (ie limit to body type)
+Kayen: Implemented SE_MitigateMeleeDamageSP (Partial Melee Rune that only is lowered if melee hits are over X amount of damage)
+Kayen: Implemented SE_SpellOnAmtDmgTaken (Effect is triggered when X amount of damage is taken)
+Kayen: Fix for various spell triggers/procs to now properly use their resist modifier.
+Kayen: Fix to mob->ModSkillDmgTaken(skill_num, value), setting value to -1 will now properly effect all skills.
+
+== 12/11/2013 ==
+demonstar55: Fixed issue with crippling blow from berserker frenzy not actually doing anything
+demonstar55: Fix haste caps
+
+== 12/04/2013 ==
+demonstar55: Fixed SpellType_Charm case in AICastSpell
+
+== 12/03/2013 ==
+demonstar55: Added #showspellslist to view a mobs spell list
+demonstar55: Fix procing off of unattackable things
+
+== 12/02/2013 ==
+JJ: Bandaid fix to CopyCharacter function.
+
+== 11/29/2013 ==
+demonstar55: Stacking issues should be resolved now, probably could be optimized more, but went from 3 loops that do stuff to 3 where only 2 really does stuff and one breaks early in most cases, so slightly better
+
+== 11/23/2013 ==
+Secrets: Fixed an issue related to a zone crash where the count of the abilities in an AA was 0, leading to a size 0 buffer issue.
+
 == 11/19/2013 ==
+Secrets: Fixed an issue with two zone crashes reported on PEQ related to the buff restrictions code and AAs.
 demonstar55: Partially make use of dot_stacking_exempt (case when it's 1 is implemented, -1 case isn't)
 
 == 11/18/2013 ==

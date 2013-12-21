@@ -177,6 +177,7 @@ Mob::Mob(const char* in_name,
 	slow_mitigation= 0;
 	findable	= false;
 	trackable	= true;
+	has_shieldequiped = false;
 
 	if(in_aa_title>0)
 		aa_title	= in_aa_title;
@@ -1875,35 +1876,43 @@ void Mob::SetOwnerID(uint16 NewOwnerID) {
 		this->Depop();
 }
 
-//heko: for backstab
-bool Mob::BehindMob(Mob* other, float playerx, float playery) const {
-	if (!other)
-		return true; // sure your behind your invisible friend?? (fall thru for sneak)
-	//see if player is behind mob
-	float angle, lengthb, vectorx, vectory;
-	float mobx = -(other->GetX());	// mob xlocation (inverse because eq is confused)
-	float moby = other->GetY();		// mobylocation
+// used in checking for behind (backstab) and checking in front (melee LoS)
+float Mob::MobAngle(Mob *other, float ourx, float oury) const {
+	if (!other || other == this)
+		return 0.0f;
+
+	float angle, lengthb, vectorx, vectory, dotp;
+	float mobx = -(other->GetX());	// mob xloc (inverse because eq)
+	float moby = other->GetY();		// mob yloc
 	float heading = other->GetHeading();	// mob heading
 	heading = (heading * 360.0f) / 256.0f;	// convert to degrees
 	if (heading < 270)
 		heading += 90;
 	else
 		heading -= 270;
+
 	heading = heading * 3.1415f / 180.0f;	// convert to radians
 	vectorx = mobx + (10.0f * cosf(heading));	// create a vector based on heading
 	vectory = moby + (10.0f * sinf(heading));	// of mob length 10
 
-	//length of mob to player vector
-	//lengthb = (float)sqrtf(pow((-playerx-mobx),2) + pow((playery-moby),2));
-	lengthb = (float) sqrtf( ( (-playerx-mobx) * (-playerx-mobx) ) + ( (playery-moby) * (playery-moby) ) );
+	// length of mob to player vector
+	lengthb = (float) sqrtf(((-ourx - mobx) * (-ourx - mobx)) + ((oury - moby) * (oury - moby)));
 
 	// calculate dot product to get angle
-	angle = acosf(((vectorx-mobx)*(-playerx-mobx)+(vectory-moby)*(playery-moby)) / (10 * lengthb));
+	// Handle acos domain errors due to floating point rounding errors
+	dotp = ((vectorx - mobx) * (-ourx - mobx) +
+			(vectory - moby) * (oury - moby)) / (10 * lengthb);
+	// I haven't seen any errors that  cause problems that weren't slightly
+	// larger/smaller than 1/-1, so only handle these cases for now
+	if (dotp > 1)
+		return 0.0f;
+	else if (dotp < -1)
+		return 180.0f;
+
+	angle = acosf(dotp);
 	angle = angle * 180.0f / 3.1415f;
-	if (angle > 90.0f) //not sure what value to use (90*2=180 degrees is front)
-		return true;
-	else
-		return false;
+
+	return angle;
 }
 
 void Mob::SetZone(uint32 zone_id, uint32 instance_id)
@@ -2875,33 +2884,42 @@ uint32 Mob::GetZoneID() const {
 }
 
 int Mob::GetHaste() {
-	int h = spellbonuses.haste + spellbonuses.hastetype2 + itembonuses.haste;
+	int h = spellbonuses.haste + spellbonuses.hastetype2;
 	int cap = 0;
+	int overhaste = 0;
 	int level = GetLevel();
 
-	if(level < 30) { // Rogean: Are these caps correct? Will use for now.
-		cap = 50;
-	} else if(level < 50) {
-		cap = 74;
-	} else if(level < 55) {
-		cap = 84;
-	} else if(level < 60) {
-		cap = 94;
-	} else {
+	// 26+ no cap, 1-25 10
+	if (level > 25) // 26+
+		h += itembonuses.haste;
+	else // 1-25
+		h += itembonuses.haste > 10 ? 10 : itembonuses.haste;
+
+	// 60+ 100, 51-59 85, 1-50 level+25
+	if (level > 59) // 60+
 		cap = RuleI(Character, HasteCap);
-	}
+	else if (level > 50) // 51-59
+		cap = 85;
+	else // 1-50
+		cap = level + 25;
 
-	if(h > cap) h = cap;
+	if(h > cap)
+		h = cap;
 
-	h += spellbonuses.hastetype3;
+	// 51+ 25 (despite there being higher spells...), 1-50 10
+	if (level > 50) // 51+
+		overhaste = spellbonuses.hastetype3 > 25 ? 25 : spellbonuses.hastetype3;
+	else // 1-50
+		overhaste = spellbonuses.hastetype3 > 10 ? 10 : spellbonuses.hastetype3;
+
+	h += overhaste;
 	h += ExtraHaste;	//GM granted haste.
 
-	if (spellbonuses.inhibitmelee){
+	if (spellbonuses.inhibitmelee) {
 		if (h >= 0)
 			h -= spellbonuses.inhibitmelee;
-
 		else
-			h -=((100+h)*spellbonuses.inhibitmelee/100);
+			h -= ((100 + h) * spellbonuses.inhibitmelee / 100);
 	}
 
 	return(h);
@@ -3130,14 +3148,14 @@ void Mob::TriggerOnCast(uint32 focus_spell, uint32 spell_id, bool aa_trigger)
 		trigger_spell_id = CastToClient()->CalcAAFocus(focusTriggerOnCast, focus_spell, spell_id);
 
 		if(IsValidSpell(trigger_spell_id) && GetTarget())
-			SpellFinished(trigger_spell_id, GetTarget());
+			SpellFinished(trigger_spell_id, GetTarget(), 10, 0, -1, spells[trigger_spell_id].ResistDiff);
 	}
 
 	else{
 		trigger_spell_id = CalcFocusEffect(focusTriggerOnCast, focus_spell, spell_id);
 
 		if(IsValidSpell(trigger_spell_id) && GetTarget()){
-			SpellFinished(trigger_spell_id, GetTarget());
+			SpellFinished(trigger_spell_id, GetTarget(),10, 0, -1, spells[trigger_spell_id].ResistDiff);
 			CheckHitsRemaining(0, false,false, 0, focus_spell);
 		}
 	}
@@ -3167,7 +3185,7 @@ void Mob::TrySpellTrigger(Mob *target, uint32 spell_id)
 				if(MakeRandomInt(0, trig_chance) <= spells[spell_id].base[i])
 				{
 					// If we trigger an effect then its over.
-					SpellFinished(spells[spell_id].base2[i], target);
+					SpellFinished(spells[spell_id].base2[i], target, 10, 0, -1, spells[spell_id].ResistDiff);
 					break;
 				}
 				else
@@ -3188,7 +3206,7 @@ void Mob::TrySpellTrigger(Mob *target, uint32 spell_id)
 			{
 				if(MakeRandomInt(0, 100) <= spells[spell_id].base[i])
 				{
-					SpellFinished(spells[spell_id].base2[i], target);
+					SpellFinished(spells[spell_id].base2[i], target, 10, 0, -1, spells[spell_id].ResistDiff);
 				}
 			}
 		}
@@ -3204,16 +3222,90 @@ void Mob::TryApplyEffect(Mob *target, uint32 spell_id)
 
 	for(int i = 0; i < EFFECT_COUNT; i++)
 	{
-		if (spells[spell_id].effectid[i] == SE_ApplyEffect)
+		if (spells[spell_id].effectid[i] == SE_ApplyEffect || spells[spell_id].effectid[i] == SE_ApplyEffect2)
 		{
 			if(MakeRandomInt(0, 100) <= spells[spell_id].base[i])
 			{
 				if(target)
-					SpellFinished(spells[spell_id].base2[i], target);
+					SpellFinished(spells[spell_id].base2[i], target, 10, 0, -1, spells[spell_id].ResistDiff);
 			}
 		}
 	}
 }
+
+void Mob::TryTriggerOnValueAmount(bool IsHP, bool IsMana, bool IsEndur, bool IsPet)
+{
+	/*
+	Base2 Range: 500-520 = Below (base2 - 500)*5 HP
+	Base2 Range: 521	 = Below (?) Mana UKNOWN - Will assume its 20% unless proven otherwise
+	Base2 Range: 522	 = Below (40%) Endurance
+	Base2 Range: 523	 = Below (40%) Mana
+	Base2 Range: 220-?	 = Number of pets on hatelist to trigger (base2 - 220) (Set at 30 pets max for now)
+	*/
+
+	if (!spellbonuses.TriggerOnValueAmount)
+		return;
+	
+	if (spellbonuses.TriggerOnValueAmount){
+
+		int buff_count = GetMaxTotalSlots();
+
+		for(int e = 0; e < buff_count; e++){
+
+			uint32 spell_id = buffs[e].spellid;
+
+			if (IsValidSpell(spell_id)){
+
+				for(int i = 0; i < EFFECT_COUNT; i++){
+
+					if (spells[spell_id].effectid[i] == SE_TriggerOnValueAmount){
+
+						int base2 = spells[spell_id].base2[i];
+						bool use_spell = false;
+
+						if (IsHP){
+							if ((base2 >= 500 && base2 <= 520) && GetHPRatio() < (base2 - 500)*5){
+								use_spell = true;
+							}
+						}
+
+						else if (IsMana){
+							if ( (base2 = 521 && GetManaRatio() < 20) || (base2 = 523 && GetManaRatio() < 40)) {
+								use_spell = true;
+							}
+						}
+
+						else if (IsEndur){
+							if (base2 = 522 && GetEndurancePercent() < 40){
+								use_spell = true;
+							}
+						}
+
+						else if (IsPet){
+							int count = hate_list.SummonedPetCount(this);
+							if ((base2 >= 220 && base2 <= 250) && count >= (base2 - 220)){
+								use_spell = true;
+							}
+						}
+
+						if (use_spell){
+							SpellFinished(spells[spell_id].base[i], this, 10, 0, -1, spells[spell_id].ResistDiff);
+							
+							/*Note, spell data shows numhits values of 0 or 1, however many descriptions of these spells indicate they should
+							be fading when consumed even with numhits of 0 (It makes sense they should fade...).
+							Unless proven otherwise, they should fade when triggered. */
+							
+							if(!TryFadeEffect(e))
+								BuffFadeBySlot(e);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
 //Twincast Focus effects should stack across different types (Spell, AA - when implemented ect)
 void Mob::TryTwincast(Mob *caster, Mob *target, uint32 spell_id)
 {
@@ -3229,7 +3321,7 @@ void Mob::TryTwincast(Mob *caster, Mob *target, uint32 spell_id)
 			if(MakeRandomInt(0, 100) <= focus)
 			{
 				Message(MT_Spells,"You twincast %s!",spells[spell_id].name);
-				SpellFinished(spell_id, target);
+				SpellFinished(spell_id, target, 10, 0, -1, spells[spell_id].ResistDiff);
 			}
 		}
 	}
@@ -3247,7 +3339,7 @@ void Mob::TryTwincast(Mob *caster, Mob *target, uint32 spell_id)
 				{
 					if(MakeRandomInt(0, 100) <= focus)
 					{
-						SpellFinished(spell_id, target);
+						SpellFinished(spell_id, target, 10, 0, -1, spells[spell_id].ResistDiff);
 					}
 				}
 			}
@@ -3365,7 +3457,8 @@ bool Mob::TryFadeEffect(int slot)
 	{
 		for(int i = 0; i < EFFECT_COUNT; i++)
 		{
-			if (spells[buffs[slot].spellid].effectid[i] == SE_CastOnWearoff || spells[buffs[slot].spellid].effectid[i] == SE_EffectOnFade)
+			if (spells[buffs[slot].spellid].effectid[i] == SE_CastOnWearoff || spells[buffs[slot].spellid].effectid[i] == SE_EffectOnFade
+				|| spells[buffs[slot].spellid].effectid[i] == SE_SpellOnAmtDmgTaken)
 			{
 				uint16 spell_id = spells[buffs[slot].spellid].base[i];
 				BuffFadeBySlot(slot);
@@ -3410,7 +3503,7 @@ void Mob::TrySympatheticProc(Mob *target, uint32 spell_id)
 					SpellFinished(focus_trigger, target);
 
 				else
-					SpellFinished(focus_trigger, this);
+					SpellFinished(focus_trigger, this, 10, 0, -1, spells[focus_trigger].ResistDiff);
 			}
 			// For detrimental spells, if the triggered spell is beneficial, then it will land on the caster
 			// if the triggered spell is also detrimental, then it will land on the target
@@ -3420,7 +3513,7 @@ void Mob::TrySympatheticProc(Mob *target, uint32 spell_id)
 					SpellFinished(focus_trigger, this);
 
 				else
-					SpellFinished(focus_trigger, target);
+					SpellFinished(focus_trigger, target, 10, 0, -1, spells[focus_trigger].ResistDiff);
 			}
 			CheckHitsRemaining(0, false,false, 0, focus_spell);
 		}
@@ -4190,6 +4283,9 @@ int16 Mob::GetMeleeDamageMod_SE(uint16 skill)
 	dmg_mod += itembonuses.DamageModifier[HIGHEST_SKILL+1] + spellbonuses.DamageModifier[HIGHEST_SKILL+1] + aabonuses.DamageModifier[HIGHEST_SKILL+1] +
 				itembonuses.DamageModifier[skill] + spellbonuses.DamageModifier[skill] + aabonuses.DamageModifier[skill];
 
+	if (HasShieldEquiped() && !IsOffHandAtk())
+		dmg_mod += itembonuses.ShieldEquipDmgMod[0] + spellbonuses.ShieldEquipDmgMod[0] + aabonuses.ShieldEquipDmgMod[0];
+
 	if(dmg_mod < -100)
 		dmg_mod = -100;
 
@@ -4419,7 +4515,7 @@ void Mob::ModSkillDmgTaken(SkillUseTypes skill_num, int value)
 		SkillDmgTaken_Mod[skill_num] = value;
 
 
-	else if (skill_num == 255)
+	else if (skill_num == 255 || skill_num == -1)
 		SkillDmgTaken_Mod[HIGHEST_SKILL+1] = value;
 }
 
@@ -4428,7 +4524,7 @@ int16 Mob::GetModSkillDmgTaken(const SkillUseTypes skill_num)
 	if (skill_num <= HIGHEST_SKILL)
 		return SkillDmgTaken_Mod[skill_num];
 
-	else if (skill_num == 255)
+	else if (skill_num == 255 || skill_num == -1)
 		return SkillDmgTaken_Mod[HIGHEST_SKILL+1];
 
 	return 0;
