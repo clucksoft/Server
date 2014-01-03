@@ -258,8 +258,6 @@ Mob::Mob(const char* in_name,
 	animation = 0;
 
 	logging_enabled = false;
-	isgrouped = false;
-	israidgrouped = false;
 	islooting = false;
 	_appearance = eaStanding;
 	pRunAnimSpeed = 0;
@@ -1068,7 +1066,8 @@ void Mob::CreateHPPacket(EQApplicationPacket* app)
 void Mob::SendHPUpdate()
 {
 	EQApplicationPacket hp_app;
-	Group *group;
+	//todo: group
+	//Group *group;
 
 	// destructor will free the pBuffer
 	CreateHPPacket(&hp_app);
@@ -1079,30 +1078,31 @@ void Mob::SendHPUpdate()
 	entity_list.QueueToGroupsForNPCHealthAA(this, &hp_app);
 
 	// send to group
-	if(IsGrouped())
-	{
-		group = entity_list.GetGroupByMob(this);
-		if(group) //not sure why this might be null, but it happens
-			group->SendHPPacketsFrom(this);
-	}
+	//todo: group
+	//if(IsGrouped())
+	//{
+	//	group = entity_list.GetGroupByMob(this);
+	//	if(group) //not sure why this might be null, but it happens
+	//		group->SendHPPacketsFrom(this);
+	//}
 
-	if(IsClient()){
-		Raid *r = entity_list.GetRaidByClient(CastToClient());
-		if(r){
-			r->SendHPPacketsFrom(this);
-		}
-	}
+	//if(IsClient()){
+	//	Raid *r = entity_list.GetRaidByClient(CastToClient());
+	//	if(r){
+	//		r->SendHPPacketsFrom(this);
+	//	}
+	//}
 
 	// send to master
 	if(GetOwner() && GetOwner()->IsClient())
 	{
 		GetOwner()->CastToClient()->QueuePacket(&hp_app, false);
-		group = entity_list.GetGroupByClient(GetOwner()->CastToClient());
-		if(group)
-			group->SendHPPacketsFrom(this);
-		Raid *r = entity_list.GetRaidByClient(GetOwner()->CastToClient());
-		if(r)
-			r->SendHPPacketsFrom(this);
+		//group = entity_list.GetGroupByClient(GetOwner()->CastToClient());
+		//if(group)
+		//	group->SendHPPacketsFrom(this);
+		//Raid *r = entity_list.GetRaidByClient(GetOwner()->CastToClient());
+		//if(r)
+		//	r->SendHPPacketsFrom(this);
 	}
 
 	// send to pet
@@ -4228,37 +4228,6 @@ int16 Mob::GetCritDmgMob(uint16 skill)
 		critDmg_mod = -100;
 
 	return critDmg_mod;
-}
-
-void Mob::SetGrouped(bool v)
-{
-	if(v)
-	{
-		israidgrouped = false;
-	}
-	isgrouped = v;
-
-	if(IsClient())
-	{
-			parse->EventPlayer(EVENT_GROUP_CHANGE, CastToClient(), "", 0);
-
-		if(!v)
-			CastToClient()->RemoveGroupXTargets();
-	}
-}
-
-void Mob::SetRaidGrouped(bool v)
-{
-	if(v)
-	{
-		isgrouped = false;
-	}
-	israidgrouped = v;
-
-	if(IsClient())
-	{
-		parse->EventPlayer(EVENT_GROUP_CHANGE, CastToClient(), "", 0);
-	}
 }
 
 int16 Mob::GetCriticalChanceBonus(uint16 skill)

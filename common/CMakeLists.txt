@@ -150,7 +150,6 @@ SET(common_headers
 	moremath.h
 	Mutex.h
 	op_codes.h
-	opcode_dispatch.h
 	opcodemgr.h
 	packet_dump.h
 	packet_dump_file.h

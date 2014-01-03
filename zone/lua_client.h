@@ -5,8 +5,8 @@
 #include "lua_mob.h"
 
 class Client;
-class Lua_Group;
-class Lua_Raid;
+//class Lua_Group;
+//class Lua_Raid;
 class Lua_Inventory;
 class Lua_Packet;
 
@@ -172,9 +172,9 @@ public:
 	void IncStats(int type, int value);
 	void DropItem(int slot_id);
 	void BreakInvis();
-	void LeaveGroup();
-	bool IsGrouped();
-	bool IsRaidGrouped();
+	//void LeaveGroup();
+	//bool IsGrouped();
+	//bool IsRaidGrouped();
 	bool Hungry();
 	bool Thirsty();
 	int GetInstrumentMod(int spell_id);
@@ -258,8 +258,8 @@ public:
 	bool HasSpellScribed(int spell_id);
 	void SetAccountFlag(std::string flag, std::string val);
 	std::string GetAccountFlag(std::string flag);
-	Lua_Group GetGroup();
-	Lua_Raid GetRaid();
+	//Lua_Group GetGroup();
+	//Lua_Raid GetRaid();
 	bool PutItemInInventory(int slot_id, Lua_ItemInst inst);
 	bool PushItemOnCursor(Lua_ItemInst inst);
 	Lua_Inventory GetInventory();

@@ -501,194 +501,195 @@ XS(XS_EntityList_FindDoor)
 	XSRETURN(1);
 }
 
-XS(XS_EntityList_GetGroupByMob); /* prototype to pass -Wmissing-prototypes */
-XS(XS_EntityList_GetGroupByMob)
-{
-	dXSARGS;
-	if (items != 2)
-		Perl_croak(aTHX_ "Usage: EntityList::GetGroupByMob(THIS, mob)");
-	{
-		EntityList *		THIS;
-		Group *		RETVAL;
-		Mob*		mob;
+//XS(XS_EntityList_GetGroupByMob); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_EntityList_GetGroupByMob)
+//{
+//	dXSARGS;
+//	if (items != 2)
+//		Perl_croak(aTHX_ "Usage: EntityList::GetGroupByMob(THIS, mob)");
+//	{
+//		EntityList *		THIS;
+//		Group *		RETVAL;
+//		Mob*		mob;
+//
+//		if (sv_derived_from(ST(0), "EntityList")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(EntityList *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type EntityList");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		if (sv_derived_from(ST(1), "Mob")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(1)));
+//			mob = INT2PTR(Mob *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "mob is not of type Mob");
+//		if(mob == nullptr)
+//			Perl_croak(aTHX_ "mob is nullptr, avoiding crash.");
+//
+//		RETVAL = THIS->GetGroupByMob(mob);
+//		ST(0) = sv_newmortal();
+//		sv_setref_pv(ST(0), "Group", (void*)RETVAL);
+//	}
+//	XSRETURN(1);
+//}
 
-		if (sv_derived_from(ST(0), "EntityList")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(EntityList *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type EntityList");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		if (sv_derived_from(ST(1), "Mob")) {
-			IV tmp = SvIV((SV*)SvRV(ST(1)));
-			mob = INT2PTR(Mob *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "mob is not of type Mob");
-		if(mob == nullptr)
-			Perl_croak(aTHX_ "mob is nullptr, avoiding crash.");
-
-		RETVAL = THIS->GetGroupByMob(mob);
-		ST(0) = sv_newmortal();
-		sv_setref_pv(ST(0), "Group", (void*)RETVAL);
-	}
-	XSRETURN(1);
-}
-
-XS(XS_EntityList_GetGroupByClient); /* prototype to pass -Wmissing-prototypes */
-XS(XS_EntityList_GetGroupByClient)
-{
-	dXSARGS;
-	if (items != 2)
-		Perl_croak(aTHX_ "Usage: EntityList::GetGroupByClient(THIS, client)");
-	{
-		EntityList *		THIS;
-		Group *		RETVAL;
-		Client*		client;
-
-		if (sv_derived_from(ST(0), "EntityList")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(EntityList *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type EntityList");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		if (sv_derived_from(ST(1), "Client")) {
-			IV tmp = SvIV((SV*)SvRV(ST(1)));
-			client = INT2PTR(Client *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "client is not of type Client");
-		if(client == nullptr)
-			Perl_croak(aTHX_ "client is nullptr, avoiding crash.");
-
-		RETVAL = THIS->GetGroupByClient(client);
-		ST(0) = sv_newmortal();
-		sv_setref_pv(ST(0), "Group", (void*)RETVAL);
-	}
-	XSRETURN(1);
-}
-
-XS(XS_EntityList_GetGroupByID); /* prototype to pass -Wmissing-prototypes */
-XS(XS_EntityList_GetGroupByID)
-{
-	dXSARGS;
-	if (items != 2)
-		Perl_croak(aTHX_ "Usage: EntityList::GetGroupByID(THIS, id)");
-	{
-		EntityList *		THIS;
-		Group *		RETVAL;
-		uint32		id = (uint32)SvUV(ST(1));
-
-		if (sv_derived_from(ST(0), "EntityList")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(EntityList *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type EntityList");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		RETVAL = THIS->GetGroupByID(id);
-		ST(0) = sv_newmortal();
-		sv_setref_pv(ST(0), "Group", (void*)RETVAL);
-	}
-	XSRETURN(1);
-}
-
-XS(XS_EntityList_GetGroupByLeaderName); /* prototype to pass -Wmissing-prototypes */
-XS(XS_EntityList_GetGroupByLeaderName)
-{
-	dXSARGS;
-	if (items != 2)
-		Perl_croak(aTHX_ "Usage: EntityList::GetGroupByLeaderName(THIS, leader)");
-	{
-		EntityList *		THIS;
-		Group *		RETVAL;
-		char*		leader = (char *)SvPV_nolen(ST(1));
-
-		if (sv_derived_from(ST(0), "EntityList")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(EntityList *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type EntityList");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		RETVAL = THIS->GetGroupByLeaderName(leader);
-		ST(0) = sv_newmortal();
-		sv_setref_pv(ST(0), "Group", (void*)RETVAL);
-	}
-	XSRETURN(1);
-}
-
-XS(XS_EntityList_GetRaidByID); /* prototype to pass -Wmissing-prototypes */
-XS(XS_EntityList_GetRaidByID)
-{
-	dXSARGS;
-	if (items != 2)
-		Perl_croak(aTHX_ "Usage: EntityList::GetRaidByID(THIS, id)");
-	{
-		EntityList *		THIS;
-		Raid *		RETVAL;
-		uint32		id = (uint32)SvUV(ST(1));
-
-		if (sv_derived_from(ST(0), "EntityList")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(EntityList *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type EntityList");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		RETVAL = THIS->GetRaidByID(id);
-		ST(0) = sv_newmortal();
-		sv_setref_pv(ST(0), "Raid", (void*)RETVAL);
-	}
-	XSRETURN(1);
-}
-
-XS(XS_EntityList_GetRaidByClient); /* prototype to pass -Wmissing-prototypes */
-XS(XS_EntityList_GetRaidByClient)
-{
-	dXSARGS;
-	if (items != 2)
-		Perl_croak(aTHX_ "Usage: EntityList::GetRaidByClient(THIS, client)");
-	{
-		EntityList *		THIS;
-		Raid *		RETVAL;
-		Client*		client;
-
-		if (sv_derived_from(ST(0), "EntityList")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(EntityList *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type EntityList");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		if (sv_derived_from(ST(1), "Client")) {
-			IV tmp = SvIV((SV*)SvRV(ST(1)));
-			client = INT2PTR(Client *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "client is not of type Client");
-		if(client == nullptr)
-			Perl_croak(aTHX_ "client is nullptr, avoiding crash.");
-
-		RETVAL = THIS->GetRaidByClient(client);
-		ST(0) = sv_newmortal();
-		sv_setref_pv(ST(0), "Raid", (void*)RETVAL);
-	}
-	XSRETURN(1);
-}
+//todo: group
+//XS(XS_EntityList_GetGroupByClient); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_EntityList_GetGroupByClient)
+//{
+//	dXSARGS;
+//	if (items != 2)
+//		Perl_croak(aTHX_ "Usage: EntityList::GetGroupByClient(THIS, client)");
+//	{
+//		EntityList *		THIS;
+//		Group *		RETVAL;
+//		Client*		client;
+//
+//		if (sv_derived_from(ST(0), "EntityList")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(EntityList *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type EntityList");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		if (sv_derived_from(ST(1), "Client")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(1)));
+//			client = INT2PTR(Client *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "client is not of type Client");
+//		if(client == nullptr)
+//			Perl_croak(aTHX_ "client is nullptr, avoiding crash.");
+//
+//		RETVAL = THIS->GetGroupByClient(client);
+//		ST(0) = sv_newmortal();
+//		sv_setref_pv(ST(0), "Group", (void*)RETVAL);
+//	}
+//	XSRETURN(1);
+//}
+//
+//XS(XS_EntityList_GetGroupByID); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_EntityList_GetGroupByID)
+//{
+//	dXSARGS;
+//	if (items != 2)
+//		Perl_croak(aTHX_ "Usage: EntityList::GetGroupByID(THIS, id)");
+//	{
+//		EntityList *		THIS;
+//		Group *		RETVAL;
+//		uint32		id = (uint32)SvUV(ST(1));
+//
+//		if (sv_derived_from(ST(0), "EntityList")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(EntityList *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type EntityList");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		RETVAL = THIS->GetGroupByID(id);
+//		ST(0) = sv_newmortal();
+//		sv_setref_pv(ST(0), "Group", (void*)RETVAL);
+//	}
+//	XSRETURN(1);
+//}
+//
+//XS(XS_EntityList_GetGroupByLeaderName); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_EntityList_GetGroupByLeaderName)
+//{
+//	dXSARGS;
+//	if (items != 2)
+//		Perl_croak(aTHX_ "Usage: EntityList::GetGroupByLeaderName(THIS, leader)");
+//	{
+//		EntityList *		THIS;
+//		Group *		RETVAL;
+//		char*		leader = (char *)SvPV_nolen(ST(1));
+//
+//		if (sv_derived_from(ST(0), "EntityList")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(EntityList *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type EntityList");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		RETVAL = THIS->GetGroupByLeaderName(leader);
+//		ST(0) = sv_newmortal();
+//		sv_setref_pv(ST(0), "Group", (void*)RETVAL);
+//	}
+//	XSRETURN(1);
+//}
+//
+//XS(XS_EntityList_GetRaidByID); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_EntityList_GetRaidByID)
+//{
+//	dXSARGS;
+//	if (items != 2)
+//		Perl_croak(aTHX_ "Usage: EntityList::GetRaidByID(THIS, id)");
+//	{
+//		EntityList *		THIS;
+//		Raid *		RETVAL;
+//		uint32		id = (uint32)SvUV(ST(1));
+//
+//		if (sv_derived_from(ST(0), "EntityList")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(EntityList *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type EntityList");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		RETVAL = THIS->GetRaidByID(id);
+//		ST(0) = sv_newmortal();
+//		sv_setref_pv(ST(0), "Raid", (void*)RETVAL);
+//	}
+//	XSRETURN(1);
+//}
+//
+//XS(XS_EntityList_GetRaidByClient); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_EntityList_GetRaidByClient)
+//{
+//	dXSARGS;
+//	if (items != 2)
+//		Perl_croak(aTHX_ "Usage: EntityList::GetRaidByClient(THIS, client)");
+//	{
+//		EntityList *		THIS;
+//		Raid *		RETVAL;
+//		Client*		client;
+//
+//		if (sv_derived_from(ST(0), "EntityList")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(EntityList *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type EntityList");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		if (sv_derived_from(ST(1), "Client")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(1)));
+//			client = INT2PTR(Client *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "client is not of type Client");
+//		if(client == nullptr)
+//			Perl_croak(aTHX_ "client is nullptr, avoiding crash.");
+//
+//		RETVAL = THIS->GetRaidByClient(client);
+//		ST(0) = sv_newmortal();
+//		sv_setref_pv(ST(0), "Raid", (void*)RETVAL);
+//	}
+//	XSRETURN(1);
+//}
 
 XS(XS_EntityList_GetCorpseByOwner); /* prototype to pass -Wmissing-prototypes */
 XS(XS_EntityList_GetCorpseByOwner)
@@ -943,32 +944,33 @@ XS(XS_EntityList_RemoveNPC)
 	XSRETURN(1);
 }
 
-XS(XS_EntityList_RemoveGroup); /* prototype to pass -Wmissing-prototypes */
-XS(XS_EntityList_RemoveGroup)
-{
-	dXSARGS;
-	if (items != 2)
-		Perl_croak(aTHX_ "Usage: EntityList::RemoveGroup(THIS, delete_id)");
-	{
-		EntityList *		THIS;
-		bool		RETVAL;
-		uint32		delete_id = (uint32)SvUV(ST(1));
-
-		if (sv_derived_from(ST(0), "EntityList")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(EntityList *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type EntityList");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		RETVAL = THIS->RemoveGroup(delete_id);
-		ST(0) = boolSV(RETVAL);
-		sv_2mortal(ST(0));
-	}
-	XSRETURN(1);
-}
+//todo: group
+//XS(XS_EntityList_RemoveGroup); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_EntityList_RemoveGroup)
+//{
+//	dXSARGS;
+//	if (items != 2)
+//		Perl_croak(aTHX_ "Usage: EntityList::RemoveGroup(THIS, delete_id)");
+//	{
+//		EntityList *		THIS;
+//		bool		RETVAL;
+//		uint32		delete_id = (uint32)SvUV(ST(1));
+//
+//		if (sv_derived_from(ST(0), "EntityList")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(EntityList *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type EntityList");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		RETVAL = THIS->RemoveGroup(delete_id);
+//		ST(0) = boolSV(RETVAL);
+//		sv_2mortal(ST(0));
+//	}
+//	XSRETURN(1);
+//}
 
 XS(XS_EntityList_RemoveCorpse); /* prototype to pass -Wmissing-prototypes */
 XS(XS_EntityList_RemoveCorpse)
@@ -1147,28 +1149,28 @@ XS(XS_EntityList_RemoveAllNPCs)
 	XSRETURN_EMPTY;
 }
 
-XS(XS_EntityList_RemoveAllGroups); /* prototype to pass -Wmissing-prototypes */
-XS(XS_EntityList_RemoveAllGroups)
-{
-	dXSARGS;
-	if (items != 1)
-		Perl_croak(aTHX_ "Usage: EntityList::RemoveAllGroups(THIS)");
-	{
-		EntityList *		THIS;
-
-		if (sv_derived_from(ST(0), "EntityList")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(EntityList *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type EntityList");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		THIS->RemoveAllGroups();
-	}
-	XSRETURN_EMPTY;
-}
+//XS(XS_EntityList_RemoveAllGroups); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_EntityList_RemoveAllGroups)
+//{
+//	dXSARGS;
+//	if (items != 1)
+//		Perl_croak(aTHX_ "Usage: EntityList::RemoveAllGroups(THIS)");
+//	{
+//		EntityList *		THIS;
+//
+//		if (sv_derived_from(ST(0), "EntityList")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(EntityList *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type EntityList");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		THIS->RemoveAllGroups();
+//	}
+//	XSRETURN_EMPTY;
+//}
 
 XS(XS_EntityList_RemoveAllCorpses); /* prototype to pass -Wmissing-prototypes */
 XS(XS_EntityList_RemoveAllCorpses)
@@ -2140,12 +2142,12 @@ XS(boot_EntityList)
 		newXSproto(strcpy(buf, "GetDoorsByDBID"), XS_EntityList_GetDoorsByDBID, file, "$$");
 		newXSproto(strcpy(buf, "GetDoorsByDoorID"), XS_EntityList_GetDoorsByDoorID, file, "$$");
 		newXSproto(strcpy(buf, "FindDoor"), XS_EntityList_FindDoor, file, "$$");
-		newXSproto(strcpy(buf, "GetGroupByMob"), XS_EntityList_GetGroupByMob, file, "$$");
-		newXSproto(strcpy(buf, "GetGroupByClient"), XS_EntityList_GetGroupByClient, file, "$$");
-		newXSproto(strcpy(buf, "GetGroupByID"), XS_EntityList_GetGroupByID, file, "$$");
-		newXSproto(strcpy(buf, "GetGroupByLeaderName"), XS_EntityList_GetGroupByLeaderName, file, "$$");
-		newXSproto(strcpy(buf, "GetRaidByID"), XS_EntityList_GetRaidByID, file, "$$");
-		newXSproto(strcpy(buf, "GetRaidByClient"), XS_EntityList_GetRaidByClient, file, "$$");
+		//newXSproto(strcpy(buf, "GetGroupByMob"), XS_EntityList_GetGroupByMob, file, "$$");
+		//newXSproto(strcpy(buf, "GetGroupByClient"), XS_EntityList_GetGroupByClient, file, "$$");
+		//newXSproto(strcpy(buf, "GetGroupByID"), XS_EntityList_GetGroupByID, file, "$$");
+		//newXSproto(strcpy(buf, "GetGroupByLeaderName"), XS_EntityList_GetGroupByLeaderName, file, "$$");
+		//newXSproto(strcpy(buf, "GetRaidByID"), XS_EntityList_GetRaidByID, file, "$$");
+		//newXSproto(strcpy(buf, "GetRaidByClient"), XS_EntityList_GetRaidByClient, file, "$$");
 		newXSproto(strcpy(buf, "GetCorpseByOwner"), XS_EntityList_GetCorpseByOwner, file, "$$");
 		newXSproto(strcpy(buf, "GetCorpseByID"), XS_EntityList_GetCorpseByID, file, "$$");
 		newXSproto(strcpy(buf, "GetCorpseByName"), XS_EntityList_GetCorpseByName, file, "$$");
@@ -2155,7 +2157,7 @@ XS(boot_EntityList)
 		newXSproto(strcpy(buf, "RemoveMob"), XS_EntityList_RemoveMob, file, "$$");
 		newXSproto(strcpy(buf, "RemoveClient"), XS_EntityList_RemoveClient, file, "$$");
 		newXSproto(strcpy(buf, "RemoveNPC"), XS_EntityList_RemoveNPC, file, "$$");
-		newXSproto(strcpy(buf, "RemoveGroup"), XS_EntityList_RemoveGroup, file, "$$");
+		//newXSproto(strcpy(buf, "RemoveGroup"), XS_EntityList_RemoveGroup, file, "$$");
 		newXSproto(strcpy(buf, "RemoveCorpse"), XS_EntityList_RemoveCorpse, file, "$$");
 		newXSproto(strcpy(buf, "RemoveDoor"), XS_EntityList_RemoveDoor, file, "$$");
 		newXSproto(strcpy(buf, "RemoveTrap"), XS_EntityList_RemoveTrap, file, "$$");
@@ -2163,7 +2165,7 @@ XS(boot_EntityList)
 		newXSproto(strcpy(buf, "RemoveAllMobs"), XS_EntityList_RemoveAllMobs, file, "$");
 		newXSproto(strcpy(buf, "RemoveAllClients"), XS_EntityList_RemoveAllClients, file, "$");
 		newXSproto(strcpy(buf, "RemoveAllNPCs"), XS_EntityList_RemoveAllNPCs, file, "$");
-		newXSproto(strcpy(buf, "RemoveAllGroups"), XS_EntityList_RemoveAllGroups, file, "$");
+		//newXSproto(strcpy(buf, "RemoveAllGroups"), XS_EntityList_RemoveAllGroups, file, "$");
 		newXSproto(strcpy(buf, "RemoveAllCorpses"), XS_EntityList_RemoveAllCorpses, file, "$");
 		newXSproto(strcpy(buf, "RemoveAllDoors"), XS_EntityList_RemoveAllDoors, file, "$");
 		newXSproto(strcpy(buf, "RemoveAllTraps"), XS_EntityList_RemoveAllTraps, file, "$");

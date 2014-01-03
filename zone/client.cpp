@@ -383,10 +383,6 @@ Client::~Client() {
 	if(GetTarget())
 		GetTarget()->IsTargeted(-1);
 
-	//if we are in a group and we are not zoning, force leave the group
-	if(isgrouped && !zoning && ZoneLoaded)
-		LeaveGroup();
-
 	UpdateWho(2);
 
 	if(IsHoveringForRespawn())
@@ -847,23 +843,24 @@ void Client::ChannelMessageReceived(uint8 chan_num, uint8 language, uint8 lang_s
 		break;
 	}
 	case 2: { // GroupChat
-		Raid* raid = entity_list.GetRaidByClient(this);
-		if(raid) {
-			raid->RaidGroupSay((const char*) message, this);
-			break;
-		}
-
-		Group* group = GetGroup();
-		if(group != nullptr) {
-			group->GroupMessage(this,language,lang_skill,(const char*) message);
-		}
+		//todo: group
+		//Raid* raid = entity_list.GetRaidByClient(this);
+		//if(raid) {
+		//	raid->RaidGroupSay((const char*) message, this);
+		//	break;
+		//}
+		//
+		//Group* group = GetGroup();
+		//if(group != nullptr) {
+		//	group->GroupMessage(this,language,lang_skill,(const char*) message);
+		//}
 		break;
 	}
 	case 15: { //raid say
-		Raid* raid = entity_list.GetRaidByClient(this);
-		if(raid){
-			raid->RaidSay((const char*) message, this);
-		}
+		//Raid* raid = entity_list.GetRaidByClient(this);
+		//if(raid){
+		//	raid->RaidSay((const char*) message, this);
+		//}
 		break;
 	}
 	case 3: { // Shout
@@ -1762,32 +1759,33 @@ void Client::SendManaUpdatePacket() {
 		QueuePacket(outapp);
 		safe_delete(outapp);
 
-		Group *g = GetGroup();
-
-		if(g)
-		{
-			outapp = new EQApplicationPacket(OP_MobManaUpdate, sizeof(MobManaUpdate_Struct));
-			EQApplicationPacket *outapp2 = new EQApplicationPacket(OP_MobEnduranceUpdate, sizeof(MobEnduranceUpdate_Struct));
-
-			MobManaUpdate_Struct *mmus = (MobManaUpdate_Struct *)outapp->pBuffer;
-			MobEnduranceUpdate_Struct *meus = (MobEnduranceUpdate_Struct *)outapp2->pBuffer;
-
-			mmus->spawn_id = meus->spawn_id = GetID();
-
-			mmus->mana = GetManaPercent();
-			meus->endurance = GetEndurancePercent();
-
-
-			for(int i = 0; i < MAX_GROUP_MEMBERS; ++i)
-				if(g->members[i] && g->members[i]->IsClient() && (g->members[i] != this) && (g->members[i]->CastToClient()->GetClientVersion() >= EQClientSoD))
-				{
-					g->members[i]->CastToClient()->QueuePacket(outapp);
-					g->members[i]->CastToClient()->QueuePacket(outapp2);
-				}
-
-			safe_delete(outapp);
-			safe_delete(outapp2);
-		}
+		//todo: group
+		//Group *g = GetGroup();
+		//
+		//if(g)
+		//{
+		//	outapp = new EQApplicationPacket(OP_MobManaUpdate, sizeof(MobManaUpdate_Struct));
+		//	EQApplicationPacket *outapp2 = new EQApplicationPacket(OP_MobEnduranceUpdate, sizeof(MobEnduranceUpdate_Struct));
+		//
+		//	MobManaUpdate_Struct *mmus = (MobManaUpdate_Struct *)outapp->pBuffer;
+		//	MobEnduranceUpdate_Struct *meus = (MobEnduranceUpdate_Struct *)outapp2->pBuffer;
+		//
+		//	mmus->spawn_id = meus->spawn_id = GetID();
+		//
+		//	mmus->mana = GetManaPercent();
+		//	meus->endurance = GetEndurancePercent();
+		//
+		//
+		//	for(int i = 0; i < MAX_GROUP_MEMBERS; ++i)
+		//		if(g->members[i] && g->members[i]->IsClient() && (g->members[i] != this) && (g->members[i]->CastToClient()->GetClientVersion() >= EQClientSoD))
+		//		{
+		//			g->members[i]->CastToClient()->QueuePacket(outapp);
+		//			g->members[i]->CastToClient()->QueuePacket(outapp2);
+		//		}
+		//
+		//	safe_delete(outapp);
+		//	safe_delete(outapp2);
+		//}
 
 
 		last_reported_mana = cur_mana;
@@ -3032,16 +3030,17 @@ void Client::SetLanguageSkill(int langid, int value)
 
 void Client::LinkDead()
 {
-	if (GetGroup())
-	{
-		entity_list.MessageGroup(this,true,15,"%s has gone linkdead.",GetName());
-		GetGroup()->DelMember(this);
-	}
-	Raid *raid = entity_list.GetRaidByClient(this);
-	if(raid){
-		raid->MemberZoned(this);
-	}
-//	save_timer.Start(2500);
+	//todo: group
+	//if (GetGroup())
+	//{
+	//	entity_list.MessageGroup(this,true,15,"%s has gone linkdead.",GetName());
+	//	GetGroup()->DelMember(this);
+	//}
+	//Raid *raid = entity_list.GetRaidByClient(this);
+	//if(raid){
+	//	raid->MemberZoned(this);
+	//}
+
 	linkdead_timer.Start(RuleI(Zone,ClientLinkdeadMS));
 	SendAppearancePacket(AT_Linkdead, 1);
 	client_state = CLIENT_LINKDEAD;
@@ -3606,58 +3605,60 @@ void Client::SacrificeConfirm(Client *caster) {
 //Essentially a special case death function
 void Client::Sacrifice(Client *caster)
 {
-				if(GetLevel() >= RuleI(Spells, SacrificeMinLevel) && GetLevel() <= RuleI(Spells, SacrificeMaxLevel)){
-					int exploss = (int)(GetLevel() * (GetLevel() / 18.0) * 12000);
-					if(exploss < GetEXP()){
-						SetEXP(GetEXP()-exploss, GetAAXP());
-						SendLogoutPackets();
+	if(GetLevel() >= RuleI(Spells, SacrificeMinLevel) && GetLevel() <= RuleI(Spells, SacrificeMaxLevel)){
+		int exploss = (int)(GetLevel() * (GetLevel() / 18.0) * 12000);
+		if(exploss < GetEXP()){
+			SetEXP(GetEXP()-exploss, GetAAXP());
+			SendLogoutPackets();
+	
+			//make our become corpse packet, and queue to ourself before OP_Death.
+			EQApplicationPacket app2(OP_BecomeCorpse, sizeof(BecomeCorpse_Struct));
+			BecomeCorpse_Struct* bc = (BecomeCorpse_Struct*)app2.pBuffer;
+			bc->spawn_id = GetID();
+			bc->x = GetX();
+			bc->y = GetY();
+			bc->z = GetZ();
+			QueuePacket(&app2);
+	
+			// make death packet
+			EQApplicationPacket app(OP_Death, sizeof(Death_Struct));
+			Death_Struct* d = (Death_Struct*)app.pBuffer;
+			d->spawn_id = GetID();
+			d->killer_id = caster ? caster->GetID() : 0;
+			d->bindzoneid = GetPP().binds[0].zoneId;
+			d->spell_id = SPELL_UNKNOWN;
+			d->attack_skill = 0xe7;
+			d->damage = 0;
+			app.priority = 6;
+			entity_list.QueueClients(this, &app);
+	
+			BuffFadeAll();
+			UnmemSpellAll();
+			//todo: group, also perhaps rewrite this to use a generic death formula?
+			//Group *g = GetGroup();
+			//if(g){
+			//	g->MemberZoned(this);
+			//}
+			//Raid *r = entity_list.GetRaidByClient(this);
+			//if(r){
+			//	r->MemberZoned(this);
+			//}
 
-						//make our become corpse packet, and queue to ourself before OP_Death.
-						EQApplicationPacket app2(OP_BecomeCorpse, sizeof(BecomeCorpse_Struct));
-						BecomeCorpse_Struct* bc = (BecomeCorpse_Struct*)app2.pBuffer;
-						bc->spawn_id = GetID();
-						bc->x = GetX();
-						bc->y = GetY();
-						bc->z = GetZ();
-						QueuePacket(&app2);
-
-						// make death packet
-						EQApplicationPacket app(OP_Death, sizeof(Death_Struct));
-						Death_Struct* d = (Death_Struct*)app.pBuffer;
-						d->spawn_id = GetID();
-						d->killer_id = caster ? caster->GetID() : 0;
-						d->bindzoneid = GetPP().binds[0].zoneId;
-						d->spell_id = SPELL_UNKNOWN;
-						d->attack_skill = 0xe7;
-						d->damage = 0;
-						app.priority = 6;
-						entity_list.QueueClients(this, &app);
-
-						BuffFadeAll();
-						UnmemSpellAll();
-						Group *g = GetGroup();
-						if(g){
-							g->MemberZoned(this);
-						}
-						Raid *r = entity_list.GetRaidByClient(this);
-						if(r){
-							r->MemberZoned(this);
-						}
-						ClearAllProximities();
-						if(RuleB(Character, LeaveCorpses)){
-							Corpse *new_corpse = new Corpse(this, 0);
-							entity_list.AddCorpse(new_corpse, GetID());
-							SetID(0);
-							entity_list.QueueClients(this, &app2, true);
-						}
-						Save();
-						GoToDeath();
-						caster->SummonItem(RuleI(Spells, SacrificeItemID));
-					}
-				}
-				else{
-					caster->Message_StringID(13, SAC_TOO_LOW);	//This being is not a worthy sacrifice.
-				}
+			ClearAllProximities();
+			if(RuleB(Character, LeaveCorpses)){
+				Corpse *new_corpse = new Corpse(this, 0);
+				entity_list.AddCorpse(new_corpse, GetID());
+				SetID(0);
+				entity_list.QueueClients(this, &app2, true);
+			}
+			Save();
+			GoToDeath();
+			caster->SummonItem(RuleI(Spells, SacrificeItemID));
+		}
+	}
+	else{
+		caster->Message_StringID(13, SAC_TOO_LOW);	//This being is not a worthy sacrifice.
+	}
 }
 
 void Client::SendOPTranslocateConfirm(Mob *Caster, uint16 SpellID) {
@@ -3936,14 +3937,15 @@ void Client::DiscoverItem(uint32 itemid) {
 
 void Client::UpdateLFP() {
 
-	Group *g = GetGroup();
-
-	if(g && !g->IsLeader(this)) {
-		database.SetLFP(CharacterID(), false);
-		worldserver.StopLFP(CharacterID());
-		LFP = false;
-		return;
-	}
+	//todo: group
+	//Group *g = GetGroup();
+	//
+	//if(g && !g->IsLeader(this)) {
+	//	database.SetLFP(CharacterID(), false);
+	//	worldserver.StopLFP(CharacterID());
+	//	LFP = false;
+	//	return;
+	//}
 
 	GroupLFPMemberEntry LFPMembers[MAX_GROUP_MEMBERS];
 
@@ -3960,17 +3962,17 @@ void Client::UpdateLFP() {
 	LFPMembers[0].Level = GetLevel();
 	LFPMembers[0].Zone = zone->GetZoneID();
 
-	if(g) {
-		// Fill the LFPMembers array with the rest of the group members, excluding ourself
-		// We don't fill in the class, level or zone, because we may not be able to determine
-		// them if the other group members are not in this zone. World will fill in this information
-		// for us, if it can.
-		int NextFreeSlot = 1;
-		for(unsigned int i = 0; i < MAX_GROUP_MEMBERS; i++) {
-			if((g->membername[i][0] != '\0') && strcasecmp(g->membername[i], LFPMembers[0].Name))
-				strcpy(LFPMembers[NextFreeSlot++].Name, g->membername[i]);
-		}
-	}
+	//if(g) {
+	//	// Fill the LFPMembers array with the rest of the group members, excluding ourself
+	//	// We don't fill in the class, level or zone, because we may not be able to determine
+	//	// them if the other group members are not in this zone. World will fill in this information
+	//	// for us, if it can.
+	//	int NextFreeSlot = 1;
+	//	for(unsigned int i = 0; i < MAX_GROUP_MEMBERS; i++) {
+	//		if((g->membername[i][0] != '\0') && strcasecmp(g->membername[i], LFPMembers[0].Name))
+	//			strcpy(LFPMembers[NextFreeSlot++].Name, g->membername[i]);
+	//	}
+	//}
 	worldserver.UpdateLFP(CharacterID(), LFPMembers);
 }
 
@@ -4074,11 +4076,12 @@ void Client::VoiceMacroReceived(uint32 Type, char *Target, uint32 MacroNumber) {
 
 		case VoiceMacroGroup: {
 
-			Group* g = GetGroup();
-
-			if(g)
-				GroupOrRaidID = g->GetID();
-			else
+			//todo: group
+			//Group* g = GetGroup();
+			//
+			//if(g)
+			//	GroupOrRaidID = g->GetID();
+			//else
 				return;
 
 			break;
@@ -4086,11 +4089,12 @@ void Client::VoiceMacroReceived(uint32 Type, char *Target, uint32 MacroNumber) {
 
 		case VoiceMacroRaid: {
 
-			Raid* r = GetRaid();
-
-			if(r)
-				GroupOrRaidID = r->GetID();
-			else
+			//todo: group
+			//Raid* r = GetRaid();
+			//
+			//if(r)
+			//	GroupOrRaidID = r->GetID();
+			//else
 				return;
 
 			break;
@@ -4138,15 +4142,16 @@ bool Client::IsLeadershipEXPOn()
 	if(!m_pp.leadAAActive)
 		return false;
 
-	Group *g = GetGroup();
-
-	if(g && g->IsLeader(this) && (g->GroupCount() > 2))
-		return true;
-
-	Raid *r = GetRaid();
-
-	if(r && r->IsLeader(this) && (r->RaidCount() > 17))
-		return true;
+	//todo: group
+	//Group *g = GetGroup();
+	//
+	//if(g && g->IsLeader(this) && (g->GroupCount() > 2))
+	//	return true;
+	//
+	//Raid *r = GetRaid();
+	//
+	//if(r && r->IsLeader(this) && (r->RaidCount() > 17))
+	//	return true;
 
 	return false;
 
@@ -4396,18 +4401,19 @@ void Client::HandleLDoNOpen(NPC *target)
 			target->AddToHateList(this, 0, 500000, false, false, false);
 			if(target->GetLDoNTrapType() != 0)
 			{
-				if(GetRaid())
-				{
-					GetRaid()->SplitExp(target->GetLevel()*target->GetLevel()*2625/10, target);
-				}
-				else if(GetGroup())
-				{
-					GetGroup()->SplitExp(target->GetLevel()*target->GetLevel()*2625/10, target);
-				}
-				else
-				{
-					AddEXP(target->GetLevel()*target->GetLevel()*2625/10, GetLevelCon(target->GetLevel()));
-				}
+				//todo: group
+				//if(GetRaid())
+				//{
+				//	GetRaid()->SplitExp(target->GetLevel()*target->GetLevel()*2625/10, target);
+				//}
+				//else if(GetGroup())
+				//{
+				//	GetGroup()->SplitExp(target->GetLevel()*target->GetLevel()*2625/10, target);
+				//}
+				//else
+				//{
+				//	AddEXP(target->GetLevel()*target->GetLevel()*2625/10, GetLevelCon(target->GetLevel()));
+				//}
 			}
 			target->Death(this, 1, SPELL_UNKNOWN, SkillHandtoHand);
 		}

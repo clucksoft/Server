@@ -371,12 +371,6 @@ public:
 	inline const uint8 GetTarNDX() const { return tar_ndx; }
 	bool IsBoat() const;
 
-	//Group
-	virtual bool HasRaid() = 0;
-	virtual bool HasGroup() = 0;
-	virtual Raid* GetRaid() = 0;
-	virtual Group* GetGroup() = 0;
-
 	//Faction
 	virtual inline int32 GetPrimaryFaction() const { return 0; }
 
@@ -742,10 +736,6 @@ public:
 	inline float GetSpellX() const {return spell_x;}
 	inline float GetSpellY() const {return spell_y;}
 	inline float GetSpellZ() const {return spell_z;}
-	inline bool IsGrouped() const { return isgrouped; }
-	void SetGrouped(bool v);
-	inline bool IsRaidGrouped() const { return israidgrouped; }
-	void SetRaidGrouped(bool v);
 	inline bool IsLooting() const { return islooting; }
 	void SetLooting(bool val) { islooting = val; }
 
@@ -868,9 +858,6 @@ protected:
 	bool m_AllowBeneficial;
 	bool m_DisableMelee;
 
-	bool isgrouped;
-	bool israidgrouped;
-	bool pendinggroup;
 	bool islooting;
 	uint8 texture;
 	uint8 helmtexture;

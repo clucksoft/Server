@@ -50,8 +50,6 @@ public:
 	Timer object_timer;
 	Timer door_timer;
 	Timer corpse_timer;
-	Timer group_timer;
-	Timer raid_timer;
 	Timer trap_timer;
 private:
 	uint16 ZonePort;

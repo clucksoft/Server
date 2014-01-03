@@ -39,8 +39,6 @@ class Corpse;
 class Beacon;
 class Petition;
 class Object;
-class Group;
-class Raid;
 class Doors;
 class Trap;
 class Entity;
@@ -48,7 +46,6 @@ class EntityList;
 
 #ifdef BOTS
 class Bot;
-class BotRaids;
 #endif
 
 extern EntityList entity_list;
@@ -144,14 +141,6 @@ public:
 	Client* GetClientByWID(uint32 iWID);
 	Client* GetClient(uint32 ip, uint16 port);
 	Client* GetRandomClient(float x, float y, float z, float Distance, Client *ExcludeClient = nullptr);
-	Group*	GetGroupByMob(Mob* mob);
-	Group*	GetGroupByClient(Client* client);
-	Group*	GetGroupByID(uint32 id);
-	Group*	GetGroupByLeaderName(const char* leader);
-	Raid*	GetRaidByMob(Mob* mob);
-	Raid*	GetRaidByClient(Client* client);
-	Raid*	GetRaidByID(uint32 id);
-	Raid*	GetRaidByLeaderName(const char *leader);
 
 	Corpse*	GetCorpseByOwner(Client* client);
 	Corpse*	GetCorpseByOwnerWithinRange(Client* client, Mob* center, int range);
@@ -179,9 +168,6 @@ public:
 	void	SendGuildMembers(uint32 guild_id);
 	void	RefreshAllGuildInfo(uint32 guild_id);
 	void	SendGuildList();
-	void	CheckGroupList (const char *fname, const int fline);
-	void	GroupProcess();
-	void	RaidProcess();
 	void	DoorProcess();
 	void	ObjectProcess();
 	void	CorpseProcess();
@@ -206,10 +192,6 @@ public:
 	void	AddMerc(Merc*, bool SendSpawnPacket = true, bool dontqueue = false);
 	void	AddCorpse(Corpse* pc, uint32 in_id = 0xFFFFFFFF);
 	void	AddObject(Object*, bool SendSpawnPacket = true);
-	void	AddGroup(Group*);
-	void	AddGroup(Group*, uint32 id);
-	void	AddRaid(Raid *raid);
-	void	AddRaid(Raid*, uint32 id);
 	void	AddDoor(Doors* door);
 	void	AddTrap(Trap* trap);
 	void	AddBeacon(Beacon *beacon);
@@ -221,8 +203,6 @@ public:
 	bool	RemoveClient(Client* delete_client);
 	bool	RemoveNPC(uint16 delete_id);
 	bool	RemoveMerc(uint16 delete_id);
-	bool	RemoveGroup(uint32 delete_id);
-	bool	RemoveRaid(uint32 delete_id);
 	bool	RemoveCorpse(uint16 delete_id);
 	bool	RemoveDoor(uint16 delete_id);
 	bool	RemoveTrap(uint16 delete_id);
@@ -232,7 +212,6 @@ public:
 	void	RemoveAllClients();
 	void	RemoveAllNPCs();
 	void	RemoveAllMercs();
-	void	RemoveAllGroups();
 	void	RemoveAllCorpses();
 	void	RemoveAllDoors();
 	void	DespawnAllDoors();
@@ -240,7 +219,6 @@ public:
 	void	RemoveAllTraps();
 	void	RemoveAllObjects();
 	void	RemoveAllLocalities();
-	void	RemoveAllRaids();
 	void	DestroyTempPets(Mob *owner);
 	Entity*	GetEntityMob(uint16 id);
 	Entity* GetEntityMob(const char *name);
@@ -366,9 +344,6 @@ public:
 	NPC* GetClosestBanker(Mob* sender, uint32 &distance);
 	void	CameraEffect(uint32 duration, uint32 intensity);
 	Mob*	GetClosestMobByBodyType(Mob* sender, bodyType BodyType);
-	void	ForceGroupUpdate(uint32 gid);
-	void	SendGroupLeave(uint32 gid, const char *name);
-	void	SendGroupJoin(uint32 gid, const char *name);
 
 	void	SaveAllClientsTaskState();
 	void	ReloadAllClientsTaskState(int TaskID=0);
@@ -423,14 +398,12 @@ private:
 	LinkedList<Mob*> mob_list;
 	LinkedList<NPC*> npc_list;
 	LinkedList<Merc *> merc_list;
-	std::list<Group*> group_list;
 	LinkedList<Corpse*> corpse_list;
 	LinkedList<Object*> object_list;
 	LinkedList<Doors*> door_list;
 	LinkedList<Trap*> trap_list;
 	LinkedList<Beacon*> beacon_list;
 	std::list<NPC*> proximity_list;
-	std::list<Raid *> raid_list;
 	std::list<Area> area_list;
 	uint16 last_insert_id;
 

@@ -628,92 +628,93 @@ void Merc::AddItemBonuses(const Item_Struct *item, StatBonuses* newbon) {
 
 int Merc::GroupLeadershipAAHealthEnhancement()
 {
-	Group *g = GetGroup();
-
-	if(!g || (g->GroupCount() < 3))
-		return 0;
-
-	switch(g->GetLeadershipAA(groupAAHealthEnhancement))
-	{
-		case 0:
-			return 0;
-		case 1:
-			return 30;
-		case 2:
-			return 60;
-		case 3:
-			return 100;
-	}
+	//todo: group
+	//Group *g = GetGroup();
+	//
+	//if(!g || (g->GroupCount() < 3))
+	//	return 0;
+	//
+	//switch(g->GetLeadershipAA(groupAAHealthEnhancement))
+	//{
+	//	case 0:
+	//		return 0;
+	//	case 1:
+	//		return 30;
+	//	case 2:
+	//		return 60;
+	//	case 3:
+	//		return 100;
+	//}
 
 	return 0;
 }
 
 int Merc::GroupLeadershipAAManaEnhancement()
 {
-	Group *g = GetGroup();
-
-	if(!g || (g->GroupCount() < 3))
-		return 0;
-
-	switch(g->GetLeadershipAA(groupAAManaEnhancement))
-	{
-		case 0:
-			return 0;
-		case 1:
-			return 30;
-		case 2:
-			return 60;
-		case 3:
-			return 100;
-	}
+	//Group *g = GetGroup();
+	//
+	//if(!g || (g->GroupCount() < 3))
+	//	return 0;
+	//
+	//switch(g->GetLeadershipAA(groupAAManaEnhancement))
+	//{
+	//	case 0:
+	//		return 0;
+	//	case 1:
+	//		return 30;
+	//	case 2:
+	//		return 60;
+	//	case 3:
+	//		return 100;
+	//}
 
 	return 0;
 }
 
 int Merc::GroupLeadershipAAHealthRegeneration()
 {
-	Group *g = GetGroup();
-
-	if(!g || (g->GroupCount() < 3))
-		return 0;
-
-	switch(g->GetLeadershipAA(groupAAHealthRegeneration))
-	{
-		case 0:
-			return 0;
-		case 1:
-			return 4;
-		case 2:
-			return 6;
-		case 3:
-			return 8;
-	}
+	//Group *g = GetGroup();
+	//
+	//if(!g || (g->GroupCount() < 3))
+	//	return 0;
+	//
+	//switch(g->GetLeadershipAA(groupAAHealthRegeneration))
+	//{
+	//	case 0:
+	//		return 0;
+	//	case 1:
+	//		return 4;
+	//	case 2:
+	//		return 6;
+	//	case 3:
+	//		return 8;
+	//}
 
 	return 0;
 }
 
 int Merc::GroupLeadershipAAOffenseEnhancement()
 {
-	Group *g = GetGroup();
-
-	if(!g || (g->GroupCount() < 3))
-		return 0;
-
-	switch(g->GetLeadershipAA(groupAAOffenseEnhancement))
-	{
-		case 0:
-			return 0;
-		case 1:
-			return 10;
-		case 2:
-			return 19;
-		case 3:
-			return 28;
-		case 4:
-			return 34;
-		case 5:
-			return 40;
-	}
+	//Group *g = GetGroup();
+	//
+	//if(!g || (g->GroupCount() < 3))
+	//	return 0;
+	//
+	//switch(g->GetLeadershipAA(groupAAOffenseEnhancement))
+	//{
+	//	case 0:
+	//		return 0;
+	//	case 1:
+	//		return 10;
+	//	case 2:
+	//		return 19;
+	//	case 3:
+	//		return 28;
+	//	case 4:
+	//		return 34;
+	//	case 5:
+	//		return 40;
+	//}
 	return 0;
 }
 
@@ -1377,9 +1378,10 @@ bool Merc::Process()
 		//return false;
 	}
 
-	if (HasGroup() && GetFollowID() == 0) {
-		SetFollowID(GetMercOwner()->GetID());
-	}
+	//todo: group
+	//if (HasGroup() && GetFollowID() == 0) {
+	//	SetFollowID(GetMercOwner()->GetID());
+	//}
 
 
 	SpellProcess();
@@ -1462,9 +1464,10 @@ void Merc::AI_Process() {
 		return;
 
 	// A bot wont start its AI if not grouped
-	if(!GetOwner() || !HasGroup()) {
-		return;
-	}
+	//todo: group
+	//if(!GetOwner() || !HasGroup()) {
+	//	return;
+	//}
 
 	if(GetAppearance() == eaDead)
 		return;
@@ -1988,30 +1991,31 @@ bool EntityList::Merc_AICheckCloseBeneficialSpells(Merc* caster, uint8 iChance, 
 
 	int8 mercCasterClass = caster->GetClass();
 
-	if(caster->HasGroup()) {
-		if( mercCasterClass == HEALER) {
-			if( iSpellTypes == SpellType_Heal )	{
-				if(caster->AICastSpell(100, SpellType_Heal))
-					return true;
-			}
-
-			if( iSpellTypes == SpellType_Cure )	{
-				if(caster->AICastSpell(100, SpellType_Cure))
-					return true;
-			}
-
-			if( iSpellTypes == SpellType_Resurrect )	{
-				if(caster->AICastSpell(100, SpellType_Resurrect))
-					return true;
-			}
-		}
-
-		//Ok for the buffs..
-		if( iSpellTypes == SpellType_Buff) {
-			if(caster->AICastSpell(100, SpellType_Buff))
-				return true;
-		}
-	}
+	//todo: group
+	//if(caster->HasGroup()) {
+	//	if( mercCasterClass == HEALER) {
+	//		if( iSpellTypes == SpellType_Heal )	{
+	//			if(caster->AICastSpell(100, SpellType_Heal))
+	//				return true;
+	//		}
+	//
+	//		if( iSpellTypes == SpellType_Cure )	{
+	//			if(caster->AICastSpell(100, SpellType_Cure))
+	//				return true;
+	//		}
+	//
+	//		if( iSpellTypes == SpellType_Resurrect )	{
+	//			if(caster->AICastSpell(100, SpellType_Resurrect))
+	//				return true;
+	//		}
+	//	}
+	//
+	//	//Ok for the buffs..
+	//	if( iSpellTypes == SpellType_Buff) {
+	//		if(caster->AICastSpell(100, SpellType_Buff))
+	//			return true;
+	//	}
+	//}
 
 	return false;
 }
@@ -2089,434 +2093,436 @@ bool Merc::AICastSpell(int8 iChance, int32 iSpellTypes) {
 	bool castedSpell = false;
 	bool isDiscipline = false;
 
-	if(HasGroup()) {
-		Group *g = GetGroup();
-
-		if(g) {
-			MercSpell selectedMercSpell;
-			selectedMercSpell.spellid = 0;
-			selectedMercSpell.stance = 0;
-			selectedMercSpell.type = 0;
-			selectedMercSpell.slot = 0;
-			selectedMercSpell.proc_chance = 0;
-			selectedMercSpell.time_cancast = 0;
-
-			switch(mercClass)
-			{
-				case TANK:
-				case MELEEDPS:
-					isDiscipline = true;
-				break;
-				default:
-					isDiscipline = false;
-				break;
-			}
-
-			switch (iSpellTypes) {
-				case SpellType_Heal: {
-					Mob* tar = nullptr;
-					int8 numToHeal = g->GetNumberNeedingHealedInGroup(IsEngaged() ? 75 : 95, true);
-					int8 checkHPR = IsEngaged() ? 95 : 99;
-					int8 checkPetHPR = IsEngaged() ? 95 : 99;
-
-					//todo: check stance to determine healing spell selection
-
-					for(int i = 0; i < MAX_GROUP_MEMBERS; i++) {
-						if(g->members[i] && !g->members[i]->qglobal) {
-							int8 hpr = (int8)g->members[i]->GetHPRatio();
-
-							if(g->members[i]->HasPet() && g->members[i]->GetPet()->GetHPRatio() < checkHPR) {
-								if(!tar || ((g->members[i]->GetPet()->GetHPRatio() + 25) < tar->GetHPRatio())) {
-									tar = g->members[i]->GetPet();
-									checkPetHPR = g->members[i]->GetPet()->GetHPRatio() + 25;
-								}
-							}
-
-							if(hpr > checkHPR) {
-								continue;
-							}
-
-							if(IsEngaged() && (g->members[i]->GetClass() == NECROMANCER && hpr >= 50)
-								|| (g->members[i]->GetClass() == SHAMAN && hpr >= 80)) {
-								//allow necros to lifetap & shaman to canni without wasting mana
-								continue;
-							}
-
-							if(hpr < checkHPR && g->members[i] == GetMercOwner()) {
-								if(!tar || (hpr < tar->GetHPRatio() || (tar->IsPet() && hpr < checkPetHPR)))
-									tar = g->members[i];		//check owner first
-							}
-							else if(hpr < checkHPR && g->HasRole(g->members[i], RoleTank)){
-								if(!tar || (hpr < tar->GetHPRatio() || (tar->IsPet() && hpr < checkPetHPR)))
-									tar = g->members[i];
-							}
-							else if( hpr < checkHPR && (!tar || (hpr < tar->GetHPRatio() || (tar->IsPet() && hpr < checkPetHPR)))) {
-								tar = g->members[i];
-							}
-						}
-					}
-
-					if(numToHeal > 2) {
-						selectedMercSpell = GetBestMercSpellForGroupHeal(this);
-					}
-
-					if(tar && selectedMercSpell.spellid == 0) {
-						if(tar->GetHPRatio() < 15) {
-							//check for very fast heals first (casting time < 1 s)
-							selectedMercSpell = GetBestMercSpellForVeryFastHeal(this);
-
-							//check for fast heals next (casting time < 2 s)
-							if(selectedMercSpell.spellid == 0) {
-								selectedMercSpell = GetBestMercSpellForFastHeal(this);
-							}
-
-							//get regular heal
-							if(selectedMercSpell.spellid == 0) {
-								selectedMercSpell = GetBestMercSpellForRegularSingleTargetHeal(this);
-							}
-						}
-						else if (tar->GetHPRatio() < 35) {
-							//check for fast heals next (casting time < 2 s)
-							selectedMercSpell = GetBestMercSpellForFastHeal(this);
-
-							//get regular heal
-							if(selectedMercSpell.spellid == 0) {
-								selectedMercSpell = GetBestMercSpellForRegularSingleTargetHeal(this);
-							}
-						}
-						else if (tar->GetHPRatio() < 80) {
-							selectedMercSpell = GetBestMercSpellForPercentageHeal(this);
-
-							//get regular heal
-							if(selectedMercSpell.spellid == 0) {
-								selectedMercSpell = GetBestMercSpellForRegularSingleTargetHeal(this);
-							}
-						}
-						else {
-							//check for heal over time. if not present, try it first
-							if(!tar->FindType(SE_HealOverTime)) {
-								selectedMercSpell = GetBestMercSpellForHealOverTime(this);
-
-								//get regular heal
-								if(selectedMercSpell.spellid == 0) {
-									selectedMercSpell = GetBestMercSpellForRegularSingleTargetHeal(this);
-								}
-							}
-						}
-					}
-
-					if(selectedMercSpell.spellid > 0) {
-						castedSpell = AIDoSpellCast(selectedMercSpell.spellid, tar, -1);
-					}
-
-					if(castedSpell) {
-						char* gmsg = 0;
-
-						if(tar != this)	{
-							//we don't need spam of bots healing themselves
-							MakeAnyLenString(&gmsg, "Casting %s on %s.", spells[selectedMercSpell.spellid].name, tar->GetCleanName());
-							if(gmsg)
-							{
-								MercGroupSay(this, gmsg);
-								safe_delete_array(gmsg);
-							}
-						}
-					}
-
-					break;
-				}
-				case SpellType_Root: {
-					break;
-				}
-				case SpellType_Buff: {
-
-					if(GetClass() == HEALER && GetManaRatio() < 50) {
-						return false;			//mercs buff when Mana > 50%
-					}
-
-					std::list<MercSpell> buffSpellList = GetMercSpellsBySpellType(this, SpellType_Buff);
-
-					for(std::list<MercSpell>::iterator itr = buffSpellList.begin(); itr != buffSpellList.end(); itr++) {
-						MercSpell selectedMercSpell = *itr;
-
-						if(!((spells[selectedMercSpell.spellid].targettype == ST_Target || spells[selectedMercSpell.spellid].targettype == ST_Pet ||
-							spells[selectedMercSpell.spellid].targettype == ST_Group || spells[selectedMercSpell.spellid].targettype == ST_GroupTeleport ||
-							spells[selectedMercSpell.spellid].targettype == ST_Self))) {
-								continue;
-						}
-
-						if(spells[selectedMercSpell.spellid].targettype == ST_Self) {
-							if( !this->IsImmuneToSpell(selectedMercSpell.spellid, this)
-								&& (this->CanBuffStack(selectedMercSpell.spellid, mercLevel, true) >= 0)) {
-
-								if( this->GetArchetype() == ARCHETYPE_MELEE && IsEffectInSpell(selectedMercSpell.spellid, SE_IncreaseSpellHaste)) {
-									continue;
-								}
-
-								uint32 TempDontBuffMeBeforeTime = this->DontBuffMeBefore();
-
-								if(selectedMercSpell.spellid > 0) {
-									if(isDiscipline) {
-										castedSpell = UseDiscipline(selectedMercSpell.spellid, GetID());
-									}
-									else {
-										castedSpell = AIDoSpellCast(selectedMercSpell.spellid, this, -1, &TempDontBuffMeBeforeTime);
-
-										if(TempDontBuffMeBeforeTime != this->DontBuffMeBefore())
-											this->SetDontBuffMeBefore(TempDontBuffMeBeforeTime);
-									}
-								}
-							}
-						}
-						else {
-							for( int i = 0; i < MAX_GROUP_MEMBERS; i++) {
-								if(g->members[i]) {
-									Mob* tar = g->members[i];
-
-									if( !tar->IsImmuneToSpell(selectedMercSpell.spellid, this)
-										&& (tar->CanBuffStack(selectedMercSpell.spellid, mercLevel, true) >= 0)) {
-
-										if( tar->GetArchetype() == ARCHETYPE_MELEE && IsEffectInSpell(selectedMercSpell.spellid, SE_IncreaseSpellHaste)) {
-											continue;
-										}
-
-										uint32 TempDontBuffMeBeforeTime = tar->DontBuffMeBefore();
-
-										if(selectedMercSpell.spellid > 0) {
-											if(isDiscipline) {
-												castedSpell = UseDiscipline(selectedMercSpell.spellid, tar->GetID());
-											}
-											else {
-												castedSpell = AIDoSpellCast(selectedMercSpell.spellid, tar, -1, &TempDontBuffMeBeforeTime);
-
-												if(TempDontBuffMeBeforeTime != tar->DontBuffMeBefore())
-													tar->SetDontBuffMeBefore(TempDontBuffMeBeforeTime);
-											}
-										}
-									}
-
-									if(!castedSpell && tar->GetPet()) {
-
-										//don't cast group spells on pets
-										if(IsGroupSpell(selectedMercSpell.spellid)
-												|| spells[selectedMercSpell.spellid].targettype == ST_Group
-												|| spells[selectedMercSpell.spellid].targettype == ST_GroupTeleport ) {
-											continue;
-										}
-
-										if(!tar->GetPet()->IsImmuneToSpell(selectedMercSpell.spellid, this)
-											&& (tar->GetPet()->CanBuffStack(selectedMercSpell.spellid, mercLevel, true) >= 0)) {
-
-											uint32 TempDontBuffMeBeforeTime = tar->DontBuffMeBefore();
-
-											if(selectedMercSpell.spellid > 0) {
-												if(isDiscipline) {
-													castedSpell = UseDiscipline(selectedMercSpell.spellid, tar->GetPet()->GetID());
-												}
-												else {
-													castedSpell = AIDoSpellCast(selectedMercSpell.spellid, tar->GetPet(), -1, &TempDontBuffMeBeforeTime);
-
-													if(TempDontBuffMeBeforeTime != tar->GetPet()->DontBuffMeBefore())
-														tar->GetPet()->SetDontBuffMeBefore(TempDontBuffMeBeforeTime);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					break;
-				}
-				case SpellType_Nuke: {
-					switch(mercClass)
-					{
-						case TANK:
-							//check for taunt
-							if(CheckAETaunt()) {
-								if(MERC_DEBUG > 0)
-									GetOwner()->Message(7, "AE Taunting");
-								//get AE taunt
-								selectedMercSpell = GetBestMercSpellForAETaunt(this);
-							}
-
-							if(selectedMercSpell.spellid == 0 && CheckTaunt()) {
-								//get taunt
-								selectedMercSpell = GetBestMercSpellForTaunt(this);
-							}
-
-							//get hate disc
-							if(selectedMercSpell.spellid == 0) {
-								selectedMercSpell = GetBestMercSpellForHate(this);
-							}
-
-						break;
-						case HEALER:
-						break;
-						case MELEEDPS:
-						break;
-						case CASTERDPS:
-							Mob* tar = GetTarget();
-
-							selectedMercSpell = GetBestMercSpellForAENuke(this, tar);
-
-							if(selectedMercSpell.spellid == 0 && !tar->GetSpecialAbility(UNSTUNABLE) && !tar->IsStunned()) {
-								uint8 stunChance = 15;
-								if(MakeRandomInt(1, 100) <= stunChance) {
-									selectedMercSpell = GetBestMercSpellForStun(this);
-								}
-							}
-
-							if(selectedMercSpell.spellid == 0) {
-								uint8 lureChance = 25;
-								if(MakeRandomInt(1, 100) <= lureChance) {
-									selectedMercSpell = GetBestMercSpellForNukeByTargetResists(this, tar);
-								}
-							}
-
-							if(selectedMercSpell.spellid == 0) {
-								selectedMercSpell = GetBestMercSpellForNuke(this);
-							}
-
-						break;
-					}
-
-					if(selectedMercSpell.spellid > 0) {
-						if(isDiscipline) {
-							castedSpell = UseDiscipline(selectedMercSpell.spellid, GetTarget()->GetID());
-						}
-						else {
-							castedSpell = AIDoSpellCast(selectedMercSpell.spellid, GetTarget(), -1);
-						}
-					}
-
-					break;
-				}
-				case SpellType_InCombatBuff: {
-					std::list<MercSpell> buffSpellList = GetMercSpellsBySpellType(this, SpellType_InCombatBuff);
-					Mob* tar = this;
-
-					for(std::list<MercSpell>::iterator itr = buffSpellList.begin(); itr != buffSpellList.end(); itr++) {
-						MercSpell selectedMercSpell = *itr;
-
-						if(!(spells[selectedMercSpell.spellid].targettype == ST_Self)) {
-							continue;
-						}
-
-						if(spells[selectedMercSpell.spellid].skill == SkillBackstab && spells[selectedMercSpell.spellid].targettype == ST_Self) {
-							if(!hidden) {
-								continue;
-							}
-						}
-
-						if( !tar->IsImmuneToSpell(selectedMercSpell.spellid, this)
-									&& (tar->CanBuffStack(selectedMercSpell.spellid, mercLevel, true) >= 0)) {
-
-							uint32 TempDontBuffMeBeforeTime = tar->DontBuffMeBefore();
-
-							if(selectedMercSpell.spellid > 0) {
-								if(isDiscipline) {
-									castedSpell = UseDiscipline(selectedMercSpell.spellid, GetID());
-								}
-								else {
-									castedSpell = AIDoSpellCast(selectedMercSpell.spellid, this, -1);
-								}
-							}
-						}
-					}
-					break;
-				}
-				case SpellType_Cure: {
-					Mob* tar = nullptr;
-					for(int i = 0; i < MAX_GROUP_MEMBERS; i++) {
-						if(g->members[i] && !g->members[i]->qglobal) {
-							if(GetNeedsCured(g->members[i]) && (g->members[i]->DontCureMeBefore() < Timer::GetCurrentTime())) {
-								tar = g->members[i];
-							}
-						}
-					}
-
-					if(tar && !(g->GetNumberNeedingHealedInGroup(IsEngaged() ? 25 : 40, false) > 0) && !(g->GetNumberNeedingHealedInGroup(IsEngaged() ? 40 : 60, false) > 2))
-					{
-						selectedMercSpell = GetBestMercSpellForCure(this, tar);
-
-						if(selectedMercSpell.spellid == 0)
-							break;
-
-						uint32 TempDontCureMeBeforeTime = tar->DontCureMeBefore();
-
-						castedSpell = AIDoSpellCast(selectedMercSpell.spellid, tar, spells[selectedMercSpell.spellid].mana, &TempDontCureMeBeforeTime);
-
-						if(castedSpell) {
-							if(IsGroupSpell(selectedMercSpell.spellid)){
-
-								if(this->HasGroup()) {
-									Group *g = this->GetGroup();
-
-									if(g) {
-										for( int i = 0; i<MAX_GROUP_MEMBERS; i++) {
-											if(g->members[i] && !g->members[i]->qglobal) {
-												if(TempDontCureMeBeforeTime != tar->DontCureMeBefore())
-													g->members[i]->SetDontCureMeBefore(Timer::GetCurrentTime() + 4000);
-											}
-										}
-									}
-								}
-							}
-							else {
-								if(TempDontCureMeBeforeTime != tar->DontCureMeBefore())
-									tar->SetDontCureMeBefore(Timer::GetCurrentTime() + 4000);
-							}
-						}
-					}
-					break;
-				}
-				case SpellType_Resurrect: {
-					Corpse *corpse = GetGroupMemberCorpse();
-
-					if(corpse) {
-						selectedMercSpell = GetFirstMercSpellBySpellType(this, SpellType_Resurrect);
-
-						if(selectedMercSpell.spellid == 0)
-							break;
-
-						uint32 TempDontRootMeBeforeTime = corpse->DontRootMeBefore();
-
-						castedSpell = AIDoSpellCast(selectedMercSpell.spellid, corpse, spells[selectedMercSpell.spellid].mana, &TempDontRootMeBeforeTime);
-
-						//CastSpell(selectedMercSpell.spellid, corpse->GetID(), 1, -1, -1, &TempDontRootMeBeforeTime);
-						corpse->SetDontRootMeBefore(TempDontRootMeBeforeTime);
-					}
-
-					break;
-				}
-				case SpellType_Escape: {
-					Mob* tar = GetTarget();
-					uint8 hpr = (uint8)GetHPRatio();
-					bool mayGetAggro = false;
-
-					if(tar && (mercClass == CASTERDPS) || (mercClass == MELEEDPS)) {
-						mayGetAggro = HasOrMayGetAggro(); //classes have hate reducing spells
-
-						if (mayGetAggro) {
-							selectedMercSpell = GetFirstMercSpellBySpellType(this, SpellType_Escape);
-
-							if(selectedMercSpell.spellid == 0)
-								break;
-
-							if(isDiscipline) {
-								castedSpell = UseDiscipline(selectedMercSpell.spellid, tar->GetID());
-							}
-							else {
-								castedSpell = AIDoSpellCast(selectedMercSpell.spellid, tar, -1);
-							}
-						}
-					}
-					break;
-				}
-			}
-		}
-	}
+	//todo: group
+	//if(HasGroup()) {
+	//	Group *g = GetGroup();
+	//
+	//	if(g) {
+	//		MercSpell selectedMercSpell;
+	//		selectedMercSpell.spellid = 0;
+	//		selectedMercSpell.stance = 0;
+	//		selectedMercSpell.type = 0;
+	//		selectedMercSpell.slot = 0;
+	//		selectedMercSpell.proc_chance = 0;
+	//		selectedMercSpell.time_cancast = 0;
+	//
+	//		switch(mercClass)
+	//		{
+	//			case TANK:
+	//			case MELEEDPS:
+	//				isDiscipline = true;
+	//			break;
+	//			default:
+	//				isDiscipline = false;
+	//			break;
+	//		}
+	//
+	//		switch (iSpellTypes) {
+	//			case SpellType_Heal: {
+	//				Mob* tar = nullptr;
+	//				int8 numToHeal = g->GetNumberNeedingHealedInGroup(IsEngaged() ? 75 : 95, true);
+	//				int8 checkHPR = IsEngaged() ? 95 : 99;
+	//				int8 checkPetHPR = IsEngaged() ? 95 : 99;
+	//
+	//				//todo: check stance to determine healing spell selection
+	//
+	//				for(int i = 0; i < MAX_GROUP_MEMBERS; i++) {
+	//					if(g->members[i] && !g->members[i]->qglobal) {
+	//						int8 hpr = (int8)g->members[i]->GetHPRatio();
+	//
+	//						if(g->members[i]->HasPet() && g->members[i]->GetPet()->GetHPRatio() < checkHPR) {
+	//							if(!tar || ((g->members[i]->GetPet()->GetHPRatio() + 25) < tar->GetHPRatio())) {
+	//								tar = g->members[i]->GetPet();
+	//								checkPetHPR = g->members[i]->GetPet()->GetHPRatio() + 25;
+	//							}
+	//						}
+	//
+	//						if(hpr > checkHPR) {
+	//							continue;
+	//						}
+	//
+	//						if(IsEngaged() && (g->members[i]->GetClass() == NECROMANCER && hpr >= 50)
+	//							|| (g->members[i]->GetClass() == SHAMAN && hpr >= 80)) {
+	//							//allow necros to lifetap & shaman to canni without wasting mana
+	//							continue;
+	//						}
+	//
+	//						if(hpr < checkHPR && g->members[i] == GetMercOwner()) {
+	//							if(!tar || (hpr < tar->GetHPRatio() || (tar->IsPet() && hpr < checkPetHPR)))
+	//								tar = g->members[i];		//check owner first
+	//						}
+	//						else if(hpr < checkHPR && g->HasRole(g->members[i], RoleTank)){
+	//							if(!tar || (hpr < tar->GetHPRatio() || (tar->IsPet() && hpr < checkPetHPR)))
+	//								tar = g->members[i];
+	//						}
+	//						else if( hpr < checkHPR && (!tar || (hpr < tar->GetHPRatio() || (tar->IsPet() && hpr < checkPetHPR)))) {
+	//							tar = g->members[i];
+	//						}
+	//					}
+	//				}
+	//
+	//				if(numToHeal > 2) {
+	//					selectedMercSpell = GetBestMercSpellForGroupHeal(this);
+	//				}
+	//
+	//				if(tar && selectedMercSpell.spellid == 0) {
+	//					if(tar->GetHPRatio() < 15) {
+	//						//check for very fast heals first (casting time < 1 s)
+	//						selectedMercSpell = GetBestMercSpellForVeryFastHeal(this);
+	//
+	//						//check for fast heals next (casting time < 2 s)
+	//						if(selectedMercSpell.spellid == 0) {
+	//							selectedMercSpell = GetBestMercSpellForFastHeal(this);
+	//						}
+	//
+	//						//get regular heal
+	//						if(selectedMercSpell.spellid == 0) {
+	//							selectedMercSpell = GetBestMercSpellForRegularSingleTargetHeal(this);
+	//						}
+	//					}
+	//					else if (tar->GetHPRatio() < 35) {
+	//						//check for fast heals next (casting time < 2 s)
+	//						selectedMercSpell = GetBestMercSpellForFastHeal(this);
+	//
+	//						//get regular heal
+	//						if(selectedMercSpell.spellid == 0) {
+	//							selectedMercSpell = GetBestMercSpellForRegularSingleTargetHeal(this);
+	//						}
+	//					}
+	//					else if (tar->GetHPRatio() < 80) {
+	//						selectedMercSpell = GetBestMercSpellForPercentageHeal(this);
+	//
+	//						//get regular heal
+	//						if(selectedMercSpell.spellid == 0) {
+	//							selectedMercSpell = GetBestMercSpellForRegularSingleTargetHeal(this);
+	//						}
+	//					}
+	//					else {
+	//						//check for heal over time. if not present, try it first
+	//						if(!tar->FindType(SE_HealOverTime)) {
+	//							selectedMercSpell = GetBestMercSpellForHealOverTime(this);
+	//
+	//							//get regular heal
+	//							if(selectedMercSpell.spellid == 0) {
+	//								selectedMercSpell = GetBestMercSpellForRegularSingleTargetHeal(this);
+	//							}
+	//						}
+	//					}
+	//				}
+	//
+	//				if(selectedMercSpell.spellid > 0) {
+	//					castedSpell = AIDoSpellCast(selectedMercSpell.spellid, tar, -1);
+	//				}
+	//
+	//				if(castedSpell) {
+	//					char* gmsg = 0;
+	//
+	//					if(tar != this)	{
+	//						//we don't need spam of bots healing themselves
+	//						MakeAnyLenString(&gmsg, "Casting %s on %s.", spells[selectedMercSpell.spellid].name, tar->GetCleanName());
+	//						if(gmsg)
+	//						{
+	//							MercGroupSay(this, gmsg);
+	//							safe_delete_array(gmsg);
+	//						}
+	//					}
+	//				}
+	//
+	//				break;
+	//			}
+	//			case SpellType_Root: {
+	//				break;
+	//			}
+	//			case SpellType_Buff: {
+	//
+	//				if(GetClass() == HEALER && GetManaRatio() < 50) {
+	//					return false;			//mercs buff when Mana > 50%
+	//				}
+	//
+	//				std::list<MercSpell> buffSpellList = GetMercSpellsBySpellType(this, SpellType_Buff);
+	//
+	//				for(std::list<MercSpell>::iterator itr = buffSpellList.begin(); itr != buffSpellList.end(); itr++) {
+	//					MercSpell selectedMercSpell = *itr;
+	//
+	//					if(!((spells[selectedMercSpell.spellid].targettype == ST_Target || spells[selectedMercSpell.spellid].targettype == ST_Pet ||
+	//						spells[selectedMercSpell.spellid].targettype == ST_Group || spells[selectedMercSpell.spellid].targettype == ST_GroupTeleport ||
+	//						spells[selectedMercSpell.spellid].targettype == ST_Self))) {
+	//							continue;
+	//					}
+	//
+	//					if(spells[selectedMercSpell.spellid].targettype == ST_Self) {
+	//						if( !this->IsImmuneToSpell(selectedMercSpell.spellid, this)
+	//							&& (this->CanBuffStack(selectedMercSpell.spellid, mercLevel, true) >= 0)) {
+	//
+	//							if( this->GetArchetype() == ARCHETYPE_MELEE && IsEffectInSpell(selectedMercSpell.spellid, SE_IncreaseSpellHaste)) {
+	//								continue;
+	//							}
+	//
+	//							uint32 TempDontBuffMeBeforeTime = this->DontBuffMeBefore();
+	//
+	//							if(selectedMercSpell.spellid > 0) {
+	//								if(isDiscipline) {
+	//									castedSpell = UseDiscipline(selectedMercSpell.spellid, GetID());
+	//								}
+	//								else {
+	//									castedSpell = AIDoSpellCast(selectedMercSpell.spellid, this, -1, &TempDontBuffMeBeforeTime);
+	//
+	//									if(TempDontBuffMeBeforeTime != this->DontBuffMeBefore())
+	//										this->SetDontBuffMeBefore(TempDontBuffMeBeforeTime);
+	//								}
+	//							}
+	//						}
+	//					}
+	//					else {
+	//						for( int i = 0; i < MAX_GROUP_MEMBERS; i++) {
+	//							if(g->members[i]) {
+	//								Mob* tar = g->members[i];
+	//
+	//								if( !tar->IsImmuneToSpell(selectedMercSpell.spellid, this)
+	//									&& (tar->CanBuffStack(selectedMercSpell.spellid, mercLevel, true) >= 0)) {
+	//
+	//									if( tar->GetArchetype() == ARCHETYPE_MELEE && IsEffectInSpell(selectedMercSpell.spellid, SE_IncreaseSpellHaste)) {
+	//										continue;
+	//									}
+	//
+	//									uint32 TempDontBuffMeBeforeTime = tar->DontBuffMeBefore();
+	//
+	//									if(selectedMercSpell.spellid > 0) {
+	//										if(isDiscipline) {
+	//											castedSpell = UseDiscipline(selectedMercSpell.spellid, tar->GetID());
+	//										}
+	//										else {
+	//											castedSpell = AIDoSpellCast(selectedMercSpell.spellid, tar, -1, &TempDontBuffMeBeforeTime);
+	//
+	//											if(TempDontBuffMeBeforeTime != tar->DontBuffMeBefore())
+	//												tar->SetDontBuffMeBefore(TempDontBuffMeBeforeTime);
+	//										}
+	//									}
+	//								}
+	//
+	//								if(!castedSpell && tar->GetPet()) {
+	//
+	//									//don't cast group spells on pets
+	//									if(IsGroupSpell(selectedMercSpell.spellid)
+	//											|| spells[selectedMercSpell.spellid].targettype == ST_Group
+	//											|| spells[selectedMercSpell.spellid].targettype == ST_GroupTeleport ) {
+	//										continue;
+	//									}
+	//
+	//									if(!tar->GetPet()->IsImmuneToSpell(selectedMercSpell.spellid, this)
+	//										&& (tar->GetPet()->CanBuffStack(selectedMercSpell.spellid, mercLevel, true) >= 0)) {
+	//
+	//										uint32 TempDontBuffMeBeforeTime = tar->DontBuffMeBefore();
+	//
+	//										if(selectedMercSpell.spellid > 0) {
+	//											if(isDiscipline) {
+	//												castedSpell = UseDiscipline(selectedMercSpell.spellid, tar->GetPet()->GetID());
+	//											}
+	//											else {
+	//												castedSpell = AIDoSpellCast(selectedMercSpell.spellid, tar->GetPet(), -1, &TempDontBuffMeBeforeTime);
+	//
+	//												if(TempDontBuffMeBeforeTime != tar->GetPet()->DontBuffMeBefore())
+	//													tar->GetPet()->SetDontBuffMeBefore(TempDontBuffMeBeforeTime);
+	//											}
+	//										}
+	//									}
+	//								}
+	//							}
+	//						}
+	//					}
+	//				}
+	//				break;
+	//			}
+	//			case SpellType_Nuke: {
+	//				switch(mercClass)
+	//				{
+	//					case TANK:
+	//						//check for taunt
+	//						if(CheckAETaunt()) {
+	//							if(MERC_DEBUG > 0)
+	//								GetOwner()->Message(7, "AE Taunting");
+	//							//get AE taunt
+	//							selectedMercSpell = GetBestMercSpellForAETaunt(this);
+	//						}
+	//
+	//						if(selectedMercSpell.spellid == 0 && CheckTaunt()) {
+	//							//get taunt
+	//							selectedMercSpell = GetBestMercSpellForTaunt(this);
+	//						}
+	//
+	//						//get hate disc
+	//						if(selectedMercSpell.spellid == 0) {
+	//							selectedMercSpell = GetBestMercSpellForHate(this);
+	//						}
+	//
+	//					break;
+	//					case HEALER:
+	//					break;
+	//					case MELEEDPS:
+	//					break;
+	//					case CASTERDPS:
+	//						Mob* tar = GetTarget();
+	//
+	//						selectedMercSpell = GetBestMercSpellForAENuke(this, tar);
+	//
+	//						if(selectedMercSpell.spellid == 0 && !tar->GetSpecialAbility(UNSTUNABLE) && !tar->IsStunned()) {
+	//							uint8 stunChance = 15;
+	//							if(MakeRandomInt(1, 100) <= stunChance) {
+	//								selectedMercSpell = GetBestMercSpellForStun(this);
+	//							}
+	//						}
+	//
+	//						if(selectedMercSpell.spellid == 0) {
+	//							uint8 lureChance = 25;
+	//							if(MakeRandomInt(1, 100) <= lureChance) {
+	//								selectedMercSpell = GetBestMercSpellForNukeByTargetResists(this, tar);
+	//							}
+	//						}
+	//
+	//						if(selectedMercSpell.spellid == 0) {
+	//							selectedMercSpell = GetBestMercSpellForNuke(this);
+	//						}
+	//
+	//					break;
+	//				}
+	//
+	//				if(selectedMercSpell.spellid > 0) {
+	//					if(isDiscipline) {
+	//						castedSpell = UseDiscipline(selectedMercSpell.spellid, GetTarget()->GetID());
+	//					}
+	//					else {
+	//						castedSpell = AIDoSpellCast(selectedMercSpell.spellid, GetTarget(), -1);
+	//					}
+	//				}
+	//
+	//				break;
+	//			}
+	//			case SpellType_InCombatBuff: {
+	//				std::list<MercSpell> buffSpellList = GetMercSpellsBySpellType(this, SpellType_InCombatBuff);
+	//				Mob* tar = this;
+	//
+	//				for(std::list<MercSpell>::iterator itr = buffSpellList.begin(); itr != buffSpellList.end(); itr++) {
+	//					MercSpell selectedMercSpell = *itr;
+	//
+	//					if(!(spells[selectedMercSpell.spellid].targettype == ST_Self)) {
+	//						continue;
+	//					}
+	//
+	//					if(spells[selectedMercSpell.spellid].skill == SkillBackstab && spells[selectedMercSpell.spellid].targettype == ST_Self) {
+	//						if(!hidden) {
+	//							continue;
+	//						}
+	//					}
+	//
+	//					if( !tar->IsImmuneToSpell(selectedMercSpell.spellid, this)
+	//								&& (tar->CanBuffStack(selectedMercSpell.spellid, mercLevel, true) >= 0)) {
+	//
+	//						uint32 TempDontBuffMeBeforeTime = tar->DontBuffMeBefore();
+	//
+	//						if(selectedMercSpell.spellid > 0) {
+	//							if(isDiscipline) {
+	//								castedSpell = UseDiscipline(selectedMercSpell.spellid, GetID());
+	//							}
+	//							else {
+	//								castedSpell = AIDoSpellCast(selectedMercSpell.spellid, this, -1);
+	//							}
+	//						}
+	//					}
+	//				}
+	//				break;
+	//			}
+	//			case SpellType_Cure: {
+	//				Mob* tar = nullptr;
+	//				for(int i = 0; i < MAX_GROUP_MEMBERS; i++) {
+	//					if(g->members[i] && !g->members[i]->qglobal) {
+	//						if(GetNeedsCured(g->members[i]) && (g->members[i]->DontCureMeBefore() < Timer::GetCurrentTime())) {
+	//							tar = g->members[i];
+	//						}
+	//					}
+	//				}
+	//
+	//				if(tar && !(g->GetNumberNeedingHealedInGroup(IsEngaged() ? 25 : 40, false) > 0) && !(g->GetNumberNeedingHealedInGroup(IsEngaged() ? 40 : 60, false) > 2))
+	//				{
+	//					selectedMercSpell = GetBestMercSpellForCure(this, tar);
+	//
+	//					if(selectedMercSpell.spellid == 0)
+	//						break;
+	//
+	//					uint32 TempDontCureMeBeforeTime = tar->DontCureMeBefore();
+	//
+	//					castedSpell = AIDoSpellCast(selectedMercSpell.spellid, tar, spells[selectedMercSpell.spellid].mana, &TempDontCureMeBeforeTime);
+	//
+	//					if(castedSpell) {
+	//						if(IsGroupSpell(selectedMercSpell.spellid)){
+	//
+	//							//todo: group
+	//							//if(this->HasGroup()) {
+	//							//	Group *g = this->GetGroup();
+	//							//
+	//							//	if(g) {
+	//							//		for( int i = 0; i<MAX_GROUP_MEMBERS; i++) {
+	//							//			if(g->members[i] && !g->members[i]->qglobal) {
+	//							//				if(TempDontCureMeBeforeTime != tar->DontCureMeBefore())
+	//							//					g->members[i]->SetDontCureMeBefore(Timer::GetCurrentTime() + 4000);
+	//							//			}
+	//							//		}
+	//							//	}
+	//							//}
+	//						}
+	//						else {
+	//							if(TempDontCureMeBeforeTime != tar->DontCureMeBefore())
+	//								tar->SetDontCureMeBefore(Timer::GetCurrentTime() + 4000);
+	//						}
+	//					}
+	//				}
+	//				break;
+	//			}
+	//			case SpellType_Resurrect: {
+	//				Corpse *corpse = GetGroupMemberCorpse();
+	//
+	//				if(corpse) {
+	//					selectedMercSpell = GetFirstMercSpellBySpellType(this, SpellType_Resurrect);
+	//
+	//					if(selectedMercSpell.spellid == 0)
+	//						break;
+	//
+	//					uint32 TempDontRootMeBeforeTime = corpse->DontRootMeBefore();
+	//
+	//					castedSpell = AIDoSpellCast(selectedMercSpell.spellid, corpse, spells[selectedMercSpell.spellid].mana, &TempDontRootMeBeforeTime);
+	//
+	//					//CastSpell(selectedMercSpell.spellid, corpse->GetID(), 1, -1, -1, &TempDontRootMeBeforeTime);
+	//					corpse->SetDontRootMeBefore(TempDontRootMeBeforeTime);
+	//				}
+	//
+	//				break;
+	//			}
+	//			case SpellType_Escape: {
+	//				Mob* tar = GetTarget();
+	//				uint8 hpr = (uint8)GetHPRatio();
+	//				bool mayGetAggro = false;
+	//
+	//				if(tar && (mercClass == CASTERDPS) || (mercClass == MELEEDPS)) {
+	//					mayGetAggro = HasOrMayGetAggro(); //classes have hate reducing spells
+	//
+	//					if (mayGetAggro) {
+	//						selectedMercSpell = GetFirstMercSpellBySpellType(this, SpellType_Escape);
+	//
+	//						if(selectedMercSpell.spellid == 0)
+	//							break;
+	//
+	//						if(isDiscipline) {
+	//							castedSpell = UseDiscipline(selectedMercSpell.spellid, tar->GetID());
+	//						}
+	//						else {
+	//							castedSpell = AIDoSpellCast(selectedMercSpell.spellid, tar, -1);
+	//						}
+	//					}
+	//				}
+	//				break;
+	//			}
+	//		}
+	//	}
+	//}
 
 	return castedSpell;
 }
@@ -2527,45 +2533,46 @@ void Merc::CheckHateList() {
 
 	if(!IsEngaged()) {
 		if(GetFollowID()) {
-			Group* g = GetGroup();
-			if(g) {
-				Mob* MercOwner = GetOwner();
-				if(MercOwner && MercOwner->GetTarget() && MercOwner->GetTarget()->IsNPC() && (MercOwner->GetTarget()->GetHateAmount(MercOwner) || MercOwner->CastToClient()->AutoAttackEnabled()) && IsAttackAllowed(MercOwner->GetTarget())) {
-						float range = g->HasRole(MercOwner, RolePuller) ? RuleI(Mercs, AggroRadiusPuller) : RuleI(Mercs, AggroRadius);
-						range = range * range;
-						if(MercOwner->GetTarget()->DistNoRootNoZ(*this) < range) {
-							AddToHateList(MercOwner->GetTarget(), 1);
-						}
-				}
-				else {
-					std::list<NPC*> npc_list;
-					entity_list.GetNPCList(npc_list);
-
-					for(std::list<NPC*>::iterator itr = npc_list.begin(); itr != npc_list.end(); itr++) {
-						NPC* npc = *itr;
-						float dist = npc->DistNoRootNoZ(*this);
-						int radius = RuleI(Mercs, AggroRadius);
-						radius *= radius;
-						if(dist <= radius) {
-
-							for(int counter = 0; counter < g->GroupCount(); counter++) {
-								Mob* groupMember = g->members[counter];
-								if(groupMember) {
-									if(npc->IsOnHatelist(groupMember)) {
-										if(!hate_list.IsOnHateList(npc)) {
-											float range = g->HasRole(groupMember, RolePuller) ? RuleI(Mercs, AggroRadiusPuller) : RuleI(Mercs, AggroRadius);
-											range *= range;
-											if(npc->DistNoRootNoZ(*this) < range) {
-												hate_list.Add(npc, 1);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			//todo: group
+			//Group* g = GetGroup();
+			//if(g) {
+			//	Mob* MercOwner = GetOwner();
+			//	if(MercOwner && MercOwner->GetTarget() && MercOwner->GetTarget()->IsNPC() && (MercOwner->GetTarget()->GetHateAmount(MercOwner) || MercOwner->CastToClient()->AutoAttackEnabled()) && IsAttackAllowed(MercOwner->GetTarget())) {
+			//			float range = g->HasRole(MercOwner, RolePuller) ? RuleI(Mercs, AggroRadiusPuller) : RuleI(Mercs, AggroRadius);
+			//			range = range * range;
+			//			if(MercOwner->GetTarget()->DistNoRootNoZ(*this) < range) {
+			//				AddToHateList(MercOwner->GetTarget(), 1);
+			//			}
+			//	}
+			//	else {
+			//		std::list<NPC*> npc_list;
+			//		entity_list.GetNPCList(npc_list);
+			//
+			//		for(std::list<NPC*>::iterator itr = npc_list.begin(); itr != npc_list.end(); itr++) {
+			//			NPC* npc = *itr;
+			//			float dist = npc->DistNoRootNoZ(*this);
+			//			int radius = RuleI(Mercs, AggroRadius);
+			//			radius *= radius;
+			//			if(dist <= radius) {
+			//
+			//				for(int counter = 0; counter < g->GroupCount(); counter++) {
+			//					Mob* groupMember = g->members[counter];
+			//					if(groupMember) {
+			//						if(npc->IsOnHatelist(groupMember)) {
+			//							if(!hate_list.IsOnHateList(npc)) {
+			//								float range = g->HasRole(groupMember, RolePuller) ? RuleI(Mercs, AggroRadiusPuller) : RuleI(Mercs, AggroRadius);
+			//								range *= range;
+			//								if(npc->DistNoRootNoZ(*this) < range) {
+			//									hate_list.Add(npc, 1);
+			//								}
+			//							}
+			//						}
+			//					}
+			//				}
+			//			}
+			//		}
+			//	}
+			//}
 		}
 	}
 }
@@ -3720,102 +3727,103 @@ MercSpell Merc::GetBestMercSpellForCure(Merc* caster, Mob *tar) {
 	bool isCursed = tar->FindType(SE_CurseCounter);
 	bool isCorrupted = tar->FindType(SE_CorruptionCounter);
 
-	if(caster && caster->AI_HasSpells()) {
-		std::list<MercSpell> cureList = GetMercSpellsBySpellType(caster, SpellType_Cure);
-
-		if(tar->HasGroup()) {
-			Group *g = tar->GetGroup();
-
-			if(g) {
-				for( int i = 0; i<MAX_GROUP_MEMBERS; i++) {
-					if(g->members[i] && !g->members[i]->qglobal) {
-						if(caster->GetNeedsCured(g->members[i]))
-							countNeedsCured++;
-					}
-				}
-			}
-		}
-
-		//Check for group cure first
-		if(countNeedsCured > 2) {
-			for(std::list<MercSpell>::iterator itr = cureList.begin(); itr != cureList.end(); itr++) {
-				MercSpell selectedMercSpell = *itr;
-
-				if(IsGroupSpell(itr->spellid) && CheckSpellRecastTimers(caster, itr->spellid)) {
-					if(selectedMercSpell.spellid == 0)
-						continue;
-
-					if(isPoisoned && IsEffectInSpell(itr->spellid, SE_PoisonCounter)) {
-						spellSelected = true;
-					}
-					else if(isDiseased && IsEffectInSpell(itr->spellid, SE_DiseaseCounter)) {
-						spellSelected = true;
-					}
-					else if(isCursed && IsEffectInSpell(itr->spellid, SE_CurseCounter)) {
-						spellSelected = true;
-					}
-					else if(isCorrupted && IsEffectInSpell(itr->spellid, SE_CorruptionCounter)) {
-						spellSelected = true;
-					}
-					else if(IsEffectInSpell(itr->spellid, SE_DispelDetrimental)) {
-						spellSelected = true;
-					}
-
-					if(spellSelected)
-					{
-						result.spellid = itr->spellid;
-						result.stance = itr->stance;
-						result.type = itr->type;
-						result.slot = itr->slot;
-						result.proc_chance = itr->proc_chance;
-						result.time_cancast = itr->time_cancast;
-
-						break;
-					}
-				}
-			}
-		}
-
-		//no group cure for target- try to find single target spell
-		if(!spellSelected) {
-			for(std::list<MercSpell>::iterator itr = cureList.begin(); itr != cureList.end(); itr++) {
-				MercSpell selectedMercSpell = *itr;
-
-				if(CheckSpellRecastTimers(caster, itr->spellid)) {
-					if(selectedMercSpell.spellid == 0)
-						continue;
-
-					if(isPoisoned && IsEffectInSpell(itr->spellid, SE_PoisonCounter)) {
-						spellSelected = true;
-					}
-					else if(isDiseased && IsEffectInSpell(itr->spellid, SE_DiseaseCounter)) {
-						spellSelected = true;
-					}
-					else if(isCursed && IsEffectInSpell(itr->spellid, SE_CurseCounter)) {
-						spellSelected = true;
-					}
-					else if(isCorrupted && IsEffectInSpell(itr->spellid, SE_CorruptionCounter)) {
-						spellSelected = true;
-					}
-					else if(IsEffectInSpell(itr->spellid, SE_DispelDetrimental)) {
-						spellSelected = true;
-					}
-
-					if(spellSelected)
-					{
-						result.spellid = itr->spellid;
-						result.stance = itr->stance;
-						result.type = itr->type;
-						result.slot = itr->slot;
-						result.proc_chance = itr->proc_chance;
-						result.time_cancast = itr->time_cancast;
-
-						break;
-					}
-				}
-			}
-		}
-	}
+	//todo: group
+	//if(caster && caster->AI_HasSpells()) {
+	//	std::list<MercSpell> cureList = GetMercSpellsBySpellType(caster, SpellType_Cure);
+	//
+	//	if(tar->HasGroup()) {
+	//		Group *g = tar->GetGroup();
+	//
+	//		if(g) {
+	//			for( int i = 0; i<MAX_GROUP_MEMBERS; i++) {
+	//				if(g->members[i] && !g->members[i]->qglobal) {
+	//					if(caster->GetNeedsCured(g->members[i]))
+	//						countNeedsCured++;
+	//				}
+	//			}
+	//		}
+	//	}
+	//
+	//	//Check for group cure first
+	//	if(countNeedsCured > 2) {
+	//		for(std::list<MercSpell>::iterator itr = cureList.begin(); itr != cureList.end(); itr++) {
+	//			MercSpell selectedMercSpell = *itr;
+	//
+	//			if(IsGroupSpell(itr->spellid) && CheckSpellRecastTimers(caster, itr->spellid)) {
+	//				if(selectedMercSpell.spellid == 0)
+	//					continue;
+	//
+	//				if(isPoisoned && IsEffectInSpell(itr->spellid, SE_PoisonCounter)) {
+	//					spellSelected = true;
+	//				}
+	//				else if(isDiseased && IsEffectInSpell(itr->spellid, SE_DiseaseCounter)) {
+	//					spellSelected = true;
+	//				}
+	//				else if(isCursed && IsEffectInSpell(itr->spellid, SE_CurseCounter)) {
+	//					spellSelected = true;
+	//				}
+	//				else if(isCorrupted && IsEffectInSpell(itr->spellid, SE_CorruptionCounter)) {
+	//					spellSelected = true;
+	//				}
+	//				else if(IsEffectInSpell(itr->spellid, SE_DispelDetrimental)) {
+	//					spellSelected = true;
+	//				}
+	//
+	//				if(spellSelected)
+	//				{
+	//					result.spellid = itr->spellid;
+	//					result.stance = itr->stance;
+	//					result.type = itr->type;
+	//					result.slot = itr->slot;
+	//					result.proc_chance = itr->proc_chance;
+	//					result.time_cancast = itr->time_cancast;
+	//
+	//					break;
+	//				}
+	//			}
+	//		}
+	//	}
+	//
+	//	//no group cure for target- try to find single target spell
+	//	if(!spellSelected) {
+	//		for(std::list<MercSpell>::iterator itr = cureList.begin(); itr != cureList.end(); itr++) {
+	//			MercSpell selectedMercSpell = *itr;
+	//
+	//			if(CheckSpellRecastTimers(caster, itr->spellid)) {
+	//				if(selectedMercSpell.spellid == 0)
+	//					continue;
+	//
+	//				if(isPoisoned && IsEffectInSpell(itr->spellid, SE_PoisonCounter)) {
+	//					spellSelected = true;
+	//				}
+	//				else if(isDiseased && IsEffectInSpell(itr->spellid, SE_DiseaseCounter)) {
+	//					spellSelected = true;
+	//				}
+	//				else if(isCursed && IsEffectInSpell(itr->spellid, SE_CurseCounter)) {
+	//					spellSelected = true;
+	//				}
+	//				else if(isCorrupted && IsEffectInSpell(itr->spellid, SE_CorruptionCounter)) {
+	//					spellSelected = true;
+	//				}
+	//				else if(IsEffectInSpell(itr->spellid, SE_DispelDetrimental)) {
+	//					spellSelected = true;
+	//				}
+	//
+	//				if(spellSelected)
+	//				{
+	//					result.spellid = itr->spellid;
+	//					result.stance = itr->stance;
+	//					result.type = itr->type;
+	//					result.slot = itr->slot;
+	//					result.proc_chance = itr->proc_chance;
+	//					result.time_cancast = itr->time_cancast;
+	//
+	//					break;
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 
 	return result;
 }
@@ -4186,20 +4194,20 @@ bool Merc::GetNeedsCured(Mob *tar) {
 
 void Merc::MercGroupSay(Mob *speaker, const char *msg, ...)
 {
-
-	char buf[1000];
-	va_list ap;
-
-	va_start(ap, msg);
-	vsnprintf(buf, 1000, msg, ap);
-	va_end(ap);
-
-	if(speaker->HasGroup()) {
-		Group *g = speaker->GetGroup();
-
-		if(g)
-			g->GroupMessage(speaker->CastToMob(), 0, 100, buf);
-	}
+	//todo: group
+	//char buf[1000];
+	//va_list ap;
+	//
+	//va_start(ap, msg);
+	//vsnprintf(buf, 1000, msg, ap);
+	//va_end(ap);
+	//
+	//if(speaker->HasGroup()) {
+	//	Group *g = speaker->GetGroup();
+	//
+	//	if(g)
+	//		g->GroupMessage(speaker->CastToMob(), 0, 100, buf);
+	//}
 }
 
 bool Merc::UseDiscipline(int32 spell_id, int32 target) {
@@ -4358,18 +4366,19 @@ bool Merc::CheckAETaunt() {
 
 			if(dist <= range) {
 				if(!npc->IsMezzed()) {
-					if(HasGroup()) {
-						Group* g = GetGroup();
-
-						if(g) {
-							for(int i = 0; i < g->GroupCount(); i++) {
-								//if(npc->IsOnHatelist(g->members[i]) && g->members[i]->GetTarget() != npc && g->members[i]->IsEngaged()) {
-								if(GetTarget() != npc && g->members[i]->GetTarget() != npc && npc->IsOnHatelist(g->members[i])) {
-									result++;
-								}
-							}
-						}
-					}
+					//todo: group
+					//if(HasGroup()) {
+					//	Group* g = GetGroup();
+					//
+					//	if(g) {
+					//		for(int i = 0; i < g->GroupCount(); i++) {
+					//			//if(npc->IsOnHatelist(g->members[i]) && g->members[i]->GetTarget() != npc && g->members[i]->IsEngaged()) {
+					//			if(GetTarget() != npc && g->members[i]->GetTarget() != npc && npc->IsOnHatelist(g->members[i])) {
+					//				result++;
+					//			}
+					//		}
+					//	}
+					//}
 				}
 			}
 		}
@@ -4386,21 +4395,22 @@ bool Merc::CheckAETaunt() {
 Corpse* Merc::GetGroupMemberCorpse() {
 	Corpse* corpse = nullptr;
 
-	if(HasGroup()) {
-		Group* g = GetGroup();
-
-		if(g) {
-			for(int i = 0; i < g->GroupCount(); i++) {
-				if(g->members[i] && g->members[i]->IsClient()) {
-					corpse = entity_list.GetCorpseByOwnerWithinRange(g->members[i]->CastToClient(), this, RuleI(Mercs, ResurrectRadius));
-
-					if(corpse && !corpse->Rezzed()) {
-						return corpse;
-					}
-				}
-			}
-		}
-	}
+	//todo: group
+	//if(HasGroup()) {
+	//	Group* g = GetGroup();
+	//
+	//	if(g) {
+	//		for(int i = 0; i < g->GroupCount(); i++) {
+	//			if(g->members[i] && g->members[i]->IsClient()) {
+	//				corpse = entity_list.GetCorpseByOwnerWithinRange(g->members[i]->CastToClient(), this, RuleI(Mercs, ResurrectRadius));
+	//
+	//				if(corpse && !corpse->Rezzed()) {
+	//					return corpse;
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 	return 0;
 }
 
@@ -5259,20 +5269,22 @@ bool Client::CheckCanHireMerc(Mob* merchant, uint32 template_id) {
 		}
 	}
 
+	//todo: group
+	return false;
 	//check for raid
-	if(HasRaid()) {
-		SendMercMerchantResponsePacket(4);
-		return false;
-	}
-
-	//check group size
-	if(HasGroup() && GetGroup()->GroupCount() >= MAX_GROUP_MEMBERS) {
-		if (GetClientVersion() < EQClientRoF)
-			SendMercMerchantResponsePacket(8);
-		else
-			SendMercMerchantResponsePacket(7);
-		return false;
-	}
+	//if(HasRaid()) {
+	//	SendMercMerchantResponsePacket(4);
+	//	return false;
+	//}
+	//
+	////check group size
+	//if(HasGroup() && GetGroup()->GroupCount() >= MAX_GROUP_MEMBERS) {
+	//	if (GetClientVersion() < EQClientRoF)
+	//		SendMercMerchantResponsePacket(8);
+	//	else
+	//		SendMercMerchantResponsePacket(7);
+	//	return false;
+	//}
 
 	//check in combat
 	if(GetClientVersion() >= EQClientRoF && GetAggroCount() > 0) {
@@ -5336,19 +5348,21 @@ bool Client::CheckCanUnsuspendMerc() {
 	}
 
 	//check for raid
-	if(HasRaid()) {
-		SendMercMerchantResponsePacket(4);
-		return false;
-	}
-
-	//check group size
-	if(HasGroup() && GetGroup()->GroupCount() >= MAX_GROUP_MEMBERS) {
-		if (GetClientVersion() < EQClientRoF)
-			SendMercMerchantResponsePacket(8);
-		else
-			SendMercMerchantResponsePacket(7);
-		return false;
-	}
+	//todo: group
+	return false;
+	//if(HasRaid()) {
+	//	SendMercMerchantResponsePacket(4);
+	//	return false;
+	//}
+	//
+	////check group size
+	//if(HasGroup() && GetGroup()->GroupCount() >= MAX_GROUP_MEMBERS) {
+	//	if (GetClientVersion() < EQClientRoF)
+	//		SendMercMerchantResponsePacket(8);
+	//	else
+	//		SendMercMerchantResponsePacket(7);
+	//	return false;
+	//}
 
 	//check if zone allows mercs
 	if(!zone->AllowMercs()) {
@@ -5531,81 +5545,83 @@ bool Merc::Unsuspend(bool setMaxStats) {
 	if(!mercOwner)
 		return false;
 
-	if(GetID()) {
-		uint32 mercState = 5;
-		uint32 suspendedTime = 0;
-
-		SetSuspended(false);
-
-		mercOwner->GetMercInfo().mercid = GetMercID();
-		mercOwner->GetMercInfo().IsSuspended = false;
-
-		mercOwner->SendMercenaryUnsuspendPacket(0);
-		mercOwner->SendMercenaryUnknownPacket(1);
-		mercOwner->GetMercInfo().SuspendedTime = 0;
-		mercOwner->GetMercTimer()->Start(RuleI(Mercs, UpkeepIntervalMS));
-		mercOwner->GetMercTimer()->SetTimer(mercOwner->GetMercInfo().MercTimerRemaining);
-		mercOwner->SendMercTimerPacket(GetID(), mercState, suspendedTime, mercOwner->GetMercInfo().MercTimerRemaining, RuleI(Mercs, SuspendIntervalMS));
-		if(!mercOwner->GetPTimers().Expired(&database, pTimerMercSuspend, false))
-			mercOwner->GetPTimers().Clear(&database, pTimerMercSuspend);
-
-		mercOwner->SendMercPersonalInfo();
-		Group* g = entity_list.GetGroupByClient(mercOwner);
-
-		if(!g) {	//nobody from our group is here... start a new group
-			g = new Group(mercOwner);
-
-			if(!g) {
-				delete g;
-				g = nullptr;
-				return false;
-			}
-
-			entity_list.AddGroup(g);
-
-			if(g->GetID() == 0) {
-				delete g;
-				g = nullptr;
-				return false;
-			}
-
-			if(AddMercToGroup(this, g)) {
-				entity_list.AddGroup(g, g->GetID());
-				database.SetGroupLeaderName(g->GetID(), mercOwner->GetName());
-				database.SetGroupID(mercOwner->GetName(), g->GetID(), mercOwner->CharacterID());
-				database.SetGroupID(this->GetName(), g->GetID(), mercOwner->CharacterID(), true);
-				database.RefreshGroupFromDB(mercOwner);
-				g->SaveGroupLeaderAA();
-				loaded = true;
-			}
-			else {
-				g->DisbandGroup();
-			}
-		}	//else, somebody from our group is already here...
-		else if (AddMercToGroup(this, mercOwner->GetGroup())) {
-			database.SetGroupID(GetName(), mercOwner->GetGroup()->GetID(), mercOwner->CharacterID(), true);
-			database.RefreshGroupFromDB(mercOwner);
-
-			loaded = true;
-		}
-		else {
-			if(MERC_DEBUG > 0)
-				mercOwner->Message(7, "Mercenary failed to join the group - Suspending");
-
-			Suspend();
-		}
-
-
-		if(loaded) {
-			LoadMercSpells();
-
-			if(setMaxStats) {
-				SetHP(GetMaxHP());
-				SetMana(GetMaxMana());
-				SetEndurance(GetMaxEndurance());
-			}
-		}
-	}
+	//todo: group
+	//if(GetID()) {
+	//	uint32 mercState = 5;
+	//	uint32 suspendedTime = 0;
+	//
+	//	SetSuspended(false);
+	//
+	//	mercOwner->GetMercInfo().mercid = GetMercID();
+	//	mercOwner->GetMercInfo().IsSuspended = false;
+	//
+	//	mercOwner->SendMercenaryUnsuspendPacket(0);
+	//	mercOwner->SendMercenaryUnknownPacket(1);
+	//	mercOwner->GetMercInfo().SuspendedTime = 0;
+	//	mercOwner->GetMercTimer()->Start(RuleI(Mercs, UpkeepIntervalMS));
+	//	mercOwner->GetMercTimer()->SetTimer(mercOwner->GetMercInfo().MercTimerRemaining);
+	//	mercOwner->SendMercTimerPacket(GetID(), mercState, suspendedTime, mercOwner->GetMercInfo().MercTimerRemaining, RuleI(Mercs, SuspendIntervalMS));
+	//	if(!mercOwner->GetPTimers().Expired(&database, pTimerMercSuspend, false))
+	//		mercOwner->GetPTimers().Clear(&database, pTimerMercSuspend);
+	//
+	//	mercOwner->SendMercPersonalInfo();
+	//	
+	//	Group* g = entity_list.GetGroupByClient(mercOwner);
+	//
+	//	if(!g) {	//nobody from our group is here... start a new group
+	//		g = new Group(mercOwner);
+	//
+	//		if(!g) {
+	//			delete g;
+	//			g = nullptr;
+	//			return false;
+	//		}
+	//
+	//		entity_list.AddGroup(g);
+	//
+	//		if(g->GetID() == 0) {
+	//			delete g;
+	//			g = nullptr;
+	//			return false;
+	//		}
+	//
+	//		if(AddMercToGroup(this, g)) {
+	//			entity_list.AddGroup(g, g->GetID());
+	//			database.SetGroupLeaderName(g->GetID(), mercOwner->GetName());
+	//			database.SetGroupID(mercOwner->GetName(), g->GetID(), mercOwner->CharacterID());
+	//			database.SetGroupID(this->GetName(), g->GetID(), mercOwner->CharacterID(), true);
+	//			database.RefreshGroupFromDB(mercOwner);
+	//			g->SaveGroupLeaderAA();
+	//			loaded = true;
+	//		}
+	//		else {
+	//			g->DisbandGroup();
+	//		}
+	//	}	//else, somebody from our group is already here...
+	//	else if (AddMercToGroup(this, mercOwner->GetGroup())) {
+	//		database.SetGroupID(GetName(), mercOwner->GetGroup()->GetID(), mercOwner->CharacterID(), true);
+	//		database.RefreshGroupFromDB(mercOwner);
+	//
+	//		loaded = true;
+	//	}
+	//	else {
+	//		if(MERC_DEBUG > 0)
+	//			mercOwner->Message(7, "Mercenary failed to join the group - Suspending");
+	//
+	//		Suspend();
+	//	}
+	//
+	//
+	//	if(loaded) {
+	//		LoadMercSpells();
+	//
+	//		if(setMaxStats) {
+	//			SetHP(GetMaxHP());
+	//			SetMana(GetMaxMana());
+	//			SetEndurance(GetMaxEndurance());
+	//		}
+	//	}
+	//}
 
 	return true;
 }
@@ -5640,8 +5656,9 @@ void Merc::Depop() {
 	entity_list.RemoveMerc(this->GetID());
 	entity_list.RemoveFromHateLists(this);
 
-	if(HasGroup())
-		Merc::RemoveMercFromGroup(this, GetGroup());
+	//todo: group
+	//if(HasGroup())
+	//	Merc::RemoveMercFromGroup(this, GetGroup());
 
 	if(HasPet()) {
 		GetPet()->Depop();
@@ -5654,69 +5671,70 @@ void Merc::Depop() {
 	NPC::Depop(false);
 }
 
-bool Merc::RemoveMercFromGroup(Merc* merc, Group* group) {
-	bool Result = false;
+//todo: group
+//bool Merc::RemoveMercFromGroup(Merc* merc, Group* group) {
+//	bool Result = false;
+//
+//	if(merc && group) {
+//		if(merc->HasGroup()) {
+//			if(!group->IsLeader(merc)) {
+//				merc->SetFollowID(0);
+//
+//				if(group->DelMember(merc)) {
+//					if(merc->GetMercCharacterID() != 0)
+//						database.SetGroupID(merc->GetName(), 0, merc->GetMercCharacterID(), true);
+//				}
+//
+//				if(group->GroupCount() <= 1 && ZoneLoaded)
+//				{
+//					group->DisbandGroup();
+//				}
+//			}
+//			else {
+//				for(int i = 0; i < MAX_GROUP_MEMBERS; i++) {
+//					if(!group->members[i])
+//						continue;
+//
+//					if(!group->members[i]->IsMerc())
+//						continue;
+//
+//					Merc* groupmerc = group->members[i]->CastToMerc();
+//
+//					groupmerc->SetOwnerID(0);
+//				}
+//
+//				group->DisbandGroup();
+//				database.SetGroupID(merc->GetCleanName(), 0, merc->GetMercCharacterID(), true);
+//			}
+//
+//			Result = true;
+//		}
+//	}
+//
+//	return Result;
+//}
 
-	if(merc && group) {
-		if(merc->HasGroup()) {
-			if(!group->IsLeader(merc)) {
-				merc->SetFollowID(0);
-
-				if(group->DelMember(merc)) {
-					if(merc->GetMercCharacterID() != 0)
-						database.SetGroupID(merc->GetName(), 0, merc->GetMercCharacterID(), true);
-				}
-
-				if(group->GroupCount() <= 1 && ZoneLoaded)
-				{
-					group->DisbandGroup();
-				}
-			}
-			else {
-				for(int i = 0; i < MAX_GROUP_MEMBERS; i++) {
-					if(!group->members[i])
-						continue;
-
-					if(!group->members[i]->IsMerc())
-						continue;
-
-					Merc* groupmerc = group->members[i]->CastToMerc();
-
-					groupmerc->SetOwnerID(0);
-				}
-
-				group->DisbandGroup();
-				database.SetGroupID(merc->GetCleanName(), 0, merc->GetMercCharacterID(), true);
-			}
-
-			Result = true;
-		}
-	}
-
-	return Result;
-}
-
-bool Merc::AddMercToGroup(Merc* merc, Group* group) {
-	bool Result = false;
-
-	if(merc && group) {
-		// Remove merc from current group if any
-		if(merc->HasGroup()) {
-			Merc::RemoveMercFromGroup(merc, merc->GetGroup());
-		}
-		//Try and add the member, followed by checking if the merc owner exists.
-		if(group->AddMember(merc) && merc->GetMercOwner() != nullptr) {
-				merc->SetFollowID(merc->GetMercOwner()->GetID());
-				Result = true;
-		}
-		else {
-			//Suspend it if the member is not added and the merc's owner is not valid.
-			merc->Suspend();
-		}
-	}
-
-	return Result;
-}
+//bool Merc::AddMercToGroup(Merc* merc, Group* group) {
+//	bool Result = false;
+//
+//	if(merc && group) {
+//		// Remove merc from current group if any
+//		if(merc->HasGroup()) {
+//			Merc::RemoveMercFromGroup(merc, merc->GetGroup());
+//		}
+//		//Try and add the member, followed by checking if the merc owner exists.
+//		if(group->AddMember(merc) && merc->GetMercOwner() != nullptr) {
+//				merc->SetFollowID(merc->GetMercOwner()->GetID());
+//				Result = true;
+//		}
+//		else {
+//			//Suspend it if the member is not added and the merc's owner is not valid.
+//			merc->Suspend();
+//		}
+//	}
+//
+//	return Result;
+//}
 
 void Client::InitializeMercInfo() {
 	for(int i=0; i<MAXMERCS; i++) {

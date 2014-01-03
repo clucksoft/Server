@@ -1,4 +1,4 @@
-#ifdef LUA_EQEMU
+/*#ifdef LUA_EQEMU
 
 #include "lua.hpp"
 #include <luabind/luabind.hpp>
@@ -150,3 +150,4 @@ luabind::scope lua_register_raid() {
 }
 
 #endif
+*/

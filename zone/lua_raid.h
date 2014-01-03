@@ -1,4 +1,4 @@
-#ifndef EQEMU_LUA_RAID_H
+/*#ifndef EQEMU_LUA_RAID_H
 #define EQEMU_LUA_RAID_H
 #ifdef LUA_EQEMU
 
@@ -51,3 +51,4 @@ public:
 
 #endif
 #endif
+*/

@@ -60,7 +60,6 @@ void ZSList::ShowUpTime(WorldTCPConnection* con, const char* adminname) {
 
 void ZSList::Add(ZoneServer* zoneserver) {
 	list.Insert(zoneserver);
-	zoneserver->SendGroupIDs();	//send its initial set of group ids
 }
 
 void ZSList::KillAll() {
@@ -504,16 +503,6 @@ void ZSList::SendTimeSync() {
 	tod->start_realtime=worldclock.getStartRealTime();
 	SendPacket(pack);
 	delete pack;
-}
-
-void ZSList::NextGroupIDs(uint32 &start, uint32 &end) {
-	start = CurGroupID;
-	CurGroupID += 1000;	//hand them out 1000 at a time...
-	if(CurGroupID < start) {	//handle overflow
-		start = 1;
-		CurGroupID = 1001;
-	}
-	end = CurGroupID - 1;
 }
 
 void ZSList::SOPZoneBootup(const char* adminname, uint32 ZoneServerID, const char* zonename, bool iMakeStatic) {

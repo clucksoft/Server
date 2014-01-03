@@ -44,8 +44,6 @@ public:
 	bool RezzPlayer(EQApplicationPacket* rpack, uint32 rezzexp, uint32 dbid, uint16 opcode);
 	bool IsOOCMuted() const { return(oocmuted); }
 
-	uint32 NextGroupID();
-
 	void SetLaunchedName(const char *n) { m_launchedName = n; }
 	void SetLauncherName(const char *n) { m_launcherName = n; }
 	void SendReloadTasks(int Command, int TaskID=0);
@@ -65,8 +63,6 @@ private:
 
 	bool oocmuted;
 
-	uint32 cur_groupid;
-	uint32 last_groupid;
 };
 #endif
 

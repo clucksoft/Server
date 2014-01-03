@@ -1039,28 +1039,29 @@ void QuestManager::gmmove(float x, float y, float z) {
 
 void QuestManager::movegrp(int zoneid, float x, float y, float z) {
 	QuestManagerCurrentQuestVars();
-	if (initiator && initiator->IsClient())
-	{
-		Group *g = entity_list.GetGroupByClient(initiator);
-		if (g != nullptr) {
-			g->TeleportGroup(owner, zoneid, 0, x, y, z, 0.0f);
-		}
-		else {
-			Raid *r = entity_list.GetRaidByClient(initiator);
-			if (r != nullptr) {
-				uint32 gid = r->GetGroup(initiator);
-				if (gid >= 0 && gid < 12) {
-					r->TeleportGroup(owner, zoneid, 0, x, y, z, 0.0f, gid);
-				}
-				else {
-					initiator->MovePC(zoneid, x, y, z, 0.0f);
-				}
-			}
-			else {
-				initiator->MovePC(zoneid, x, y, z, 0.0f);
-			}
-		}
-	}
+	//todo: group
+	//if (initiator && initiator->IsClient())
+	//{
+	//	Group *g = entity_list.GetGroupByClient(initiator);
+	//	if (g != nullptr) {
+	//		g->TeleportGroup(owner, zoneid, 0, x, y, z, 0.0f);
+	//	}
+	//	else {
+	//		Raid *r = entity_list.GetRaidByClient(initiator);
+	//		if (r != nullptr) {
+	//			uint32 gid = r->GetGroup(initiator);
+	//			if (gid >= 0 && gid < 12) {
+	//				r->TeleportGroup(owner, zoneid, 0, x, y, z, 0.0f, gid);
+	//			}
+	//			else {
+	//				initiator->MovePC(zoneid, x, y, z, 0.0f);
+	//			}
+	//		}
+	//		else {
+	//			initiator->MovePC(zoneid, x, y, z, 0.0f);
+	//		}
+	//	}
+	//}
 }
 
 void QuestManager::doanim(int anim_id) {
@@ -2283,34 +2284,36 @@ int QuestManager::getlevel(uint8 type)
 	}
 	else if(type == 1)
 	{
-		Group *g = entity_list.GetGroupByClient(initiator);
-		if (g != nullptr)
-			return (g->GetAvgLevel());
-		else
+		//todo: group
+		//Group *g = entity_list.GetGroupByClient(initiator);
+		//if (g != nullptr)
+		//	return (g->GetAvgLevel());
+		//else
 			return 0;
 	}
 	else if(type == 2)
 	{
-		Raid *r = entity_list.GetRaidByClient(initiator);
-		if (r != nullptr)
-			return (r->GetAvgLevel());
-		else
+		//Raid *r = entity_list.GetRaidByClient(initiator);
+		//if (r != nullptr)
+		//	return (r->GetAvgLevel());
+		//else
 			return 0;
 	}
 	else if(type == 3)
 	{
-		Raid *r = entity_list.GetRaidByClient(initiator);
-		if(r != nullptr)
-		{
-			return (r->GetAvgLevel());
-		}
-		Group *g = entity_list.GetGroupByClient(initiator);
-		if(g != nullptr)
-		{
-			return (g->GetAvgLevel());
-		}
-		else
-			return (initiator->GetLevel());
+		//Raid *r = entity_list.GetRaidByClient(initiator);
+		//if(r != nullptr)
+		//{
+		//	return (r->GetAvgLevel());
+		//}
+		//Group *g = entity_list.GetGroupByClient(initiator);
+		//if(g != nullptr)
+		//{
+		//	return (g->GetAvgLevel());
+		//}
+		//else
+		//	return (initiator->GetLevel());
+		return 0;
 	}
 	else if(type == 4 && initiator->IsClient())
 	{
@@ -2540,30 +2543,31 @@ void QuestManager::AssignToInstance(uint16 instance_id)
 
 void QuestManager::AssignGroupToInstance(uint16 instance_id)
 {
+	//todo: group
 	QuestManagerCurrentQuestVars();
-	if(initiator)
-	{
-		Group *g = initiator->GetGroup();
-		if(g)
-		{
-			uint32 gid = g->GetID();
-			database.AssignGroupToInstance(gid, instance_id);
-		}
-	}
+	//if(initiator)
+	//{
+	//	Group *g = initiator->GetGroup();
+	//	if(g)
+	//	{
+	//		uint32 gid = g->GetID();
+	//		database.AssignGroupToInstance(gid, instance_id);
+	//	}
+	//}
 }
 
 void QuestManager::AssignRaidToInstance(uint16 instance_id)
 {
 	QuestManagerCurrentQuestVars();
-	if(initiator)
-	{
-		Raid *r = initiator->GetRaid();
-		if(r)
-		{
-			uint32 rid = r->GetID();
-			database.AssignRaidToInstance(rid, instance_id);
-		}
-	}
+	//if(initiator)
+	//{
+	//	Raid *r = initiator->GetRaid();
+	//	if(r)
+	//	{
+	//		uint32 rid = r->GetID();
+	//		database.AssignRaidToInstance(rid, instance_id);
+	//	}
+	//}
 }
 
 void QuestManager::MovePCInstance(int zone_id, int instance_id, float x, float y, float z, float heading)
@@ -2578,26 +2582,26 @@ void QuestManager::MovePCInstance(int zone_id, int instance_id, float x, float y
 void QuestManager::FlagInstanceByGroupLeader(uint32 zone, int16 version)
 {
 	QuestManagerCurrentQuestVars();
-	if(initiator)
-	{
-		Group *g = initiator->GetGroup();
-		if(g){
-			database.FlagInstanceByGroupLeader(zone, version, initiator->CharacterID(), g->GetID());
-		}
-	}
+	//if(initiator)
+	//{
+	//	Group *g = initiator->GetGroup();
+	//	if(g){
+	//		database.FlagInstanceByGroupLeader(zone, version, initiator->CharacterID(), g->GetID());
+	//	}
+	//}
 }
 
 void QuestManager::FlagInstanceByRaidLeader(uint32 zone, int16 version)
 {
 	QuestManagerCurrentQuestVars();
-	if(initiator)
-	{
-		Raid *r = initiator->GetRaid();
-		if(r)
-		{
-			database.FlagInstanceByRaidLeader(zone, version, initiator->CharacterID(), r->GetID());
-		}
-	}
+	//if(initiator)
+	//{
+	//	Raid *r = initiator->GetRaid();
+	//	if(r)
+	//	{
+	//		database.FlagInstanceByRaidLeader(zone, version, initiator->CharacterID(), r->GetID());
+	//	}
+	//}
 }
 
 const char* QuestManager::saylink(char* Phrase, bool silent, const char* LinkName) {

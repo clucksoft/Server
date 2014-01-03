@@ -728,11 +728,11 @@ void PerlembParser::MapFunctions() {
 	"package PerlPacket;"
 	"&boot_PerlPacket;"		//load our PerlPacket XS
 
-	"package Group;"
-	"&boot_Group;"		//load our Group XS
-
-	"package Raid;"
-	"&boot_Raid;"		//load our Raid XS
+	//"package Group;"
+	//"&boot_Group;"		//load our Group XS
+    //
+	//"package Raid;"
+	//"&boot_Raid;"		//load our Raid XS
 
 	"package QuestItem;"
 	"&boot_QuestItem;"	// load quest Item XS
@@ -1245,8 +1245,9 @@ void PerlembParser::ExportEventVariables(std::string &package_name, QuestEventID
 		case EVENT_GROUP_CHANGE: {
 			if(mob && mob->IsClient())
 			{
-				ExportVar(package_name.c_str(), "grouped", mob->IsGrouped());
-				ExportVar(package_name.c_str(), "raided", mob->IsRaidGrouped());
+				//todo: group
+				//ExportVar(package_name.c_str(), "grouped", mob->IsGrouped());
+				//ExportVar(package_name.c_str(), "raided", mob->IsRaidGrouped());
 			}
 			break;
 		}

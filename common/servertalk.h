@@ -60,9 +60,9 @@
 #define ServerOP_OOCMute			0x002D
 #define ServerOP_Revoke				0x002E
 //#define			0x002F
-#define ServerOP_GroupIDReq			0x0030
-#define ServerOP_GroupIDReply		0x0031
-#define ServerOP_GroupLeave			0x0032	// for disbanding out of zone folks
+//#define ServerOP_GroupIDReq			0x0030
+//#define ServerOP_GroupIDReply		0x0031
+//#define ServerOP_GroupLeave			0x0032	// for disbanding out of zone folks
 #define ServerOP_RezzPlayerAccept	0x0033
 #define ServerOP_SpawnCondition		0x0034
 #define ServerOP_SpawnEvent			0x0035
@@ -71,10 +71,10 @@
 #define ServerOP_SpawnPlayerCorpse	0x0038
 #define ServerOP_Consent			0x0039
 #define ServerOP_Consent_Response	0x003a
-#define ServerOP_ForceGroupUpdate	0x003b
-#define ServerOP_OOZGroupMessage	0x003c
-#define ServerOP_DisbandGroup		0x003d //for disbanding a whole group cross zone
-#define ServerOP_GroupJoin			0x003e //for joining ooz folks
+//#define ServerOP_ForceGroupUpdate	0x003b
+//#define ServerOP_OOZGroupMessage	0x003c
+//#define ServerOP_DisbandGroup		0x003d //for disbanding a whole group cross zone
+//#define ServerOP_GroupJoin			0x003e //for joining ooz folks
 #define ServerOP_UpdateSpawn		0x003f
 #define ServerOP_SpawnStatusChange	0x0040
 #define ServerOP_ReloadTasks		0x0060
@@ -84,25 +84,25 @@
 #define ServerOP_QGlobalDelete		0x0064
 #define ServerOP_DepopPlayerCorpse	0x0065
 
-#define ServerOP_RaidAdd			0x0100 //in use
-#define ServerOP_RaidRemove			0x0101 //in use
-#define	ServerOP_RaidDisband		0x0102 //in use
-#define ServerOP_RaidLockFlag		0x0103 //in use
-#define ServerOP_RaidGroupLeader	0x0104 //in use
-#define ServerOP_RaidLeader			0x0105 //in use
-#define	ServerOP_RaidGroupSay		0x0106 //in use
-#define	ServerOP_RaidSay			0x0107 //in use
-#define	ServerOP_DetailsChange		0x0108 //in use
+//#define ServerOP_RaidAdd			0x0100 //in use
+//#define ServerOP_RaidRemove			0x0101 //in use
+//#define	ServerOP_RaidDisband		0x0102 //in use
+//#define ServerOP_RaidLockFlag		0x0103 //in use
+//#define ServerOP_RaidGroupLeader	0x0104 //in use
+//#define ServerOP_RaidLeader			0x0105 //in use
+//#define	ServerOP_RaidGroupSay		0x0106 //in use
+//#define	ServerOP_RaidSay			0x0107 //in use
+//#define	ServerOP_DetailsChange		0x0108 //in use
 
-#define ServerOP_UpdateGroup		0x010A //in use
-#define ServerOP_RaidGroupDisband	0x010B //in use
-#define ServerOP_RaidChangeGroup	0x010C //in use
-#define ServerOP_RaidGroupAdd		0x010D
-#define ServerOP_RaidGroupRemove	0x010E
-#define ServerOP_GroupInvite		0x010F
-#define ServerOP_GroupFollow		0x0110
-#define ServerOP_GroupFollowAck		0x0111
-#define ServerOP_GroupCancelInvite	0x0112
+//#define ServerOP_UpdateGroup		0x010A //in use
+//#define ServerOP_RaidGroupDisband	0x010B //in use
+//#define ServerOP_RaidChangeGroup	0x010C //in use
+//#define ServerOP_RaidGroupAdd		0x010D
+//#define ServerOP_RaidGroupRemove	0x010E
+//#define ServerOP_GroupInvite		0x010F
+//#define ServerOP_GroupFollow		0x0110
+//#define ServerOP_GroupFollowAck		0x0111
+//#define ServerOP_GroupCancelInvite	0x0112
 
 #define ServerOP_InstanceUpdateTime			0x014F
 #define ServerOP_AdventureRequest			0x0150
@@ -317,23 +317,6 @@ struct ServerChangeWID_Struct {
 	uint32	charid;
 	uint32	newwid;
 };
-struct SendGroup_Struct{
-	uint8	grouptotal;
-	uint32	zoneid;
-	char	leader[64];
-	char	thismember[64];
-	char	members[5][64];
-};
-
-struct ServerGroupFollow_Struct {
-	uint32 CharacterID;
-	GroupGeneric_Struct gf;
-};
-
-struct ServerGroupFollowAck_Struct {
-	char Name[64];
-};
-
 
 struct ServerChannelMessage_Struct {
 	char deliverto[64];
@@ -679,45 +662,6 @@ struct RevokeStruct {
 	bool toggle; //0 off 1 on
 };
 
-struct ServerGroupIDReply_Struct {
-	uint32 start;	//a range of group IDs to use.
-	uint32 end;
-};
-
-struct ServerGroupLeave_Struct {
-	uint32 zoneid;
-	uint16 instance_id;
-	uint32 gid;
-	char member_name[64];	//kick this member from the group
-};
-
-struct ServerGroupJoin_Struct {
-	uint32 zoneid;
-	uint16 instance_id;
-	uint32 gid;
-	char member_name[64];	//this person is joining the group
-};
-
-struct ServerForceGroupUpdate_Struct {
-	uint32 origZoneID;
-	uint16 instance_id;
-	uint32 gid;
-};
-
-struct ServerGroupChannelMessage_Struct {
-	uint32 zoneid;
-	uint16 instanceid;
-	uint32 groupid;
-	char from[64];
-	char message[0];
-};
-
-struct ServerDisbandGroup_Struct {
-	uint32 zoneid;
-	uint16 instance_id;
-	uint32 groupid;
-};
-
 struct SimpleName_Struct{
 	char name[64];
 };
@@ -825,27 +769,6 @@ struct ServerDepopPlayerCorpse_Struct
 	uint32 DBID;
 	uint32 ZoneID;
 	uint16 InstanceID;
-};
-
-struct ServerRaidGeneralAction_Struct {
-	uint32 zoneid;
-	uint16 instance_id;
-	uint32 rid;
-	uint32 gid;
-	char playername[64];
-};
-
-struct ServerRaidGroupAction_Struct { //add / remove depends on opcode.
-	char membername[64]; //member who's adding / leaving
-	uint32 gid; //group id to send to.
-	uint32 rid; //raid id to send to.
-};
-
-struct ServerRaidMessage_Struct {
-	uint32 rid;
-	uint32 gid;
-	char from[64];
-	char message[0];
 };
 
 struct ServerLFGMatchesRequest_Struct {

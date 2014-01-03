@@ -104,39 +104,45 @@ void HateList::Set(Mob* other, uint32 in_hate, uint32 in_dam)
 
 Mob* HateList::GetDamageTop(Mob* hater)
 {
+	//todo: group
 	Mob* current = nullptr;
-	Group* grp = nullptr;
-	Raid* r = nullptr;
+	//Group* grp = nullptr;
+	//Raid* r = nullptr;
 	uint32 dmg_amt = 0;
 
 	auto iterator = list.begin();
 	while(iterator != list.end())
 	{
-		grp = nullptr;
-		r = nullptr;
+		//grp = nullptr;
+		//r = nullptr;
+		//
+		//if((*iterator)->ent && (*iterator)->ent->IsClient()){
+		//	r = entity_list.GetRaidByClient((*iterator)->ent->CastToClient());
+		//}
+		//
+		//grp = entity_list.GetGroupByMob((*iterator)->ent);
 
-		if((*iterator)->ent && (*iterator)->ent->IsClient()){
-			r = entity_list.GetRaidByClient((*iterator)->ent->CastToClient());
-		}
-
-		grp = entity_list.GetGroupByMob((*iterator)->ent);
-
-		if((*iterator)->ent && r){
-			if(r->GetTotalRaidDamage(hater) >= dmg_amt)
-			{
-				current = (*iterator)->ent;
-				dmg_amt = r->GetTotalRaidDamage(hater);
-			}
-		}
-		else if ((*iterator)->ent != nullptr && grp != nullptr)
-		{
-			if (grp->GetTotalGroupDamage(hater) >= dmg_amt)
-			{
-				current = (*iterator)->ent;
-				dmg_amt = grp->GetTotalGroupDamage(hater);
-			}
-		}
-		else if ((*iterator)->ent != nullptr && (uint32)(*iterator)->damage >= dmg_amt)
+		//if((*iterator)->ent && r){
+		//	if(r->GetTotalRaidDamage(hater) >= dmg_amt)
+		//	{
+		//		current = (*iterator)->ent;
+		//		dmg_amt = r->GetTotalRaidDamage(hater);
+		//	}
+		//}
+		//else if ((*iterator)->ent != nullptr && grp != nullptr)
+		//{
+		//	if (grp->GetTotalGroupDamage(hater) >= dmg_amt)
+		//	{
+		//		current = (*iterator)->ent;
+		//		dmg_amt = grp->GetTotalGroupDamage(hater);
+		//	}
+		//}
+		//else if ((*iterator)->ent != nullptr && (uint32)(*iterator)->damage >= dmg_amt)
+		//{
+		//	current = (*iterator)->ent;
+		//	dmg_amt = (*iterator)->damage;
+		//}
+		if ((*iterator)->ent != nullptr && (uint32)(*iterator)->damage >= dmg_amt)
 		{
 			current = (*iterator)->ent;
 			dmg_amt = (*iterator)->damage;

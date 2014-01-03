@@ -954,21 +954,27 @@ void Corpse::MakeLootRequestPackets(Client* client, const EQApplicationPacket* a
 				}
 			}
 
-			if(!IsPlayerCorpse() && client->IsGrouped() && client->AutoSplitEnabled() && client->GetGroup()) {
-				d->copper		= 0;
-				d->silver		= 0;
-				d->gold			= 0;
-				d->platinum		= 0;
-				Group *cgroup = client->GetGroup();
-				cgroup->SplitMoney(GetCopper(), GetSilver(), GetGold(), GetPlatinum(), client);
-			}
-			else {
-				d->copper		= this->GetCopper();
-				d->silver		= this->GetSilver();
-				d->gold			= this->GetGold();
-				d->platinum		= this->GetPlatinum();
-				client->AddMoneyToPP(GetCopper(), GetSilver(), GetGold(), GetPlatinum(), false);
-			}
+			//todo: group
+			//if(!IsPlayerCorpse() && client->IsGrouped() && client->AutoSplitEnabled() && client->GetGroup()) {
+			//	d->copper		= 0;
+			//	d->silver		= 0;
+			//	d->gold			= 0;
+			//	d->platinum		= 0;
+			//	Group *cgroup = client->GetGroup();
+			//	cgroup->SplitMoney(GetCopper(), GetSilver(), GetGold(), GetPlatinum(), client);
+			//}
+			//else {
+			//	d->copper		= this->GetCopper();
+			//	d->silver		= this->GetSilver();
+			//	d->gold			= this->GetGold();
+			//	d->platinum		= this->GetPlatinum();
+			//	client->AddMoneyToPP(GetCopper(), GetSilver(), GetGold(), GetPlatinum(), false);
+			//}
+			d->copper		= this->GetCopper();
+			d->silver		= this->GetSilver();
+			d->gold			= this->GetGold();
+			d->platinum		= this->GetPlatinum();
+			client->AddMoneyToPP(GetCopper(), GetSilver(), GetGold(), GetPlatinum(), false);
 
 			RemoveCash();
 			Save();
@@ -1268,15 +1274,16 @@ void Corpse::LootItem(Client* client, const EQApplicationPacket* app)
 
 		client->Message_StringID(MT_LootMessages, LOOTED_MESSAGE, link);
 		if(!IsPlayerCorpse()) {
-			Group *g = client->GetGroup();
-			if(g != nullptr) {
-				g->GroupMessage_StringID(client, MT_LootMessages, OTHER_LOOTED_MESSAGE, client->GetName(), link);
-			} else {
-				Raid *r = client->GetRaid();
-				if(r != nullptr) {
-					r->RaidMessage_StringID(client, MT_LootMessages, OTHER_LOOTED_MESSAGE, client->GetName(), link);
-				}
-			}
+			//todo: group
+			//Group *g = client->GetGroup();
+			//if(g != nullptr) {
+			//	g->GroupMessage_StringID(client, MT_LootMessages, OTHER_LOOTED_MESSAGE, client->GetName(), link);
+			//} else {
+			//	Raid *r = client->GetRaid();
+			//	if(r != nullptr) {
+			//		r->RaidMessage_StringID(client, MT_LootMessages, OTHER_LOOTED_MESSAGE, client->GetName(), link);
+			//	}
+			//}
 		}
 		safe_delete_array(link);
 	}

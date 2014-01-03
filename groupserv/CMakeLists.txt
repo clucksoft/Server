@@ -1,0 +1,40 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+
+SET(groupserv_sources
+	database.cpp
+	groupserv.cpp
+	worldserver.cpp
+)
+
+SET(groupserv_headers
+	database.h
+	worldserver.h
+)
+
+ADD_EXECUTABLE(groupserv ${groupserv_sources} ${groupserv_headers})
+
+INSTALL(TARGETS groupserv RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+ADD_DEFINITIONS(-DGSERV)
+
+TARGET_LINK_LIBRARIES(groupserv Common debug ${MySQL_LIBRARY_DEBUG} optimized ${MySQL_LIBRARY_RELEASE} ${ZLIB_LIBRARY})
+
+IF(MSVC)
+	SET_TARGET_PROPERTIES(groupserv PROPERTIES LINK_FLAGS_RELEASE "/OPT:REF /OPT:ICF")
+	TARGET_LINK_LIBRARIES(groupserv "Ws2_32.lib")
+ENDIF(MSVC)
+
+IF(MINGW)
+	TARGET_LINK_LIBRARIES(groupserv "WS2_32")
+ENDIF(MINGW)
+
+IF(UNIX)
+	TARGET_LINK_LIBRARIES(groupserv "${CMAKE_DL_LIBS}")
+	TARGET_LINK_LIBRARIES(groupserv "z")
+	TARGET_LINK_LIBRARIES(groupserv "m")
+	TARGET_LINK_LIBRARIES(groupserv "rt")
+	TARGET_LINK_LIBRARIES(groupserv "pthread")
+	ADD_DEFINITIONS(-fPIC)
+ENDIF(UNIX)
+
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/Bin)

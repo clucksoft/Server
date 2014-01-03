@@ -1524,92 +1524,93 @@ void Client::ResetAA(){
 
 int Client::GroupLeadershipAAHealthEnhancement()
 {
-	Group *g = GetGroup();
-
-	if(!g || (g->GroupCount() < 3))
-		return 0;
-
-	switch(g->GetLeadershipAA(groupAAHealthEnhancement))
-	{
-		case 0:
-			return 0;
-		case 1:
-			return 30;
-		case 2:
-			return 60;
-		case 3:
-			return 100;
-	}
-
+	//todo: group
+	//Group *g = GetGroup();
+	//
+	//if(!g || (g->GroupCount() < 3))
+	//	return 0;
+	//
+	//switch(g->GetLeadershipAA(groupAAHealthEnhancement))
+	//{
+	//	case 0:
+	//		return 0;
+	//	case 1:
+	//		return 30;
+	//	case 2:
+	//		return 60;
+	//	case 3:
+	//		return 100;
+	//}
+	//
 	return 0;
 }
 
 int Client::GroupLeadershipAAManaEnhancement()
 {
-	Group *g = GetGroup();
-
-	if(!g || (g->GroupCount() < 3))
-		return 0;
-
-	switch(g->GetLeadershipAA(groupAAManaEnhancement))
-	{
-		case 0:
-			return 0;
-		case 1:
-			return 30;
-		case 2:
-			return 60;
-		case 3:
-			return 100;
-	}
-
+	//Group *g = GetGroup();
+	//
+	//if(!g || (g->GroupCount() < 3))
+	//	return 0;
+	//
+	//switch(g->GetLeadershipAA(groupAAManaEnhancement))
+	//{
+	//	case 0:
+	//		return 0;
+	//	case 1:
+	//		return 30;
+	//	case 2:
+	//		return 60;
+	//	case 3:
+	//		return 100;
+	//}
+	//
 	return 0;
 }
 
 int Client::GroupLeadershipAAHealthRegeneration()
 {
-	Group *g = GetGroup();
-
-	if(!g || (g->GroupCount() < 3))
-		return 0;
-
-	switch(g->GetLeadershipAA(groupAAHealthRegeneration))
-	{
-		case 0:
-			return 0;
-		case 1:
-			return 4;
-		case 2:
-			return 6;
-		case 3:
-			return 8;
-	}
-
+	//Group *g = GetGroup();
+	//
+	//if(!g || (g->GroupCount() < 3))
+	//	return 0;
+	//
+	//switch(g->GetLeadershipAA(groupAAHealthRegeneration))
+	//{
+	//	case 0:
+	//		return 0;
+	//	case 1:
+	//		return 4;
+	//	case 2:
+	//		return 6;
+	//	case 3:
+	//		return 8;
+	//}
+	//
 	return 0;
 }
 
 int Client::GroupLeadershipAAOffenseEnhancement()
 {
-	Group *g = GetGroup();
-
-	if(!g || (g->GroupCount() < 3))
-		return 0;
-
-	switch(g->GetLeadershipAA(groupAAOffenseEnhancement))
-	{
-		case 0:
-			return 0;
-		case 1:
-			return 10;
-		case 2:
-			return 19;
-		case 3:
-			return 28;
-		case 4:
-			return 34;
-		case 5:
-			return 40;
-	}
+	//Group *g = GetGroup();
+	//
+	//if(!g || (g->GroupCount() < 3))
+	//	return 0;
+	//
+	//switch(g->GetLeadershipAA(groupAAOffenseEnhancement))
+	//{
+	//	case 0:
+	//		return 0;
+	//	case 1:
+	//		return 10;
+	//	case 2:
+	//		return 19;
+	//	case 3:
+	//		return 28;
+	//	case 4:
+	//		return 34;
+	//	case 5:
+	//		return 40;
+	//}
 	return 0;
 }
 

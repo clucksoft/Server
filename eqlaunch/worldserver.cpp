@@ -120,10 +120,6 @@ void WorldServer::Process() {
 			}
 			break;
 		}
-		case ServerOP_GroupIDReply: {
-			//ignore this, world is still being dumb
-			break;
-		}
 
 		default: {
 			_log(LAUNCHER__NET, "Unknown opcode 0x%x from World of len %d", pack->opcode, pack->size);

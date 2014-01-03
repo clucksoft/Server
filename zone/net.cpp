@@ -396,9 +396,6 @@ int main(int argc, char** argv) {
 
 		if (ZoneLoaded && temp_timer.Check()) {
 			{
-				if(net.group_timer.Enabled() && net.group_timer.Check())
-					entity_list.GroupProcess();
-
 				if(net.door_timer.Enabled() && net.door_timer.Check())
 					entity_list.DoorProcess();
 
@@ -410,9 +407,6 @@ int main(int argc, char** argv) {
 
 				if(net.trap_timer.Enabled() && net.trap_timer.Check())
 					entity_list.TrapProcess();
-
-				if(net.raid_timer.Enabled() && net.raid_timer.Check())
-					entity_list.RaidProcess();
 
 				entity_list.Process();
 
@@ -567,15 +561,11 @@ NetConnection::NetConnection()
 	object_timer(5000),
 	door_timer(5000),
 	corpse_timer(2000),
-	group_timer(1000),
-	raid_timer(1000),
 	trap_timer(1000)
 {
 	ZonePort = 0;
 	ZoneAddress = 0;
 	WorldAddress = 0;
-	group_timer.Disable();
-	raid_timer.Disable();
 	corpse_timer.Disable();
 	door_timer.Disable();
 	object_timer.Disable();

@@ -1,3 +1,4 @@
+/*
 #ifndef EQEMU_LUA_GROUP_H
 #define EQEMU_LUA_GROUP_H
 #ifdef LUA_EQEMU
@@ -47,3 +48,4 @@ public:
 
 #endif
 #endif
+*/

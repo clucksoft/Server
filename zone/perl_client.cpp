@@ -3194,132 +3194,132 @@ XS(XS_Client_BreakInvis)
 	XSRETURN_EMPTY;
 }
 
-XS(XS_Client_GetGroup); /* prototype to pass -Wmissing-prototypes */
-XS(XS_Client_GetGroup)
-{
-	dXSARGS;
-	if (items != 1)
-		Perl_croak(aTHX_ "Usage: Client::GetGroup(THIS)");
-	{
-		Client *		THIS;
-		Group *		RETVAL;
-
-		if (sv_derived_from(ST(0), "Client")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(Client *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type Client");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		RETVAL = THIS->GetGroup();
-		ST(0) = sv_newmortal();
-		sv_setref_pv(ST(0), "Group", (void*)RETVAL);
-	}
-	XSRETURN(1);
-}
-
-XS(XS_Client_LeaveGroup); /* prototype to pass -Wmissing-prototypes */
-XS(XS_Client_LeaveGroup)
-{
-	dXSARGS;
-	if (items != 1)
-		Perl_croak(aTHX_ "Usage: Client::LeaveGroup(THIS)");
-	{
-		Client *		THIS;
-
-		if (sv_derived_from(ST(0), "Client")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(Client *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type Client");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		THIS->LeaveGroup();
-	}
-	XSRETURN_EMPTY;
-}
-
-XS(XS_Client_GetRaid); /* prototype to pass -Wmissing-prototypes */
-XS(XS_Client_GetRaid)
-{
-	dXSARGS;
-	if (items != 1)
-		Perl_croak(aTHX_ "Usage: Client::GetRaid(THIS)");
-	{
-		Client *		THIS;
-		Raid *		RETVAL;
-
-		if (sv_derived_from(ST(0), "Client")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(Client *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type Client");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		RETVAL = THIS->GetRaid();
-		ST(0) = sv_newmortal();
-		sv_setref_pv(ST(0), "Raid", (void*)RETVAL);
-	}
-	XSRETURN(1);
-}
-
-XS(XS_Client_IsGrouped); /* prototype to pass -Wmissing-prototypes */
-XS(XS_Client_IsGrouped)
-{
-	dXSARGS;
-	if (items != 1)
-		Perl_croak(aTHX_ "Usage: Client::IsGrouped(THIS)");
-	{
-		Client *		THIS;
-		bool		RETVAL;
-
-		if (sv_derived_from(ST(0), "Client")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(Client *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type Client");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		RETVAL = THIS->IsGrouped();
-		ST(0) = boolSV(RETVAL);
-		sv_2mortal(ST(0));
-	}
-	XSRETURN(1);
-}
-
-XS(XS_Client_IsRaidGrouped); /* prototype to pass -Wmissing-prototypes */
-XS(XS_Client_IsRaidGrouped)
-{
-	dXSARGS;
-	if (items != 1)
-		Perl_croak(aTHX_ "Usage: Client::IsRaidGrouped(THIS)");
-	{
-		Client *		THIS;
-		bool		RETVAL;
-
-		if (sv_derived_from(ST(0), "Client")) {
-			IV tmp = SvIV((SV*)SvRV(ST(0)));
-			THIS = INT2PTR(Client *,tmp);
-		}
-		else
-			Perl_croak(aTHX_ "THIS is not of type Client");
-		if(THIS == nullptr)
-			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
-
-		RETVAL = THIS->IsRaidGrouped();
-		ST(0) = boolSV(RETVAL);
-		sv_2mortal(ST(0));
-	}
-	XSRETURN(1);
-}
+//XS(XS_Client_GetGroup); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_Client_GetGroup)
+//{
+//	dXSARGS;
+//	if (items != 1)
+//		Perl_croak(aTHX_ "Usage: Client::GetGroup(THIS)");
+//	{
+//		Client *		THIS;
+//		Group *		RETVAL;
+//
+//		if (sv_derived_from(ST(0), "Client")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(Client *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type Client");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		RETVAL = THIS->GetGroup();
+//		ST(0) = sv_newmortal();
+//		sv_setref_pv(ST(0), "Group", (void*)RETVAL);
+//	}
+//	XSRETURN(1);
+//}
+//
+//XS(XS_Client_LeaveGroup); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_Client_LeaveGroup)
+//{
+//	dXSARGS;
+//	if (items != 1)
+//		Perl_croak(aTHX_ "Usage: Client::LeaveGroup(THIS)");
+//	{
+//		Client *		THIS;
+//
+//		if (sv_derived_from(ST(0), "Client")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(Client *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type Client");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		THIS->LeaveGroup();
+//	}
+//	XSRETURN_EMPTY;
+//}
+//
+//XS(XS_Client_GetRaid); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_Client_GetRaid)
+//{
+//	dXSARGS;
+//	if (items != 1)
+//		Perl_croak(aTHX_ "Usage: Client::GetRaid(THIS)");
+//	{
+//		Client *		THIS;
+//		Raid *		RETVAL;
+//
+//		if (sv_derived_from(ST(0), "Client")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(Client *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type Client");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		RETVAL = THIS->GetRaid();
+//		ST(0) = sv_newmortal();
+//		sv_setref_pv(ST(0), "Raid", (void*)RETVAL);
+//	}
+//	XSRETURN(1);
+//}
+//
+//XS(XS_Client_IsGrouped); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_Client_IsGrouped)
+//{
+//	dXSARGS;
+//	if (items != 1)
+//		Perl_croak(aTHX_ "Usage: Client::IsGrouped(THIS)");
+//	{
+//		Client *		THIS;
+//		bool		RETVAL;
+//
+//		if (sv_derived_from(ST(0), "Client")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(Client *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type Client");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		RETVAL = THIS->IsGrouped();
+//		ST(0) = boolSV(RETVAL);
+//		sv_2mortal(ST(0));
+//	}
+//	XSRETURN(1);
+//}
+//
+//XS(XS_Client_IsRaidGrouped); /* prototype to pass -Wmissing-prototypes */
+//XS(XS_Client_IsRaidGrouped)
+//{
+//	dXSARGS;
+//	if (items != 1)
+//		Perl_croak(aTHX_ "Usage: Client::IsRaidGrouped(THIS)");
+//	{
+//		Client *		THIS;
+//		bool		RETVAL;
+//
+//		if (sv_derived_from(ST(0), "Client")) {
+//			IV tmp = SvIV((SV*)SvRV(ST(0)));
+//			THIS = INT2PTR(Client *,tmp);
+//		}
+//		else
+//			Perl_croak(aTHX_ "THIS is not of type Client");
+//		if(THIS == nullptr)
+//			Perl_croak(aTHX_ "THIS is nullptr, avoiding crash.");
+//
+//		RETVAL = THIS->IsRaidGrouped();
+//		ST(0) = boolSV(RETVAL);
+//		sv_2mortal(ST(0));
+//	}
+//	XSRETURN(1);
+//}
 
 XS(XS_Client_Hungry); /* prototype to pass -Wmissing-prototypes */
 XS(XS_Client_Hungry)
@@ -6009,11 +6009,11 @@ XS(boot_Client)
 		newXSproto(strcpy(buf, "IncStats"), XS_Client_IncStats, file, "$$$");
 		newXSproto(strcpy(buf, "DropItem"), XS_Client_DropItem, file, "$$");
 		newXSproto(strcpy(buf, "BreakInvis"), XS_Client_BreakInvis, file, "$");
-		newXSproto(strcpy(buf, "GetGroup"), XS_Client_GetGroup, file, "$");
-		newXSproto(strcpy(buf, "LeaveGroup"), XS_Client_LeaveGroup, file, "$");
-		newXSproto(strcpy(buf, "GetRaid"), XS_Client_GetRaid, file, "$");
-		newXSproto(strcpy(buf, "IsGrouped"), XS_Client_IsGrouped, file, "$");
-		newXSproto(strcpy(buf, "IsRaidGrouped"), XS_Client_IsRaidGrouped, file, "$");
+		//newXSproto(strcpy(buf, "GetGroup"), XS_Client_GetGroup, file, "$");
+		//newXSproto(strcpy(buf, "LeaveGroup"), XS_Client_LeaveGroup, file, "$");
+		//newXSproto(strcpy(buf, "GetRaid"), XS_Client_GetRaid, file, "$");
+		//newXSproto(strcpy(buf, "IsGrouped"), XS_Client_IsGrouped, file, "$");
+		//newXSproto(strcpy(buf, "IsRaidGrouped"), XS_Client_IsRaidGrouped, file, "$");
 		newXSproto(strcpy(buf, "Hungry"), XS_Client_Hungry, file, "$");
 		newXSproto(strcpy(buf, "Thirsty"), XS_Client_Thirsty, file, "$");
 		newXSproto(strcpy(buf, "GetInstrumentMod"), XS_Client_GetInstrumentMod, file, "$$");

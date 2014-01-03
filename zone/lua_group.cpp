@@ -1,3 +1,4 @@
+/*
 #ifdef LUA_EQEMU
 
 #include "lua.hpp"
@@ -127,3 +128,4 @@ luabind::scope lua_register_group() {
 }
 
 #endif
+*/

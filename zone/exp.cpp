@@ -131,28 +131,29 @@ void Client::AddEXP(uint32 in_add_exp, uint8 conlevel, bool resexp) {
 		if(IsLeadershipEXPOn() && ((conlevel == CON_BLUE) || (conlevel == CON_WHITE) || (conlevel == CON_YELLOW) || (conlevel == CON_RED))) {
 			add_exp = static_cast<uint32>(static_cast<float>(add_exp) * 0.8f);
 
-			if(GetGroup())
-			{
-				if((m_pp.group_leadership_points < MaxBankedGroupLeadershipPoints(GetLevel()))
-					&& (RuleI(Character, KillsPerGroupLeadershipAA) > 0))
-				{
-					AddLeadershipEXP(GROUP_EXP_PER_POINT / RuleI(Character, KillsPerGroupLeadershipAA), 0);
-					Message_StringID(MT_Leadership, GAIN_GROUP_LEADERSHIP_EXP);
-				}
-				else
-					Message_StringID(MT_Leadership, MAX_GROUP_LEADERSHIP_POINTS);
-			}
-			else
-			{
-				if((m_pp.raid_leadership_points < MaxBankedRaidLeadershipPoints(GetLevel()))
-					&& (RuleI(Character, KillsPerRaidLeadershipAA) > 0))
-				{
-					AddLeadershipEXP(0, RAID_EXP_PER_POINT / RuleI(Character, KillsPerRaidLeadershipAA));
-					Message_StringID(MT_Leadership, GAIN_RAID_LEADERSHIP_EXP);
-				}
-				else
-					Message_StringID(MT_Leadership, MAX_RAID_LEADERSHIP_POINTS);
-			}
+			//todo: group
+			//if(GetGroup())
+			//{
+			//	if((m_pp.group_leadership_points < MaxBankedGroupLeadershipPoints(GetLevel()))
+			//		&& (RuleI(Character, KillsPerGroupLeadershipAA) > 0))
+			//	{
+			//		AddLeadershipEXP(GROUP_EXP_PER_POINT / RuleI(Character, KillsPerGroupLeadershipAA), 0);
+			//		Message_StringID(MT_Leadership, GAIN_GROUP_LEADERSHIP_EXP);
+			//	}
+			//	else
+			//		Message_StringID(MT_Leadership, MAX_GROUP_LEADERSHIP_POINTS);
+			//}
+			//else
+			//{
+			//	if((m_pp.raid_leadership_points < MaxBankedRaidLeadershipPoints(GetLevel()))
+			//		&& (RuleI(Character, KillsPerRaidLeadershipAA) > 0))
+			//	{
+			//		AddLeadershipEXP(0, RAID_EXP_PER_POINT / RuleI(Character, KillsPerRaidLeadershipAA));
+			//		Message_StringID(MT_Leadership, GAIN_RAID_LEADERSHIP_EXP);
+			//	}
+			//	else
+			//		Message_StringID(MT_Leadership, MAX_RAID_LEADERSHIP_POINTS);
+			//}
 
 		}
 
@@ -208,11 +209,12 @@ void Client::SetEXP(uint32 set_exp, uint32 set_aaxp, bool isrezzexp) {
 		if (isrezzexp)
 			this->Message_StringID(MT_Experience, REZ_REGAIN);
 		else{
-			if(this->IsGrouped())
-				this->Message_StringID(MT_Experience, GAIN_GROUPXP);
-			else if(IsRaidGrouped())
-				Message_StringID(MT_Experience, GAIN_RAIDEXP);
-			else
+			//todo: group
+			//if(this->IsGrouped())
+			//	this->Message_StringID(MT_Experience, GAIN_GROUPXP);
+			//else if(IsRaidGrouped())
+			//	Message_StringID(MT_Experience, GAIN_RAIDEXP);
+			//else
 				this->Message_StringID(MT_Experience, GAIN_XP);
 		}
 	}
@@ -385,13 +387,15 @@ void Client::SetLevel(uint8 set_level, bool command)
 
 	level = set_level;
 
-	if(IsRaidGrouped())
-	{
-		Raid *r = this->GetRaid();
-		if(r){
-			r->UpdateLevel(GetName(), set_level);
-		}
-	}
+	//todo: group
+	//if(IsRaidGrouped())
+	//{
+	//	Raid *r = this->GetRaid();
+	//	if(r){
+	//		r->UpdateLevel(GetName(), set_level);
+	//	}
+	//}
+	
 	if(set_level > m_pp.level2)
 	{
 		if(m_pp.level2 == 0)
@@ -401,6 +405,7 @@ void Client::SetLevel(uint8 set_level, bool command)
 
 		m_pp.level2 = set_level;
 	}
+
 	if(set_level > m_pp.level) {
 		parse->EventPlayer(EVENT_LEVEL_UP, this, "", 0);
 	}
@@ -508,108 +513,111 @@ void Client::AddLevelBasedExp(uint8 exp_percentage, uint8 max_level) {
 	SetEXP(newexp, GetAAXP());
 }
 
-void Group::SplitExp(uint32 exp, Mob* other) {
-	if( other->CastToNPC()->MerchantType != 0 ) // Ensure NPC isn't a merchant
-		return;
+//todo: group
+//void Group::SplitExp(uint32 exp, Mob* other) {
+//	if( other->CastToNPC()->MerchantType != 0 ) // Ensure NPC isn't a merchant
+//		return;
+//
+//	if(other->GetOwner() && other->GetOwner()->IsClient()) // Ensure owner isn't pc
+//		return;
+//
+//	unsigned int i;
+//	uint32 groupexp = exp;
+//	uint8 membercount = 0;
+//	uint8 maxlevel = 1;
+//
+//	for (i = 0; i < MAX_GROUP_MEMBERS; i++) {
+//		if (members[i] != nullptr) {
+//			if(members[i]->GetLevel() > maxlevel)
+//				maxlevel = members[i]->GetLevel();
+//
+//			membercount++;
+//		}
+//	}
+//
+//	float groupmod;
+//	if (membercount > 1 && membercount < 6)
+//		groupmod = 1 + .2*(membercount - 1); //2members=1.2exp, 3=1.4, 4=1.6, 5=1.8
+//	else if (membercount == 6)
+//		groupmod = 2.16;
+//	else
+//		groupmod = 1.0;
+//
+//	groupexp += (uint32)((float)exp * groupmod * (RuleR(Character, GroupExpMultiplier)));
+//
+//	int conlevel = Mob::GetLevelCon(maxlevel, other->GetLevel());
+//	if(conlevel == CON_GREEN)
+//		return;	//no exp for greenies...
+//
+//	if (membercount == 0)
+//		return;
+//
+//	for (i = 0; i < MAX_GROUP_MEMBERS; i++) {
+//		if (members[i] != nullptr && members[i]->IsClient()) // If Group Member is Client
+//		{
+//			Client *cmember = members[i]->CastToClient();
+//			// add exp + exp cap
+//			int16 diff = cmember->GetLevel() - maxlevel;
+//			int16 maxdiff = -(cmember->GetLevel()*15/10 - cmember->GetLevel());
+//				if(maxdiff > -5)
+//					maxdiff = -5;
+//			if (diff >= (maxdiff)) { /*Instead of person who killed the mob, the person who has the highest level in the group*/
+//				uint32 tmp = (cmember->GetLevel()+3) * (cmember->GetLevel()+3) * 75 * 35 / 10;
+//				uint32 tmp2 = groupexp / membercount;
+//				cmember->AddEXP( tmp < tmp2 ? tmp : tmp2, conlevel );
+//			}
+//		}
+//	}
+//}
 
-	if(other->GetOwner() && other->GetOwner()->IsClient()) // Ensure owner isn't pc
-		return;
-
-	unsigned int i;
-	uint32 groupexp = exp;
-	uint8 membercount = 0;
-	uint8 maxlevel = 1;
-
-	for (i = 0; i < MAX_GROUP_MEMBERS; i++) {
-		if (members[i] != nullptr) {
-			if(members[i]->GetLevel() > maxlevel)
-				maxlevel = members[i]->GetLevel();
-
-			membercount++;
-		}
-	}
-
-	float groupmod;
-	if (membercount > 1 && membercount < 6)
-		groupmod = 1 + .2*(membercount - 1); //2members=1.2exp, 3=1.4, 4=1.6, 5=1.8
-	else if (membercount == 6)
-		groupmod = 2.16;
-	else
-		groupmod = 1.0;
-
-	groupexp += (uint32)((float)exp * groupmod * (RuleR(Character, GroupExpMultiplier)));
-
-	int conlevel = Mob::GetLevelCon(maxlevel, other->GetLevel());
-	if(conlevel == CON_GREEN)
-		return;	//no exp for greenies...
-
-	if (membercount == 0)
-		return;
-
-	for (i = 0; i < MAX_GROUP_MEMBERS; i++) {
-		if (members[i] != nullptr && members[i]->IsClient()) // If Group Member is Client
-		{
-			Client *cmember = members[i]->CastToClient();
-			// add exp + exp cap
-			int16 diff = cmember->GetLevel() - maxlevel;
-			int16 maxdiff = -(cmember->GetLevel()*15/10 - cmember->GetLevel());
-				if(maxdiff > -5)
-					maxdiff = -5;
-			if (diff >= (maxdiff)) { /*Instead of person who killed the mob, the person who has the highest level in the group*/
-				uint32 tmp = (cmember->GetLevel()+3) * (cmember->GetLevel()+3) * 75 * 35 / 10;
-				uint32 tmp2 = groupexp / membercount;
-				cmember->AddEXP( tmp < tmp2 ? tmp : tmp2, conlevel );
-			}
-		}
-	}
-}
-
-void Raid::SplitExp(uint32 exp, Mob* other) {
-	if( other->CastToNPC()->MerchantType != 0 ) // Ensure NPC isn't a merchant
-		return;
-
-	if(other->GetOwner() && other->GetOwner()->IsClient()) // Ensure owner isn't pc
-		return;
-
-	uint32 groupexp = exp;
-	uint8 membercount = 0;
-	uint8 maxlevel = 1;
-
-	for (int i = 0; i < MAX_RAID_MEMBERS; i++) {
-		if (members[i].member != nullptr) {
-			if(members[i].member->GetLevel() > maxlevel)
-				maxlevel = members[i].member->GetLevel();
-
-			membercount++;
-		}
-	}
-
-	groupexp = (uint32)((float)groupexp * (1.0f-(RuleR(Character, RaidExpMultiplier))));
-
-	int conlevel = Mob::GetLevelCon(maxlevel, other->GetLevel());
-	if(conlevel == CON_GREEN)
-		return;	//no exp for greenies...
-
-	if (membercount == 0)
-		return;
-
-	for (unsigned int x = 0; x < MAX_RAID_MEMBERS; x++) {
-		if (members[x].member != nullptr) // If Group Member is Client
-		{
-			Client *cmember = members[x].member;
-			// add exp + exp cap
-			int16 diff = cmember->GetLevel() - maxlevel;
-			int16 maxdiff = -(cmember->GetLevel()*15/10 - cmember->GetLevel());
-			if(maxdiff > -5)
-				maxdiff = -5;
-			if (diff >= (maxdiff)) { /*Instead of person who killed the mob, the person who has the highest level in the group*/
-				uint32 tmp = (cmember->GetLevel()+3) * (cmember->GetLevel()+3) * 75 * 35 / 10;
-				uint32 tmp2 = (groupexp / membercount) + 1;
-				cmember->AddEXP( tmp < tmp2 ? tmp : tmp2, conlevel );
-			}
-		}
-	}
-}
+//todo: group
+//why is this in exp.cpp -.-
+//void Raid::SplitExp(uint32 exp, Mob* other) {
+//	if( other->CastToNPC()->MerchantType != 0 ) // Ensure NPC isn't a merchant
+//		return;
+//
+//	if(other->GetOwner() && other->GetOwner()->IsClient()) // Ensure owner isn't pc
+//		return;
+//
+//	uint32 groupexp = exp;
+//	uint8 membercount = 0;
+//	uint8 maxlevel = 1;
+//
+//	for (int i = 0; i < MAX_RAID_MEMBERS; i++) {
+//		if (members[i].member != nullptr) {
+//			if(members[i].member->GetLevel() > maxlevel)
+//				maxlevel = members[i].member->GetLevel();
+//
+//			membercount++;
+//		}
+//	}
+//
+//	groupexp = (uint32)((float)groupexp * (1.0f-(RuleR(Character, RaidExpMultiplier))));
+//
+//	int conlevel = Mob::GetLevelCon(maxlevel, other->GetLevel());
+//	if(conlevel == CON_GREEN)
+//		return;	//no exp for greenies...
+//
+//	if (membercount == 0)
+//		return;
+//
+//	for (unsigned int x = 0; x < MAX_RAID_MEMBERS; x++) {
+//		if (members[x].member != nullptr) // If Group Member is Client
+//		{
+//			Client *cmember = members[x].member;
+//			// add exp + exp cap
+//			int16 diff = cmember->GetLevel() - maxlevel;
+//			int16 maxdiff = -(cmember->GetLevel()*15/10 - cmember->GetLevel());
+//			if(maxdiff > -5)
+//				maxdiff = -5;
+//			if (diff >= (maxdiff)) { /*Instead of person who killed the mob, the person who has the highest level in the group*/
+//				uint32 tmp = (cmember->GetLevel()+3) * (cmember->GetLevel()+3) * 75 * 35 / 10;
+//				uint32 tmp2 = (groupexp / membercount) + 1;
+//				cmember->AddEXP( tmp < tmp2 ? tmp : tmp2, conlevel );
+//			}
+//		}
+//	}
+//}
 
 void Client::SetLeadershipEXP(uint32 group_exp, uint32 raid_exp) {
 	while(group_exp >= GROUP_EXP_PER_POINT) {

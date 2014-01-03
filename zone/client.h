@@ -216,10 +216,6 @@ public:
 	virtual void Damage(Mob* from, int32 damage, uint16 spell_id, SkillUseTypes attack_skill, bool avoidable = true, int8 buffslot = -1, bool iBuffTic = false);
 	virtual bool Attack(Mob* other, int Hand = 13, bool FromRiposte = false, bool IsStrikethrough = false, bool IsFromSpell = false,
 		ExtraAttackOptions *opts = nullptr);
-	virtual bool HasRaid() { return (GetRaid() ? true : false); }
-	virtual bool HasGroup() { return (GetGroup() ? true : false); }
-	virtual Raid* GetRaid() { return entity_list.GetRaidByClient(this); }
-	virtual Group* GetGroup() { return entity_list.GetGroupByClient(this); }
 	virtual inline bool IsBerserk() { return berserk; }
 
 	void	AI_Init();
@@ -805,7 +801,6 @@ public:
 	void	SetFilter(eqFilterType filter_id, eqFilterMode value) { ClientFilters[filter_id]=value; }
 
 	void	BreakInvis();
-	void	LeaveGroup();
 
 	bool	Hungry() const {if (GetGM()) return false; return m_pp.hunger_level <= 3000;}
 	bool	Thirsty() const {if (GetGM()) return false; return m_pp.thirst_level <= 3000;}

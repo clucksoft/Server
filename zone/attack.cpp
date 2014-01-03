@@ -1630,19 +1630,6 @@ bool Client::Death(Mob* killerMob, int32 damage, uint16 spell, SkillUseTypes att
 					new_corpse->SetPKItem(1);
 				else
 					new_corpse->SetPKItem(0);
-				if(killerMob->CastToClient()->isgrouped) {
-					Group* group = entity_list.GetGroupByClient(killerMob->CastToClient());
-					if(group != 0)
-					{
-						for(int i=0;i<6;i++)
-						{
-							if(group->members[i] != nullptr)
-							{
-								new_corpse->AllowMobLoot(group->members[i],i);
-							}
-						}
-					}
-				}
 			}
 
 			entity_list.AddCorpse(new_corpse, GetID());
@@ -1654,8 +1641,6 @@ bool Client::Death(Mob* killerMob, int32 damage, uint16 spell, SkillUseTypes att
 			LeftCorpse = true;
 		}
 
-//		if(!IsLD())//Todo: make it so an LDed client leaves corpse if its enabled
-//			MakeCorpse(exploss);
 	} else {
 		BuffFadeDetrimental();
 	}
@@ -1678,18 +1663,6 @@ bool Client::Death(Mob* killerMob, int32 damage, uint16 spell, SkillUseTypes att
 	}
 	else
 	{
-		if(isgrouped)
-		{
-			Group *g = GetGroup();
-			if(g)
-				g->MemberZoned(this);
-		}
-
-		Raid* r = entity_list.GetRaidByClient(this);
-
-		if(r)
-			r->MemberZoned(this);
-
 		dead_timer.Start(5000, true);
 
 		m_pp.zone_id = m_pp.binds[0].zoneId;
@@ -2116,20 +2089,7 @@ bool NPC::Death(Mob* killerMob, int32 damage, uint16 spell, SkillUseTypes attack
 		give_exp = killer;
 
 	if(give_exp && give_exp->HasOwner()) {
-
-		bool ownerInGroup = false;
-		if((give_exp->HasGroup() && give_exp->GetGroup()->IsGroupMember(give_exp->GetUltimateOwner()))
-			|| (give_exp->IsPet() && (give_exp->GetOwner()->IsClient()
-			|| ( give_exp->GetOwner()->HasGroup() && give_exp->GetOwner()->GetGroup()->IsGroupMember(give_exp->GetOwner()->GetUltimateOwner())))))
-			ownerInGroup = true;
-
 		give_exp = give_exp->GetUltimateOwner();
-
-#ifdef BOTS
-		if(!RuleB(Bots, BotGroupXP) && !ownerInGroup) {
-			give_exp = nullptr;
-		}
-#endif //BOTS
 	}
 
 	int PlayerCount = 0; // QueryServ Player Counting
@@ -2141,97 +2101,9 @@ bool NPC::Death(Mob* killerMob, int32 damage, uint16 spell, SkillUseTypes attack
 	bool IsLdonTreasure = (this->GetClass() == LDON_TREASURE);
 	if (give_exp_client && !IsCorpse() && MerchantType == 0)
 	{
-		Group *kg = entity_list.GetGroupByClient(give_exp_client);
-		Raid *kr = entity_list.GetRaidByClient(give_exp_client);
-
-        int32 finalxp = EXP_FORMULA;
+		int32 finalxp = EXP_FORMULA;
         finalxp = give_exp_client->mod_client_xp(finalxp, this);
 
-		if(kr)
-		{
-			if(!IsLdonTreasure) {
-				kr->SplitExp((finalxp), this);
-				if(killerMob && (kr->IsRaidMember(killerMob->GetName()) || kr->IsRaidMember(killerMob->GetUltimateOwner()->GetName())))
-					killerMob->TrySpellOnKill(killed_level,spell);
-			}
-			/* Send the EVENT_KILLED_MERIT event for all raid members */
-			for (int i = 0; i < MAX_RAID_MEMBERS; i++) {
-				if (kr->members[i].member != nullptr) { // If Group Member is Client
-					parse->EventNPC(EVENT_KILLED_MERIT, this, kr->members[i].member, "killed", 0);
-
-					mod_npc_killed_merit(kr->members[i].member);
-
-					if(RuleB(TaskSystem, EnableTaskSystem))
-						kr->members[i].member->UpdateTasksOnKill(GetNPCTypeID());
-					PlayerCount++;
-				}
-			}
-
-			// QueryServ Logging - Raid Kills
-			if(RuleB(QueryServ, PlayerLogNPCKills)){
-				ServerPacket* pack = new ServerPacket(ServerOP_QSPlayerLogNPCKills, sizeof(QSPlayerLogNPCKill_Struct) + (sizeof(QSPlayerLogNPCKillsPlayers_Struct) * PlayerCount));
-				PlayerCount = 0;
-				QSPlayerLogNPCKill_Struct* QS = (QSPlayerLogNPCKill_Struct*) pack->pBuffer;
-				QS->s1.NPCID = this->GetNPCTypeID();
-				QS->s1.ZoneID = this->GetZoneID();
-				QS->s1.Type = 2; // Raid Fight
-				for (int i = 0; i < MAX_RAID_MEMBERS; i++) {
-					if (kr->members[i].member != nullptr) { // If Group Member is Client
-						Client *c = kr->members[i].member;
-						QS->Chars[PlayerCount].char_id = c->CharacterID();
-						PlayerCount++;
-					}
-				}
-				worldserver.SendPacket(pack); // Send Packet to World
-				safe_delete(pack);
-			}
-			// End QueryServ Logging
-
-		}
-		else if (give_exp_client->IsGrouped() && kg != nullptr)
-		{
-			if(!IsLdonTreasure) {
-				kg->SplitExp((finalxp), this);
-				if(killerMob && (kg->IsGroupMember(killerMob->GetName()) || kg->IsGroupMember(killerMob->GetUltimateOwner()->GetName())))
-					killerMob->TrySpellOnKill(killed_level,spell);
-			}
-			/* Send the EVENT_KILLED_MERIT event and update kill tasks
-			* for all group members */
-			for (int i = 0; i < MAX_GROUP_MEMBERS; i++) {
-				if (kg->members[i] != nullptr && kg->members[i]->IsClient()) { // If Group Member is Client
-					Client *c = kg->members[i]->CastToClient();
-					parse->EventNPC(EVENT_KILLED_MERIT, this, c, "killed", 0);
-
-					mod_npc_killed_merit(c);
-
-					if(RuleB(TaskSystem, EnableTaskSystem))
-						c->UpdateTasksOnKill(GetNPCTypeID());
-
-					PlayerCount++;
-				}
-			}
-
-			// QueryServ Logging - Group Kills
-			if(RuleB(QueryServ, PlayerLogNPCKills)){
-				ServerPacket* pack = new ServerPacket(ServerOP_QSPlayerLogNPCKills, sizeof(QSPlayerLogNPCKill_Struct) + (sizeof(QSPlayerLogNPCKillsPlayers_Struct) * PlayerCount));
-				PlayerCount = 0;
-				QSPlayerLogNPCKill_Struct* QS = (QSPlayerLogNPCKill_Struct*) pack->pBuffer;
-				QS->s1.NPCID = this->GetNPCTypeID();
-				QS->s1.ZoneID = this->GetZoneID();
-				QS->s1.Type = 1; // Group Fight
-				for (int i = 0; i < MAX_GROUP_MEMBERS; i++) {
-					if (kg->members[i] != nullptr && kg->members[i]->IsClient()) { // If Group Member is Client
-						Client *c = kg->members[i]->CastToClient();
-						QS->Chars[PlayerCount].char_id = c->CharacterID();
-						PlayerCount++;
-					}
-				}
-				worldserver.SendPacket(pack); // Send Packet to World
-				safe_delete(pack);
-			}
-			// End QueryServ Logging
-		}
-		else
 		{
 			if(!IsLdonTreasure) {
 				int conlevel = give_exp->GetLevelCon(GetLevel());
@@ -2300,58 +2172,6 @@ bool NPC::Death(Mob* killerMob, int32 damage, uint16 spell, SkillUseTypes attack
 			corpse->CastToNPC()->DoNPCEmote(AFTERDEATH, emoteid);
 		if(killer != 0 && killer->IsClient()) {
 			corpse->AllowMobLoot(killer, 0);
-			if(killer->IsGrouped()) {
-				Group* group = entity_list.GetGroupByClient(killer->CastToClient());
-				if(group != 0) {
-					for(int i=0;i<6;i++) { // Doesnt work right, needs work
-						if(group->members[i] != nullptr) {
-							corpse->AllowMobLoot(group->members[i],i);
-						}
-					}
-				}
-			}
-			else if(killer->IsRaidGrouped()){
-				Raid* r = entity_list.GetRaidByClient(killer->CastToClient());
-				if(r){
-					int i = 0;
-					for(int x = 0; x < MAX_RAID_MEMBERS; x++)
-					{
-						switch(r->GetLootType())
-						{
-						case 0:
-						case 1:
-							if(r->members[x].member && r->members[x].IsRaidLeader){
-								corpse->AllowMobLoot(r->members[x].member, i);
-								i++;
-							}
-							break;
-						case 2:
-							if(r->members[x].member && r->members[x].IsRaidLeader){
-								corpse->AllowMobLoot(r->members[x].member, i);
-								i++;
-							}
-							else if(r->members[x].member && r->members[x].IsGroupLeader){
-								corpse->AllowMobLoot(r->members[x].member, i);
-								i++;
-							}
-							break;
-						case 3:
-							if(r->members[x].member && r->members[x].IsLooter){
-								corpse->AllowMobLoot(r->members[x].member, i);
-								i++;
-							}
-							break;
-						case 4:
-							if(r->members[x].member)
-							{
-								corpse->AllowMobLoot(r->members[x].member, i);
-								i++;
-							}
-							break;
-						}
-					}
-				}
-			}
 		}
 
 		if(zone && zone->adv_data)

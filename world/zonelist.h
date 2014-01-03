@@ -50,7 +50,6 @@ public:
 	void	ListLockedZones(const char* to, WorldTCPConnection* connection);
 	Timer*	shutdowntimer;
 	Timer*	reminder;
-	void	NextGroupIDs(uint32 &start, uint32 &end);
 	void	SendLSZones();
 	uint16 GetAvailableZonePort();
 

@@ -340,80 +340,16 @@ void EntityList::TrapProcess() {
 		net.trap_timer.Disable();//No traps in list, disable until one is added
 }
 
-
-// Debug function -- checks to see if group_list has any nullptr entries.
-// Meant to be called after each group-related function, in order
-// to track down bugs.
-void EntityList::CheckGroupList (const char *fname, const int fline)
-{
-	std::list<Group *>::iterator it;
-
-	for (it = group_list.begin(); it != group_list.end(); it++)
-	{
-		if (*it == nullptr)
-		{
-			LogFile->write(EQEMuLog::Error, "nullptr group, %s:%i", fname, fline);
-		}
-	}
-}
-
-void EntityList::GroupProcess() {
-	std::list<Group *>::iterator iterator;
-	uint32 count = 0;
-
-	if(numclients < 1)
-		return;
-
-	iterator = group_list.begin();
-	while(iterator != group_list.end())
-	{
-		count++;
-		(*iterator)->Process();
-		/*
-		if(!iterator.GetData()->Process()){
-			iterator.RemoveCurrent();
-		}
-		else
-			iterator.Advance();
-		*/
-		iterator++;
-	}
-	if(count == 0)
-		net.group_timer.Disable();//No groups in list, disable until one is added
-
-#if EQDEBUG >= 5
-	CheckGroupList (__FILE__, __LINE__);
-#endif
-}
-
 void EntityList::QueueToGroupsForNPCHealthAA(Mob* sender, const EQApplicationPacket* app)
 {
-
-	std::list<Group *>::iterator iterator = group_list.begin();
-
-	while(iterator != group_list.end())
-	{
-		(*iterator)->QueueHPPacketsForNPCHealthAA(sender, app);
-		iterator++;
-	}
-}
-
-void EntityList::RaidProcess() {
-	std::list<Raid *>::iterator iterator;
-	uint32 count = 0;
-
-	if(numclients < 1)
-		return;
-
-	iterator = raid_list.begin();
-	while(iterator != raid_list.end())
-	{
-		count++;
-		(*iterator)->Process();
-		iterator++;
-	}
-	if(count == 0)
-		net.raid_timer.Disable();//No groups in list, disable until one is added
+	//todo: group
+	//std::list<Group *>::iterator iterator = group_list.begin();
+	//
+	//while(iterator != group_list.end())
+	//{
+	//	(*iterator)->QueueHPPacketsForNPCHealthAA(sender, app);
+	//	iterator++;
+	//}
 }
 
 void EntityList::DoorProcess() {
@@ -501,19 +437,9 @@ void EntityList::MobProcess() {
 #ifdef _WINDOWS
 					struct in_addr	in;
 					in.s_addr = mob->CastToClient()->GetIP();
-					std::cout << "Dropping client: Process=false, ip=" << inet_ntoa(in) << ", port=" << mob->CastToClient()->GetPort() << std::endl;
+					LogFile->write(EQEMuLog::Status, "Dropping client: Process=false, ip=%s, port=%d", inet_ntoa(in), mob->CastToClient()->GetPort());
 #endif
 					zone->StartShutdownTimer();
-					Group *g = GetGroupByMob(mob);
-					if(g) {
-						LogFile->write(EQEMuLog::Error, "About to delete a client still in a group.");
-						g->DelMember(mob);
-					}
-					Raid *r = entity_list.GetRaidByClient(mob->CastToClient());
-					if(r) {
-						LogFile->write(EQEMuLog::Error, "About to delete a client still in a raid.");
-						r->MemberZoned(mob->CastToClient());
-					}
 					entity_list.RemoveClient(mob->GetID());
 			}
 			iterator.RemoveCurrent();
@@ -535,55 +461,6 @@ void EntityList::BeaconProcess() {
 			iterator.Advance();
 	}
 }
-
-
-void EntityList::AddGroup(Group* group) {
-	if(group == nullptr)	//this seems to be happening somehow...
-		return;
-
-	uint32 gid = worldserver.NextGroupID();
-	if(gid == 0) {
-		LogFile->write(EQEMuLog::Error, "Unable to get new group ID from world server. group is going to be broken.");
-		return;
-	}
-
-	AddGroup(group, gid);
-#if EQDEBUG >= 5
-	CheckGroupList (__FILE__, __LINE__);
-#endif
-}
-
-
-void EntityList::AddGroup(Group* group, uint32 gid) {
-	group->SetID(gid);
-	//group_list.Insert(group);
-	group_list.push_back(group);
-	if(!net.group_timer.Enabled())
-		net.group_timer.Start();
-#if EQDEBUG >= 5
-	CheckGroupList (__FILE__, __LINE__);
-#endif
-}
-
-void EntityList::AddRaid(Raid* raid) {
-	if(raid == nullptr)
-		return;
-
-	uint32 gid = worldserver.NextGroupID();
-	if(gid == 0) {
-		LogFile->write(EQEMuLog::Error, "Unable to get new group ID from world server. group is going to be broken.");
-		return;
-	}
-
-	AddRaid(raid, gid);
-}
-void EntityList::AddRaid(Raid* raid, uint32 gid) {
-	raid->SetID(gid);
-	raid_list.push_back(raid);
-	if(!net.raid_timer.Enabled())
-		net.raid_timer.Start();
-}
-
 
 void EntityList::AddCorpse(Corpse* corpse, uint32 in_id) {
 	if (corpse == 0)
@@ -1635,13 +1512,25 @@ void EntityList::QueueCloseClients(Mob* sender, const EQApplicationPacket* app, 
 
 		Client* ent = iterator.GetData();
 
+		//todo: group
+		//if ((!ignore_sender || ent != sender) && (ent != SkipThisMob)) {
+		//	eqFilterMode filter2 = ent->GetFilter(filter);
+		//	if(ent->Connected() &&
+		//		(filter==FilterNone
+		//		|| filter2 == FilterShow
+		//		|| (filter2 == FilterShowGroupOnly && (sender == ent ||
+		//			(ent->GetGroup() && ent->GetGroup()->IsGroupMember(sender))))
+		//		|| (filter2 == FilterShowSelfOnly && ent==sender))
+		//	&& (ent->DistNoRoot(*sender) <= dist2)) {
+		//		ent->QueuePacket(app, ackreq, Client::CLIENT_CONNECTED);
+		//	}
+		//}
 		if ((!ignore_sender || ent != sender) && (ent != SkipThisMob)) {
 			eqFilterMode filter2 = ent->GetFilter(filter);
 			if(ent->Connected() &&
 				(filter==FilterNone
-				|| filter2 == FilterShow
-				|| (filter2 == FilterShowGroupOnly && (sender == ent ||
-					(ent->GetGroup() && ent->GetGroup()->IsGroupMember(sender))))
+				|| filter2 == FilterShow 
+				|| filter2 == FilterShowGroupOnly
 				|| (filter2 == FilterShowSelfOnly && ent==sender))
 			&& (ent->DistNoRoot(*sender) <= dist2)) {
 				ent->QueuePacket(app, ackreq, Client::CLIENT_CONNECTED);
@@ -1927,149 +1816,6 @@ int EntityList::RezzAllCorpsesByCharID(uint32 charid)
 	return RezzExp;
 }
 
-Group* EntityList::GetGroupByMob(Mob* mob)
-{
-	std::list<Group *>::iterator iterator;
-
-	iterator = group_list.begin();
-
-	while(iterator != group_list.end())
-	{
-		if ((*iterator)->IsGroupMember(mob)) {
-			return *iterator;
-		}
-		iterator++;
-	}
-#if EQDEBUG >= 5
-	CheckGroupList (__FILE__, __LINE__);
-#endif
-	return 0;
-}
-
-Group* EntityList::GetGroupByLeaderName(const char* leader){
-	std::list<Group *>::iterator iterator;
-
-	iterator = group_list.begin();
-
-	while(iterator != group_list.end())
-	{
-		if (!strcmp((*iterator)->GetLeaderName(), leader)) {
-			return *iterator;
-		}
-		iterator++;
-	}
-#if EQDEBUG >= 5
-	CheckGroupList (__FILE__, __LINE__);
-#endif
-	return 0;
-}
-Group* EntityList::GetGroupByID(uint32 group_id){
-	std::list<Group *>::iterator iterator;
-
-	iterator = group_list.begin();
-
-	while(iterator != group_list.end())
-	{
-		if ((*iterator)->GetID() == group_id) {
-			return *iterator;
-		}
-		iterator++;
-	}
-#if EQDEBUG >= 5
-	CheckGroupList (__FILE__, __LINE__);
-#endif
-	return 0;
-}
-Group* EntityList::GetGroupByClient(Client* client)
-{
-	std::list <Group *>::iterator iterator;
-
-	iterator = group_list.begin();
-
-	while(iterator != group_list.end())
-	{
-		if ((*iterator)->IsGroupMember(client->CastToMob())) {
-			return *iterator;
-		}
-		iterator++;
-	}
-#if EQDEBUG >= 5
-	CheckGroupList (__FILE__, __LINE__);
-#endif
-	return 0;
-}
-
-Raid* EntityList::GetRaidByLeaderName(const char *leader){
-	std::list<Raid *>::iterator iterator;
-
-	iterator = raid_list.begin();
-
-	while(iterator != raid_list.end())
-	{
-		if((*iterator)->GetLeader()){
-			if(strcmp((*iterator)->GetLeader()->GetName(), leader) == 0){
-				return *iterator;
-	}
-}
-		iterator++;
-	}
-	return 0;
-}
-Raid* EntityList::GetRaidByID(uint32 id){
-	std::list<Raid *>::iterator iterator;
-
-	iterator = raid_list.begin();
-
-	while(iterator != raid_list.end())
-	{
-		if ((*iterator)->GetID() == id) {
-			return *iterator;
-		}
-		iterator++;
-	}
-	return 0;
-}
-
-Raid* EntityList::GetRaidByClient(Client* client)
-{
-	std::list<Raid *>::iterator iterator;
-
-	iterator = raid_list.begin();
-
-	while(iterator != raid_list.end())
-	{
-		for(int x = 0; x < MAX_RAID_MEMBERS; x++)
-		{
-			if((*iterator)->members[x].member){
-				if((*iterator)->members[x].member == client)
-					return *iterator;
-			}
-		}
-		iterator++;
-	}
-	return 0;
-}
-
-Raid* EntityList::GetRaidByMob(Mob* mob) {
-	std::list<Raid *>::iterator iterator;
-
-	iterator = raid_list.begin();
-
-	while(iterator != raid_list.end())
-	{
-		for(int x = 0; x < MAX_RAID_MEMBERS; x++)
-		{
-			// TODO: Implement support for Mob objects in Raid class
-			/*if((*iterator)->members[x].member){
-				if((*iterator)->members[x].member == mob)
-					return *iterator;
-			}*/
-		}
-		iterator++;
-	}
-	return 0;
-}
-
 Client* EntityList::GetClientByAccID(uint32 accid)
 {
 	LinkedListIterator<Client*> iterator(client_list);
@@ -2285,18 +2031,6 @@ void EntityList::RemoveAllMercs(){
 		iterator.RemoveCurrent(false);
 	}
 }
-void EntityList::RemoveAllGroups(){
-	while (group_list.size())
-		group_list.pop_front();
-#if EQDEBUG >= 5
-	CheckGroupList (__FILE__, __LINE__);
-#endif
-}
-
-void EntityList::RemoveAllRaids(){
-	while (raid_list.size())
-		raid_list.pop_front();
-}
 
 void EntityList::RemoveAllDoors(){
 	LinkedListIterator<Doors*> iterator(door_list);
@@ -2493,43 +2227,6 @@ bool EntityList::RemoveCorpse(uint16 delete_id){
 	}
 	return false;
 }
-bool EntityList::RemoveGroup(uint32 delete_id){
-	std::list<Group *>::iterator iterator;
-
-	iterator = group_list.begin();
-
-	while(iterator != group_list.end())
-	{
-		if((*iterator)->GetID() == delete_id) {
-			group_list.remove (*iterator);
-#if EQDEBUG >= 5
-	CheckGroupList (__FILE__, __LINE__);
-#endif
-			return true;
-		}
-		iterator++;
-	}
-#if EQDEBUG >= 5
-	CheckGroupList (__FILE__, __LINE__);
-#endif
-	return false;
-}
-
-bool EntityList::RemoveRaid(uint32 delete_id){
-	std::list<Raid *>::iterator iterator;
-
-	iterator = raid_list.begin();
-
-	while(iterator != raid_list.end())
-	{
-		if((*iterator)->GetID() == delete_id) {
-			raid_list.remove (*iterator);
-			return true;
-		}
-		iterator++;
-	}
-	return false;
-}
 
 void EntityList::Clear()
 {
@@ -2538,10 +2235,8 @@ void EntityList::Clear()
 	entity_list.RemoveAllNPCs();
 	entity_list.RemoveAllMobs();
 	entity_list.RemoveAllCorpses();
-	entity_list.RemoveAllGroups();
 	entity_list.RemoveAllDoors();
 	entity_list.RemoveAllObjects();
-	entity_list.RemoveAllRaids();
 	entity_list.RemoveAllLocalities();
 	last_insert_id = 0;
 }
@@ -2597,8 +2292,6 @@ void EntityList::RemoveEntity(uint16 id)
 	else if(entity_list.RemoveCorpse(id))
 		return;
 	else if(entity_list.RemoveDoor(id))
-		return;
-	else if(entity_list.RemoveGroup(id))
 		return;
 	else if(entity_list.RemoveTrap(id))
 		return;
@@ -3261,7 +2954,8 @@ bool EntityList::MakeTrackPacket(Client* client)
 	LinkedListIterator<Mob*> iterator(mob_list);
 	iterator.Reset();
 
-	Group *g = client->GetGroup();
+	//todo: group
+	//Group *g = client->GetGroup();
 
 	while(iterator.MoreElements())
 	{
@@ -3274,9 +2968,9 @@ bool EntityList::MakeTrackPacket(Client* client)
 				track_ent->distance = MobDistance;
 				track_ent->level = cur_entity->GetLevel();
 				track_ent->NPC = !cur_entity->IsClient();
-				if(g && cur_entity->IsClient() && g->IsGroupMember(cur_entity->CastToMob()))
-					track_ent->GroupMember = 1;
-				else
+				//if(g && cur_entity->IsClient() && g->IsGroupMember(cur_entity->CastToMob()))
+				//	track_ent->GroupMember = 1;
+				//else
 					track_ent->GroupMember = 0;
 				strn0cpy(track_ent->name, cur_entity->GetName(), sizeof(track_ent->name));
 				memcpy(&track_array->Entrys[array_counter], track_ent, sizeof(Track_Struct));
@@ -3306,28 +3000,29 @@ bool EntityList::MakeTrackPacket(Client* client)
 }
 
 void EntityList::MessageGroup(Mob* sender, bool skipclose, uint32 type, const char* message, ...) {
-	va_list argptr;
-	char buffer[4096];
-
-	va_start(argptr, message);
-	vsnprintf(buffer, 4095, message, argptr);
-	va_end(argptr);
-
-	float dist2 = 100;
-
-	if (skipclose)
-		dist2 = 0;
-
-	LinkedListIterator<Client*> iterator(client_list);
-
-	iterator.Reset();
-	while(iterator.MoreElements())
-	{
-		if (iterator.GetData() != sender && (iterator.GetData()->Dist(*sender) <= dist2 || iterator.GetData()->GetGroup() == sender->CastToClient()->GetGroup())) {
-			iterator.GetData()->Message(type, buffer);
-		}
-		iterator.Advance();
-	}
+	//todo: group
+	//va_list argptr;
+	//char buffer[4096];
+	//
+	//va_start(argptr, message);
+	//vsnprintf(buffer, 4095, message, argptr);
+	//va_end(argptr);
+	//
+	//float dist2 = 100;
+	//
+	//if (skipclose)
+	//	dist2 = 0;
+	//
+	//LinkedListIterator<Client*> iterator(client_list);
+	//
+	//iterator.Reset();
+	//while(iterator.MoreElements())
+	//{
+	//	if (iterator.GetData() != sender && (iterator.GetData()->Dist(*sender) <= dist2 || iterator.GetData()->GetGroup() == sender->CastToClient()->GetGroup())) {
+	//		iterator.GetData()->Message(type, buffer);
+	//	}
+	//	iterator.Advance();
+	//}
 }
 
 
@@ -4047,101 +3742,24 @@ Corpse* EntityList::GetClosestCorpse(Mob* sender, const char* Name)
 	return ClosestCorpse;
 }
 
-void EntityList::ForceGroupUpdate(uint32 gid) {
-	LinkedListIterator<Client*> iterator(client_list);
-
-	iterator.Reset();
-	while(iterator.MoreElements()) {
-		if(iterator.GetData()){
-			Group *g = nullptr;
-			g = iterator.GetData()->GetGroup();
-			if(g){
-				if(g->GetID() == gid)
-				{
-					database.RefreshGroupFromDB(iterator.GetData());
-				}
-			}
-		}
-		iterator.Advance();
-	}
-}
-
-void EntityList::SendGroupLeave(uint32 gid, const char *name) {
-	LinkedListIterator<Client*> iterator(client_list);
-	iterator.Reset();
-	while(iterator.MoreElements()) {
-		Client *c = iterator.GetData();
-		if(c){
-			Group *g = nullptr;
-			g = c->GetGroup();
-			if(g){
-				if(g->GetID() == gid)
-				{
-					EQApplicationPacket* outapp = new EQApplicationPacket(OP_GroupUpdate,sizeof(GroupJoin_Struct));
-					GroupJoin_Struct* gj = (GroupJoin_Struct*) outapp->pBuffer;
-					strcpy(gj->membername, name);
-					gj->action = groupActLeave;
-					strcpy(gj->yourname, c->GetName());
-					Mob *Leader = g->GetLeader();
-					if(Leader)
-						Leader->CastToClient()->GetGroupAAs(&gj->leader_aas);
-					c->QueuePacket(outapp);
-					safe_delete(outapp);
-					g->DelMemberOOZ(name);
-					if(g->IsLeader(c) && c->IsLFP())
-						c->UpdateLFP();
-				}
-			}
-		}
-		iterator.Advance();
-	}
-}
-
-void EntityList::SendGroupJoin(uint32 gid, const char *name) {
-	LinkedListIterator<Client*> iterator(client_list);
-	iterator.Reset();
-	while(iterator.MoreElements()) {
-		if(iterator.GetData()){
-			Group *g = nullptr;
-			g = iterator.GetData()->GetGroup();
-			if(g){
-				if(g->GetID() == gid)
-				{
-					EQApplicationPacket* outapp = new EQApplicationPacket(OP_GroupUpdate,sizeof(GroupJoin_Struct));
-					GroupJoin_Struct* gj = (GroupJoin_Struct*) outapp->pBuffer;
-					strcpy(gj->membername, name);
-					gj->action = groupActJoin;
-					strcpy(gj->yourname, iterator.GetData()->GetName());
-					Mob *Leader = g->GetLeader();
-					if(Leader)
-						Leader->CastToClient()->GetGroupAAs(&gj->leader_aas);
-
-					iterator.GetData()->QueuePacket(outapp);
-					safe_delete(outapp);
-				}
-			}
-		}
-		iterator.Advance();
-	}
-}
-
 void EntityList::GroupMessage(uint32 gid, const char *from, const char *message)
 {
-	LinkedListIterator<Client*> iterator(client_list);
-	iterator.Reset();
-	while(iterator.MoreElements()) {
-		if(iterator.GetData()){
-			Group *g = nullptr;
-			g = iterator.GetData()->GetGroup();
-			if(g){
-				if(g->GetID() == gid)
-				{
-					iterator.GetData()->ChannelMessageSend(from, iterator.GetData()->GetName(),2,0,message);
-				}
-			}
-		}
-		iterator.Advance();
-	}
+	//todo: group
+	//LinkedListIterator<Client*> iterator(client_list);
+	//iterator.Reset();
+	//while(iterator.MoreElements()) {
+	//	if(iterator.GetData()){
+	//		Group *g = nullptr;
+	//		g = iterator.GetData()->GetGroup();
+	//		if(g){
+	//			if(g->GetID() == gid)
+	//			{
+	//				iterator.GetData()->ChannelMessageSend(from, iterator.GetData()->GetName(),2,0,message);
+	//			}
+	//		}
+	//	}
+	//	iterator.Advance();
+	//}
 }
 
 uint16 EntityList::CreateGroundObject(uint32 itemid, float x, float y, float z, float heading, uint32 decay_time)
@@ -4567,27 +4185,28 @@ void EntityList::ZoneWho(Client *c, Who_All_Struct* Who) {
 
 void EntityList::UnMarkNPC(uint16 ID)
 {
-	// Designed to be called from the Mob destructor, this method calls Group::UnMarkNPC for
-	// each group to remove the dead mobs entity ID from the groups list of NPCs marked via the
-	// Group Leadership AA Mark NPC ability.
+	//todo: group
+	//// Designed to be called from the Mob destructor, this method calls Group::UnMarkNPC for
+	//// each group to remove the dead mobs entity ID from the groups list of NPCs marked via the
+	//// Group Leadership AA Mark NPC ability.
+	////
+	//LinkedListIterator<Client*> iterator(client_list);
 	//
-	LinkedListIterator<Client*> iterator(client_list);
-
-	iterator.Reset();
-
-	while(iterator.MoreElements())
-	{
-		if(iterator.GetData())
-		{
-			Group *g = nullptr;
-
-			g = iterator.GetData()->GetGroup();
-
-			if(g)
-				g->UnMarkNPC(ID);
-		}
-		iterator.Advance();
-	}
+	//iterator.Reset();
+	//
+	//while(iterator.MoreElements())
+	//{
+	//	if(iterator.GetData())
+	//	{
+	//		Group *g = nullptr;
+	//
+	//		g = iterator.GetData()->GetGroup();
+	//
+	//		if(g)
+	//			g->UnMarkNPC(ID);
+	//	}
+	//	iterator.Advance();
+	//}
 }
 
 uint32 EntityList::CheckNPCsClose(Mob *center)
@@ -4927,13 +4546,14 @@ void EntityList::HideCorpses(Client *c, uint8 CurrentMode, uint8 NewMode)
 		return;
 	}
 
-	Group *g = nullptr;
+	//todo: group
+	//Group *g = nullptr;
 
 	if(NewMode == HideCorpseAllButGroup)
 	{
-		g = c->GetGroup();
-
-		if(!g)
+		//g = c->GetGroup();
+		//
+		//if(!g)
 			NewMode = HideCorpseAll;
 	}
 
@@ -4955,13 +4575,15 @@ void EntityList::HideCorpses(Client *c, uint8 CurrentMode, uint8 NewMode)
 			}
 			else if(NewMode == HideCorpseAllButGroup)
 			{
-				if(!g->IsGroupMember(b->GetOwnerName()))
-				{
-					EQApplicationPacket outapp;
-						b->CreateDespawnPacket(&outapp, false);
-					c->QueuePacket(&outapp);
-				}
-				else if((CurrentMode == HideCorpseAll))
+				//todo: group
+				//if(!g->IsGroupMember(b->GetOwnerName()))
+				//{
+				//	EQApplicationPacket outapp;
+				//		b->CreateDespawnPacket(&outapp, false);
+				//	c->QueuePacket(&outapp);
+				//}
+				//else 
+				if((CurrentMode == HideCorpseAll))
 				{
 					EQApplicationPacket outapp;
 						b->CreateSpawnPacket(&outapp);

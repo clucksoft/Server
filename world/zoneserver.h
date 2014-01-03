@@ -46,7 +46,6 @@ public:
 	void		LSShutDownUpdate(uint32 zoneid);
 	uint32		GetPrevZoneID() { return oldZoneID; }
 	void		ChangeWID(uint32 iCharID, uint32 iWID);
-	void		SendGroupIDs();
 
 	inline const char*	GetZoneName() const	{ return zone_name; }
 	inline const char*	GetZoneLongName() const	{ return long_name; }

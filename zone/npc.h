@@ -83,10 +83,6 @@ public:
 	virtual void Damage(Mob* from, int32 damage, uint16 spell_id, SkillUseTypes attack_skill, bool avoidable = true, int8 buffslot = -1, bool iBuffTic = false);
 	virtual bool Attack(Mob* other, int Hand = 13, bool FromRiposte = false, bool IsStrikethrough = false,
 		bool IsFromSpell = false, ExtraAttackOptions *opts = nullptr);
-	virtual bool HasRaid() { return false; }
-	virtual bool HasGroup() { return false; }
-	virtual Raid* GetRaid() { return 0; }
-	virtual Group* GetGroup() { return 0; }
 
 	virtual bool IsNPC() const { return true; }
 

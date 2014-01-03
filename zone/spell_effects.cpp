@@ -725,42 +725,43 @@ bool Mob::SpellEffect(Mob* caster, uint16 spell_id, float partial)
 #ifdef SPELL_EFFECT_SPAM
 				snprintf(effect_desc, _EDLEN, "Group Fear Immunity");
 #endif
-				//Added client messages to give some indication this effect is active.
-				uint32 group_id_caster = 0;
-				uint32 time = spell.base[i]*10;
-				if(caster->IsClient())
-				{
-					if(caster->IsGrouped())
-					{
-						group_id_caster = GetGroup()->GetID();
-					}
-					else if(caster->IsRaidGrouped())
-					{
-						group_id_caster = (GetRaid()->GetGroup(CastToClient()) == 0xFFFF) ? 0 : (GetRaid()->GetGroup(CastToClient()) + 1);
-					}
-				}
-				if(group_id_caster){
-					Group *g = entity_list.GetGroupByID(group_id_caster);
-					uint32 time = spell.base[i]*10;
-					if(g){
-						for(int gi=0; gi < 6; gi++){
-							if(g->members[gi] && g->members[gi]->IsClient())
-							{
-								g->members[gi]->CastToClient()->EnableAAEffect(aaEffectWarcry , time);
-								if (g->members[gi]->GetID() != caster->GetID())
-									g->members[gi]->Message(13, "You hear the war cry.");
-								else
-									Message(13, "You let loose a fierce war cry.");
-							}
-						}
-					}
-				}
-
-				else{
-					CastToClient()->EnableAAEffect(aaEffectWarcry , time);
-					Message(13, "You let loose a fierce war cry.");
-				}
-
+				//todo: group
+				////Added client messages to give some indication this effect is active.
+				//uint32 group_id_caster = 0;
+				//uint32 time = spell.base[i]*10;
+				//if(caster->IsClient())
+				//{
+				//	if(caster->IsGrouped())
+				//	{
+				//		group_id_caster = GetGroup()->GetID();
+				//	}
+				//	else if(caster->IsRaidGrouped())
+				//	{
+				//		group_id_caster = (GetRaid()->GetGroup(CastToClient()) == 0xFFFF) ? 0 : (GetRaid()->GetGroup(CastToClient()) + 1);
+				//	}
+				//}
+				//if(group_id_caster){
+				//	Group *g = entity_list.GetGroupByID(group_id_caster);
+				//	uint32 time = spell.base[i]*10;
+				//	if(g){
+				//		for(int gi=0; gi < 6; gi++){
+				//			if(g->members[gi] && g->members[gi]->IsClient())
+				//			{
+				//				g->members[gi]->CastToClient()->EnableAAEffect(aaEffectWarcry , time);
+				//				if (g->members[gi]->GetID() != caster->GetID())
+				//					g->members[gi]->Message(13, "You hear the war cry.");
+				//				else
+				//					Message(13, "You let loose a fierce war cry.");
+				//			}
+				//		}
+				//	}
+				//}
+				//
+				//else{
+				//	CastToClient()->EnableAAEffect(aaEffectWarcry , time);
+				//	Message(13, "You let loose a fierce war cry.");
+				//}
+				//
 				break;
 			}
 
@@ -1722,33 +1723,34 @@ bool Mob::SpellEffect(Mob* caster, uint16 spell_id, float partial)
 						TargetClient = this->CastToClient();
 
 					// We now have a valid target for this spell. Either the caster himself or a targetted player. Lets see if the target is in the group.
-					Group* group = entity_list.GetGroupByClient(TargetClient);
-					if(group) {
-						if(!group->IsGroupMember(TargetClient)) {
-							Message(13, "Your target must be a group member for this spell.");
-							break;
-						}
-					}
-					else {
-						Raid *r = entity_list.GetRaidByClient(caster->CastToClient());
-						if(r)
-						{
-							uint32 gid = 0xFFFFFFFF;
-							gid = r->GetGroup(caster->GetName());
-							if(gid < 11)
-							{
-								if(r->GetGroup(TargetClient->GetName()) != gid) {
-									Message(13, "Your target must be a group member for this spell.");
-									break;
-								}
-							}
-						} else {
+					//todo: group
+					//Group* group = entity_list.GetGroupByClient(TargetClient);
+					//if(group) {
+					//	if(!group->IsGroupMember(TargetClient)) {
+					//		Message(13, "Your target must be a group member for this spell.");
+					//		break;
+					//	}
+					//}
+					//else {
+					//	Raid *r = entity_list.GetRaidByClient(caster->CastToClient());
+					//	if(r)
+					//	{
+					//		uint32 gid = 0xFFFFFFFF;
+					//		gid = r->GetGroup(caster->GetName());
+					//		if(gid < 11)
+					//		{
+					//			if(r->GetGroup(TargetClient->GetName()) != gid) {
+					//				Message(13, "Your target must be a group member for this spell.");
+					//				break;
+					//			}
+					//		}
+					//	} else {
 							if(TargetClient != this->CastToClient()) {
 								Message(13, "Your target must be a group member for this spell.");
 								break;
 							}
-						}
-					}
+					//	}
+					//}
 
 					// Now we should either be casting this on self or its being cast on a valid group member
 					if(TargetClient) {
@@ -2399,24 +2401,25 @@ bool Mob::SpellEffect(Mob* caster, uint16 spell_id, float partial)
 				if(!caster->IsClient())
 					break;
 
-				Raid *r = entity_list.GetRaidByClient(caster->CastToClient());
-				if(r)
-				{
-					uint32 gid = 0xFFFFFFFF;
-					gid = r->GetGroup(caster->GetName());
-					if(gid < 11)
-					{
-						r->BalanceHP(spell.base[i], gid);
-						break;
-					}
-				}
-
-				Group *g = entity_list.GetGroupByClient(caster->CastToClient());
-
-				if(!g)
-					break;
-
-				g->BalanceHP(spell.base[i]);
+				//todo: group
+				//Raid *r = entity_list.GetRaidByClient(caster->CastToClient());
+				//if(r)
+				//{
+				//	uint32 gid = 0xFFFFFFFF;
+				//	gid = r->GetGroup(caster->GetName());
+				//	if(gid < 11)
+				//	{
+				//		r->BalanceHP(spell.base[i], gid);
+				//		break;
+				//	}
+				//}
+				//
+				//Group *g = entity_list.GetGroupByClient(caster->CastToClient());
+				//
+				//if(!g)
+				//	break;
+				//
+				//g->BalanceHP(spell.base[i]);
 				break;
 			}
 
@@ -2427,24 +2430,25 @@ bool Mob::SpellEffect(Mob* caster, uint16 spell_id, float partial)
 				if(!caster->IsClient())
 					break;
 
-				Raid *r = entity_list.GetRaidByClient(caster->CastToClient());
-				if(r)
-				{
-					uint32 gid = 0xFFFFFFFF;
-					gid = r->GetGroup(caster->GetName());
-					if(gid < 11)
-					{
-						r->BalanceMana(spell.base[i], gid);
-						break;
-					}
-				}
-
-				Group *g = entity_list.GetGroupByClient(caster->CastToClient());
-
-				if(!g)
-					break;
-
-				g->BalanceMana(spell.base[i]);
+				//todo: group
+				//Raid *r = entity_list.GetRaidByClient(caster->CastToClient());
+				//if(r)
+				//{
+				//	uint32 gid = 0xFFFFFFFF;
+				//	gid = r->GetGroup(caster->GetName());
+				//	if(gid < 11)
+				//	{
+				//		r->BalanceMana(spell.base[i], gid);
+				//		break;
+				//	}
+				//}
+				//
+				//Group *g = entity_list.GetGroupByClient(caster->CastToClient());
+				//
+				//if(!g)
+				//	break;
+				//
+				//g->BalanceMana(spell.base[i]);
 				break;
 			}
 
@@ -2531,26 +2535,27 @@ bool Mob::SpellEffect(Mob* caster, uint16 spell_id, float partial)
 					caster->SetMana(caster->GetMana() - max_mana);
 				}
 
-				Raid *r = entity_list.GetRaidByClient(caster->CastToClient());
-				if(r)
-				{
-					uint32 gid = 0xFFFFFFFF;
-					gid = r->GetGroup(caster->GetName());
-					if(gid < 11)
-					{
-						r->HealGroup(heal_amt,caster, gid);
-						break;
-					}
-				}
-
-				Group *g = entity_list.GetGroupByClient(caster->CastToClient());
-
-				if(!g){
-					caster->HealDamage(heal_amt);
-					break;
-				}
-
-				g->HealGroup(heal_amt, caster);
+				//todo: group
+				//Raid *r = entity_list.GetRaidByClient(caster->CastToClient());
+				//if(r)
+				//{
+				//	uint32 gid = 0xFFFFFFFF;
+				//	gid = r->GetGroup(caster->GetName());
+				//	if(gid < 11)
+				//	{
+				//		r->HealGroup(heal_amt,caster, gid);
+				//		break;
+				//	}
+				//}
+				//
+				//Group *g = entity_list.GetGroupByClient(caster->CastToClient());
+				//
+				//if(!g){
+				//	caster->HealDamage(heal_amt);
+				//	break;
+				//}
+				//
+				//g->HealGroup(heal_amt, caster);
 				break;
 			}
 

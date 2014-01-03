@@ -23,8 +23,8 @@
 #include "lua_npc.h"
 #include "lua_spell.h"
 #include "lua_entity_list.h"
-#include "lua_group.h"
-#include "lua_raid.h"
+//#include "lua_group.h"
+//#include "lua_raid.h"
 #include "lua_corpse.h"
 #include "lua_object.h"
 #include "lua_door.h"
@@ -956,8 +956,8 @@ void LuaParser::MapFunctions(lua_State *L) {
 			lua_register_object_list(),
 			lua_register_door_list(),
 			lua_register_spawn_list(),
-			lua_register_group(),
-			lua_register_raid(),
+//			lua_register_group(),
+//			lua_register_raid(),
 			lua_register_corpse(),
 			lua_register_door(),
 			lua_register_object(),

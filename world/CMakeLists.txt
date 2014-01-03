@@ -12,6 +12,7 @@ SET(world_sources
 	EQW.cpp
 	EQWHTTPHandler.cpp
 	EQWParser.cpp
+	GroupServ.cpp
 	HTTPRequest.cpp
 	LauncherLink.cpp
 	LauncherList.cpp
@@ -45,6 +46,7 @@ SET(world_headers
 	EQW.h
 	EQWHTTPHandler.h
 	EQWParser.h
+	GroupServ.h
 	HTTPRequest.h
 	LauncherLink.h
 	LauncherList.h

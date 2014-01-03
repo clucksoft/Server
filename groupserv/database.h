@@ -17,8 +17,8 @@
 
 */
 
-#ifndef QUERYSERVER_DATABASE_H
-#define QUERYSERVER_DATABASE_H
+#ifndef GROUPSERV_DATABASE_H
+#define GROUPSERV_DATABASE_H
 
 #define AUTHENTICATION_TIMEOUT	60
 #define INVALID_ID				0xFFFFFFFF
@@ -43,13 +43,6 @@ public:
 	~Database();
 
 	bool GetVariable(const char* varname, char* varvalue, uint16 varvalue_len);
-	void AddSpeech(const char* from, const char* to, const char* message, uint16 minstatus, uint32 guilddbid, uint8 type);
-	void LogPlayerTrade(QSPlayerLogTrade_Struct* QS, uint32 Items);
-	void LogPlayerHandin(QSPlayerLogHandin_Struct* QS, uint32 Items);
-	void LogPlayerNPCKill(QSPlayerLogNPCKill_Struct* QS, uint32 Members);
-	void LogPlayerDelete(QSPlayerLogDelete_Struct* QS, uint32 Items);
-	void LogPlayerMove(QSPlayerLogMove_Struct* QS, uint32 Items);
-	void LogMerchantTransaction(QSMerchantLogTransaction_Struct* QS, uint32 Items);
 protected:
 	void HandleMysqlError(uint32 errnum);
 private:

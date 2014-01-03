@@ -2272,61 +2272,62 @@ bool ZoneDatabase::GetAccountInfoForLogin(uint32 account_id, int16* admin, char*
 }
 
 void ZoneDatabase::RefreshGroupFromDB(Client *c){
-	if(!c){
-		return;
-	}
-
-	Group *g = c->GetGroup();
-
-	if(!g){
-		return;
-	}
-
-	EQApplicationPacket* outapp = new EQApplicationPacket(OP_GroupUpdate,sizeof(GroupUpdate2_Struct));
-	GroupUpdate2_Struct* gu = (GroupUpdate2_Struct*)outapp->pBuffer;
-	gu->action = groupActUpdate;
-	char errbuf[MYSQL_ERRMSG_SIZE];
-	char *query = 0;
-	MYSQL_RES *result;
-	MYSQL_ROW row;
-
-	strcpy(gu->yourname, c->GetName());
-	GetGroupLeadershipInfo(g->GetID(), gu->leadersname, nullptr, nullptr, nullptr, nullptr, &gu->leader_aas);
-	gu->NPCMarkerID = g->GetNPCMarkerID();
-
-	int index = 0;
-	if (RunQuery(query, MakeAnyLenString(&query, "SELECT name from group_id where groupid=%d", g->GetID()), errbuf, &result)) {
-		while((row = mysql_fetch_row(result))){
-			if(index < 6){
-				if(strcmp(c->GetName(), row[0]) != 0){
-					strcpy(gu->membername[index], row[0]);
-					index++;
-				}
-			}
-		}
-		mysql_free_result(result);
-	}
-	else
-	{
-		printf("Error in group update query: %s\n", errbuf);
-	}
-	safe_delete_array(query);
-
-	c->QueuePacket(outapp);
-	safe_delete(outapp);
-
-	if(c->GetClientVersion() >= EQClientSoD) {
-		g->NotifyMainTank(c, 1);
-		g->NotifyPuller(c, 1);
-	}
-
-	g->NotifyMainAssist(c, 1);
-
-	g->NotifyMarkNPC(c);
-	g->NotifyAssistTarget(c);
-	g->NotifyTankTarget(c);
-	g->NotifyPullerTarget(c);
-	g->SendMarkedNPCsToMember(c);
+	//todo: group
+	//if(!c){
+	//	return;
+	//}
+	//
+	//Group *g = c->GetGroup();
+	//
+	//if(!g){
+	//	return;
+	//}
+	//
+	//EQApplicationPacket* outapp = new EQApplicationPacket(OP_GroupUpdate,sizeof(GroupUpdate2_Struct));
+	//GroupUpdate2_Struct* gu = (GroupUpdate2_Struct*)outapp->pBuffer;
+	//gu->action = groupActUpdate;
+	//char errbuf[MYSQL_ERRMSG_SIZE];
+	//char *query = 0;
+	//MYSQL_RES *result;
+	//MYSQL_ROW row;
+	//
+	//strcpy(gu->yourname, c->GetName());
+	//GetGroupLeadershipInfo(g->GetID(), gu->leadersname, nullptr, nullptr, nullptr, nullptr, &gu->leader_aas);
+	//gu->NPCMarkerID = g->GetNPCMarkerID();
+	//
+	//int index = 0;
+	//if (RunQuery(query, MakeAnyLenString(&query, "SELECT name from group_id where groupid=%d", g->GetID()), errbuf, &result)) {
+	//	while((row = mysql_fetch_row(result))){
+	//		if(index < 6){
+	//			if(strcmp(c->GetName(), row[0]) != 0){
+	//				strcpy(gu->membername[index], row[0]);
+	//				index++;
+	//			}
+	//		}
+	//	}
+	//	mysql_free_result(result);
+	//}
+	//else
+	//{
+	//	printf("Error in group update query: %s\n", errbuf);
+	//}
+	//safe_delete_array(query);
+	//
+	//c->QueuePacket(outapp);
+	//safe_delete(outapp);
+	//
+	//if(c->GetClientVersion() >= EQClientSoD) {
+	//	g->NotifyMainTank(c, 1);
+	//	g->NotifyPuller(c, 1);
+	//}
+	//
+	//g->NotifyMainAssist(c, 1);
+	//
+	//g->NotifyMarkNPC(c);
+	//g->NotifyAssistTarget(c);
+	//g->NotifyTankTarget(c);
+	//g->NotifyPullerTarget(c);
+	//g->SendMarkedNPCsToMember(c);
 
 }
 

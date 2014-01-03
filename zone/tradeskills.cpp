@@ -1076,10 +1076,12 @@ bool Client::TradeskillExecute(DBTradeskillRecipe_Struct *spec) {
 			//should we check this crap?
 			SummonItem(itr->first, itr->second);
 			item = database.GetItem(itr->first);
-			if (this->GetGroup())
-			{
-				entity_list.MessageGroup(this,true,MT_Skills,"%s has successfully fashioned %s!",GetName(),item->Name);
-			}
+			//todo: group
+			//if (GetGroup())
+			//{
+			//	entity_list.MessageGroup(this,true,MT_Skills,"%s has successfully fashioned %s!",GetName(),item->Name);
+			//}
+
 			if(RuleB(TaskSystem, EnableTaskSystem))
 				UpdateTasksForItem(ActivityTradeSkill, itr->first, itr->second);
 			itr++;
@@ -1094,10 +1096,11 @@ bool Client::TradeskillExecute(DBTradeskillRecipe_Struct *spec) {
 		Message_StringID(MT_Emote,TRADESKILL_FAILED);
 
 		_log(TRADESKILLS__TRACE, "Tradeskill failed");
-			if (this->GetGroup())
-		{
-			entity_list.MessageGroup(this,true,MT_Skills,"%s was unsuccessful in %s tradeskill attempt.",GetName(),this->GetGender() == 0 ? "his" : this->GetGender() == 1 ? "her" : "its");
-		}
+		//todo: group
+		//if (GetGroup())
+		//{
+		//	entity_list.MessageGroup(this,true,MT_Skills,"%s was unsuccessful in %s tradeskill attempt.",GetName(),this->GetGender() == 0 ? "his" : this->GetGender() == 1 ? "her" : "its");
+		//}
 
 		itr = spec->onfail.begin();
 		while(itr != spec->onfail.end()) {

@@ -152,17 +152,19 @@ bool Client::Process() {
 			m_pp.z = m_pp.binds[0].z;
 			Save();
 
-			Group *mygroup = GetGroup();
-			if (mygroup)
-			{
-				entity_list.MessageGroup(this,true,15,"%s died.", GetName());
-				mygroup->MemberZoned(this);
-			}
-			Raid *myraid = entity_list.GetRaidByClient(this);
-			if (myraid)
-			{
-				myraid->MemberZoned(this);
-			}
+			//todo: group
+			//Group *mygroup = GetGroup();
+			//if (mygroup)
+			//{
+			//	entity_list.MessageGroup(this,true,15,"%s died.", GetName());
+			//	mygroup->MemberZoned(this);
+			//}
+			//
+			//Raid *myraid = entity_list.GetRaidByClient(this);
+			//if (myraid)
+			//{
+			//	myraid->MemberZoned(this);
+			//}
 			return(false);
 		}
 
@@ -181,17 +183,11 @@ bool Client::Process() {
 				GetMerc()->Save();
 				GetMerc()->Depop();
 			}
-			LeaveGroup();
-			Raid *myraid = entity_list.GetRaidByClient(this);
-			if (myraid)
-			{
-				myraid->MemberZoned(this);
-			}
-			return false; //delete client
+
+			return false;
 		}
 
 		if (camp_timer.Check()) {
-			LeaveGroup();
 			Save();
 			if (GetMerc())
 			{
@@ -226,7 +222,6 @@ bool Client::Process() {
 			} else {
 				if(!ApplyNextBardPulse(bardsong, song_target, bardsong_slot))
 					InterruptSpell(SONG_ENDS_ABRUPTLY, 0x121, bardsong);
-//				SpellFinished(bardsong, bardsong_target, bardsong_slot, spells[bardsong].mana);
 			}
 		}
 
@@ -711,7 +706,6 @@ bool Client::Process() {
 
 	if (client_state != CLIENT_LINKDEAD && (client_state == CLIENT_ERROR || client_state == DISCONNECTED || client_state == CLIENT_KICKED || !eqs->CheckState(ESTABLISHED))) {
 		//client logged out or errored out
-		//ResetTrade();
 		if (client_state != CLIENT_KICKED) {
 			Save();
 		}
@@ -723,30 +717,6 @@ bool Client::Process() {
 		client_state = CLIENT_LINKDEAD;
 		if (zoning || instalog || GetGM())
 		{
-			Group *mygroup = GetGroup();
-			if (mygroup)
-			{
-				if (!zoning) {
-					entity_list.MessageGroup(this, true, 15, "%s logged out.", GetName());
-					mygroup->DelMember(this);
-				} else {
-					entity_list.MessageGroup(this, true, 15, "%s left the zone.", GetName());
-					mygroup->MemberZoned(this);
-				}
-
-			}
-			Raid *myraid = entity_list.GetRaidByClient(this);
-			if (myraid)
-			{
-				if (!zoning) {
-					//entity_list.MessageGroup(this,true,15,"%s logged out.",GetName());
-					//mygroup->DelMember(this);
-					myraid->MemberZoned(this);
-				} else {
-					//entity_list.MessageGroup(this,true,15,"%s left the zone.",GetName());
-					myraid->MemberZoned(this);
-				}
-			}
 			OnDisconnect(false);
 			return false;
 		}
@@ -769,13 +739,6 @@ bool Client::Process() {
 //just a set of actions preformed all over in Client::Process
 void Client::OnDisconnect(bool hard_disconnect) {
 	if(hard_disconnect) {
-		LeaveGroup();
-
-		Raid *MyRaid = entity_list.GetRaidByClient(this);
-
-		if (MyRaid)
-			MyRaid->MemberZoned(this);
-
 		parse->EventPlayer(EVENT_DISCONNECT, this, "", 0);
 	}
 
@@ -2171,18 +2134,6 @@ void Client::HandleRespawnFromHover(uint32 Option)
 	}
 	else
 	{
-		//Heading to a different zone
-		if(isgrouped)
-		{
-			Group *g = GetGroup();
-			if(g)
-				g->MemberZoned(this);
-		}
-
-		Raid* r = entity_list.GetRaidByClient(this);
-		if(r)
-			r->MemberZoned(this);
-
 		m_pp.zone_id = chosen->zoneid;
 		m_pp.zoneInstance = 0;
 		database.MoveCharacterToZone(this->CharacterID(), database.GetZoneName(chosen->zoneid));

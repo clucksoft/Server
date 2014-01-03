@@ -1347,16 +1347,17 @@ bool Mob::DetermineSpellTargets(uint16 spell_id, Mob *&spell_target, Mob *&ae_ce
 	SpellTargetType targetType = spells[spell_id].targettype;
 	bodyType mob_body = spell_target ? spell_target->GetBodyType() : BT_Humanoid;
 
-	if(IsPlayerIllusionSpell(spell_id)
-		&& spell_target != nullptr // null ptr crash safeguard
-		&& !spell_target->IsNPC() // still self only if NPC targetted
-		&& IsClient()
-		&& (IsGrouped() // still self only if not grouped
-		|| IsRaidGrouped())
-		&& CastToClient()->CheckAAEffect(aaEffectProjectIllusion)){
-			mlog(AA__MESSAGE, "Project Illusion overwrote target caster: %s spell id: %d was ON", GetName(), spell_id);
-			targetType = ST_GroupClientAndPet;
-	}
+	//todo: group
+	//if(IsPlayerIllusionSpell(spell_id)
+	//	&& spell_target != nullptr // null ptr crash safeguard
+	//	&& !spell_target->IsNPC() // still self only if NPC targetted
+	//	&& IsClient()
+	//	&& (IsGrouped() // still self only if not grouped
+	//	|| IsRaidGrouped())
+	//	&& CastToClient()->CheckAAEffect(aaEffectProjectIllusion)){
+	//		mlog(AA__MESSAGE, "Project Illusion overwrote target caster: %s spell id: %d was ON", GetName(), spell_id);
+	//		targetType = ST_GroupClientAndPet;
+	//}
 
 	switch (targetType)
 	{
@@ -1589,26 +1590,28 @@ bool Mob::DetermineSpellTargets(uint16 spell_id, Mob *&spell_target, Mob *&ae_ce
 					uint32 group_id_target = 0;
 					if(IsClient())
 					{
-						if(IsGrouped())
-						{
-							group_id_caster = GetGroup()->GetID();
-						}
-						else if(IsRaidGrouped())
-						{
-							group_id_caster = (GetRaid()->GetGroup(CastToClient()) == 0xFFFF) ? 0 : (GetRaid()->GetGroup(CastToClient()) + 1);
-						}
+						//todo: group
+						//if(IsGrouped())
+						//{
+						//	group_id_caster = GetGroup()->GetID();
+						//}
+						//else if(IsRaidGrouped())
+						//{
+						//	group_id_caster = (GetRaid()->GetGroup(CastToClient()) == 0xFFFF) ? 0 : (GetRaid()->GetGroup(CastToClient()) + 1);
+						//}
 					}
 					else if(IsPet())
 					{
 						Mob *owner = GetOwner();
-						if(owner->IsGrouped())
-						{
-							group_id_caster = owner->GetGroup()->GetID();
-						}
-						else if(owner->IsRaidGrouped())
-						{
-							group_id_caster = (owner->GetRaid()->GetGroup(CastToClient()) == 0xFFFF) ? 0 : (owner->GetRaid()->GetGroup(CastToClient()) + 1);
-						}
+						//todo: group
+						//if(owner->IsGrouped())
+						//{
+						//	group_id_caster = owner->GetGroup()->GetID();
+						//}
+						//else if(owner->IsRaidGrouped())
+						//{
+						//	group_id_caster = (owner->GetRaid()->GetGroup(CastToClient()) == 0xFFFF) ? 0 : (owner->GetRaid()->GetGroup(CastToClient()) + 1);
+						//}
 					}
 #ifdef BOTS
 					else if(IsBot())
@@ -1627,26 +1630,28 @@ bool Mob::DetermineSpellTargets(uint16 spell_id, Mob *&spell_target, Mob *&ae_ce
 
 					if(spell_target->IsClient())
 					{
-						if(spell_target->IsGrouped())
-						{
-							group_id_target = spell_target->GetGroup()->GetID();
-						}
-						else if(spell_target->IsRaidGrouped())
-						{
-							group_id_target = (spell_target->GetRaid()->GetGroup(CastToClient()) == 0xFFFF) ? 0 : (spell_target->GetRaid()->GetGroup(CastToClient()) + 1);
-						}
+						//todo: group
+						//if(spell_target->IsGrouped())
+						//{
+						//	group_id_target = spell_target->GetGroup()->GetID();
+						//}
+						//else if(spell_target->IsRaidGrouped())
+						//{
+						//	group_id_target = (spell_target->GetRaid()->GetGroup(CastToClient()) == 0xFFFF) ? 0 : (spell_target->GetRaid()->GetGroup(CastToClient()) + 1);
+						//}
 					}
 					else if(spell_target->IsPet())
 					{
-						Mob *owner = spell_target->GetOwner();
-						if(owner->IsGrouped())
-						{
-							group_id_target = owner->GetGroup()->GetID();
-						}
-						else if(owner->IsRaidGrouped())
-						{
-							group_id_target = (owner->GetRaid()->GetGroup(CastToClient()) == 0xFFFF) ? 0 : (owner->GetRaid()->GetGroup(CastToClient()) + 1);
-						}
+						//todo: group
+						//Mob *owner = spell_target->GetOwner();
+						//if(owner->IsGrouped())
+						//{
+						//	group_id_target = owner->GetGroup()->GetID();
+						//}
+						//else if(owner->IsRaidGrouped())
+						//{
+						//	group_id_target = (owner->GetRaid()->GetGroup(CastToClient()) == 0xFFFF) ? 0 : (owner->GetRaid()->GetGroup(CastToClient()) + 1);
+						//}
 					}
 #ifdef BOTS
 					else if(spell_target->IsBot())
@@ -1951,27 +1956,28 @@ bool Mob::SpellFinished(uint16 spell_id, Mob *spell_target, uint16 slot, uint16 
 				// caster if they're not using TGB
 				// NOTE: this will always hit the caster, plus the target's group so
 				// it can affect up to 7 people if the targeted group is not our own
-				if(spell_target->IsGrouped())
-				{
-					Group *target_group = entity_list.GetGroupByMob(spell_target);
-					if(target_group)
-					{
-						target_group->CastGroupSpell(this, spell_id);
-					}
-				}
-				else if(spell_target->IsRaidGrouped() && spell_target->IsClient())
-				{
-					Raid *target_raid = entity_list.GetRaidByClient(spell_target->CastToClient());
-					uint32 gid = 0xFFFFFFFF;
-					if(target_raid){
-						gid = target_raid->GetGroup(spell_target->GetName());
-						if(gid < 12)
-							target_raid->CastGroupSpell(this, spell_id, gid);
-						else
-							SpellOnTarget(spell_id, spell_target);
-					}
-				}
-				else
+				//todo: group
+				//if(spell_target->IsGrouped())
+				//{
+				//	Group *target_group = entity_list.GetGroupByMob(spell_target);
+				//	if(target_group)
+				//	{
+				//		target_group->CastGroupSpell(this, spell_id);
+				//	}
+				//}
+				//else if(spell_target->IsRaidGrouped() && spell_target->IsClient())
+				//{
+				//	Raid *target_raid = entity_list.GetRaidByClient(spell_target->CastToClient());
+				//	uint32 gid = 0xFFFFFFFF;
+				//	if(target_raid){
+				//		gid = target_raid->GetGroup(spell_target->GetName());
+				//		if(gid < 12)
+				//			target_raid->CastGroupSpell(this, spell_id, gid);
+				//		else
+				//			SpellOnTarget(spell_id, spell_target);
+				//	}
+				//}
+				//else
 				{
 					// if target is grouped, CastGroupSpell will cast it on the caster
 					// too, but if not then we have to do that here.
@@ -2231,37 +2237,38 @@ bool Mob::ApplyNextBardPulse(uint16 spell_id, Mob *spell_target, uint16 slot) {
 
 		case GroupSpell:
 		{
-			if(spell_target->IsGrouped()) {
-				mlog(SPELLS__BARDS, "Bard Song Pulse: spell %d, Group targeting group of %s", spell_id, spell_target->GetName());
-				Group *target_group = entity_list.GetGroupByMob(spell_target);
-				if(target_group)
-					target_group->GroupBardPulse(this, spell_id);
-			}
-			else if(spell_target->IsRaidGrouped() && spell_target->IsClient()) {
-				mlog(SPELLS__BARDS, "Bard Song Pulse: spell %d, Raid group targeting raid group of %s", spell_id, spell_target->GetName());
-				Raid *r = entity_list.GetRaidByClient(spell_target->CastToClient());
-				if(r){
-					uint32 gid = r->GetGroup(spell_target->GetName());
-					if(gid < 12){
-						r->GroupBardPulse(this, spell_id, gid);
-					}
-					else{
-						BardPulse(spell_id, this);
-#ifdef GROUP_BUFF_PETS
-						if (GetPet() && HasPetAffinity() && !GetPet()->IsCharmed())
-							GetPet()->BardPulse(spell_id, this);
-#endif
-					}
-				}
-			}
-			else {
-				mlog(SPELLS__BARDS, "Bard Song Pulse: spell %d, Group target without group. Affecting caster.", spell_id);
-				BardPulse(spell_id, this);
-#ifdef GROUP_BUFF_PETS
-				if (GetPet() && HasPetAffinity() && !GetPet()->IsCharmed())
-					GetPet()->BardPulse(spell_id, this);
-#endif
-			}
+			//todo: group
+//			if(spell_target->IsGrouped()) {
+//				mlog(SPELLS__BARDS, "Bard Song Pulse: spell %d, Group targeting group of %s", spell_id, spell_target->GetName());
+//				Group *target_group = entity_list.GetGroupByMob(spell_target);
+//				if(target_group)
+//					target_group->GroupBardPulse(this, spell_id);
+//			}
+//			else if(spell_target->IsRaidGrouped() && spell_target->IsClient()) {
+//				mlog(SPELLS__BARDS, "Bard Song Pulse: spell %d, Raid group targeting raid group of %s", spell_id, spell_target->GetName());
+//				Raid *r = entity_list.GetRaidByClient(spell_target->CastToClient());
+//				if(r){
+//					uint32 gid = r->GetGroup(spell_target->GetName());
+//					if(gid < 12){
+//						r->GroupBardPulse(this, spell_id, gid);
+//					}
+//					else{
+//						BardPulse(spell_id, this);
+//#ifdef GROUP_BUFF_PETS
+//						if (GetPet() && HasPetAffinity() && !GetPet()->IsCharmed())
+//							GetPet()->BardPulse(spell_id, this);
+//#endif
+//					}
+//				}
+//			}
+//			else {
+//				mlog(SPELLS__BARDS, "Bard Song Pulse: spell %d, Group target without group. Affecting caster.", spell_id);
+//				BardPulse(spell_id, this);
+//#ifdef GROUP_BUFF_PETS
+//				if (GetPet() && HasPetAffinity() && !GetPet()->IsCharmed())
+//					GetPet()->BardPulse(spell_id, this);
+//#endif
+//			}
 			break;
 		}
 	}
@@ -3246,77 +3253,77 @@ bool Mob::SpellOnTarget(uint16 spell_id, Mob* spelltar, bool reflect, bool use_r
 			if(IsClient() &&	//let NPCs do beneficial spells on anybody if they want, should be the job of the AI, not the spell code to prevent this from going wrong
 				spelltar != this)
 			{
+				//todo: group
+				//Client* pClient = 0;
+				//Raid* pRaid = 0;
+				//Group* pBasicGroup = 0;
+				//uint32 nGroup = 0; //raid group
+				//
+				//Client* pClientTarget = 0;
+				//Raid* pRaidTarget = 0;
+				//Group* pBasicGroupTarget = 0;
+				//uint32 nGroupTarget = 0; //raid group
+				//
+				//Client* pClientTargetPet = 0;
+				//Raid* pRaidTargetPet = 0;
+				//Group* pBasicGroupTargetPet = 0;
+				//uint32 nGroupTargetPet = 0; //raid group
+				//
+				//const uint32 cnWTF = 0xFFFFFFFF + 1; //this should be zero unless on 64bit? forced uint64?
+				//
+				////Caster client pointers
+				//pClient = this->CastToClient();
+				//pRaid = entity_list.GetRaidByClient(pClient);
+				//pBasicGroup = entity_list.GetGroupByMob(this);
+				//if(pRaid)
+				//	nGroup = pRaid->GetGroup(pClient) + 1;
+				//
+				////Target client pointers
+				//if(spelltar->IsClient())
+				//{
+				//	pClientTarget = spelltar->CastToClient();
+				//	pRaidTarget = entity_list.GetRaidByClient(pClientTarget);
+				//	pBasicGroupTarget = entity_list.GetGroupByMob(spelltar);
+				//	if(pRaidTarget)
+				//		nGroupTarget = pRaidTarget->GetGroup(pClientTarget) + 1;
+				//}
+				//
+				//if(spelltar->IsPet())
+				//{
+				//	Mob *owner = spelltar->GetOwner();
+				//	if(owner->IsClient())
+				//	{
+				//		pClientTargetPet = owner->CastToClient();
+				//		pRaidTargetPet = entity_list.GetRaidByClient(pClientTargetPet);
+				//		pBasicGroupTargetPet = entity_list.GetGroupByMob(owner);
+				//		if(pRaidTargetPet)
+				//			nGroupTargetPet = pRaidTargetPet->GetGroup(pClientTargetPet) + 1;
+				//	}
+				//
+				//}
 
-				Client* pClient = 0;
-				Raid* pRaid = 0;
-				Group* pBasicGroup = 0;
-				uint32 nGroup = 0; //raid group
-
-				Client* pClientTarget = 0;
-				Raid* pRaidTarget = 0;
-				Group* pBasicGroupTarget = 0;
-				uint32 nGroupTarget = 0; //raid group
-
-				Client* pClientTargetPet = 0;
-				Raid* pRaidTargetPet = 0;
-				Group* pBasicGroupTargetPet = 0;
-				uint32 nGroupTargetPet = 0; //raid group
-
-				const uint32 cnWTF = 0xFFFFFFFF + 1; //this should be zero unless on 64bit? forced uint64?
-
-				//Caster client pointers
-				pClient = this->CastToClient();
-				pRaid = entity_list.GetRaidByClient(pClient);
-				pBasicGroup = entity_list.GetGroupByMob(this);
-				if(pRaid)
-					nGroup = pRaid->GetGroup(pClient) + 1;
-
-				//Target client pointers
-				if(spelltar->IsClient())
-				{
-					pClientTarget = spelltar->CastToClient();
-					pRaidTarget = entity_list.GetRaidByClient(pClientTarget);
-					pBasicGroupTarget = entity_list.GetGroupByMob(spelltar);
-					if(pRaidTarget)
-						nGroupTarget = pRaidTarget->GetGroup(pClientTarget) + 1;
-				}
-
-				if(spelltar->IsPet())
-				{
-					Mob *owner = spelltar->GetOwner();
-					if(owner->IsClient())
-					{
-						pClientTargetPet = owner->CastToClient();
-						pRaidTargetPet = entity_list.GetRaidByClient(pClientTargetPet);
-						pBasicGroupTargetPet = entity_list.GetGroupByMob(owner);
-						if(pRaidTargetPet)
-							nGroupTargetPet = pRaidTargetPet->GetGroup(pClientTargetPet) + 1;
-					}
-
-				}
-
-				if(!IsBeneficialAllowed(spelltar) ||
-					(IsGroupOnlySpell(spell_id) &&
-						!(
-							(pBasicGroup && ((pBasicGroup == pBasicGroupTarget) || (pBasicGroup == pBasicGroupTargetPet))) || //Basic Group
-
-							((nGroup != cnWTF) && ((nGroup == nGroupTarget) || (nGroup == nGroupTargetPet))) || //Raid group
-
-							(spelltar == GetPet()) //should be able to cast grp spells on self and pet despite grped status.
-						)
-					)
-				)
-				{
-					if(spells[spell_id].targettype == ST_AEBard) {
-						//if it was a beneficial AE bard song don't spam the window that it would not hold
-						mlog(SPELLS__CASTING_ERR, "Beneficial ae bard song %d can't take hold %s -> %s, IBA? %d", spell_id, GetName(), spelltar->GetName(), IsBeneficialAllowed(spelltar));
-					} else {
-						mlog(SPELLS__CASTING_ERR, "Beneficial spell %d can't take hold %s -> %s, IBA? %d", spell_id, GetName(), spelltar->GetName(), IsBeneficialAllowed(spelltar));
-						Message_StringID(MT_SpellFailure, SPELL_NO_HOLD);
-					}
-					safe_delete(action_packet);
-					return false;
-				}
+				//if(!IsBeneficialAllowed(spelltar) ||
+				//	(IsGroupOnlySpell(spell_id) &&
+				//		!(
+				//			(pBasicGroup && ((pBasicGroup == pBasicGroupTarget) || (pBasicGroup == pBasicGroupTargetPet))) || //Basic Group
+				//
+				//			((nGroup != cnWTF) && ((nGroup == nGroupTarget) || (nGroup == nGroupTargetPet))) || //Raid group
+				//
+				//			(spelltar == GetPet()) //should be able to cast grp spells on self and pet despite grped status.
+				//		)
+				//	)
+				//)
+				//{
+				//	if(spells[spell_id].targettype == ST_AEBard) {
+				//		//if it was a beneficial AE bard song don't spam the window that it would not hold
+				//		mlog(SPELLS__CASTING_ERR, "Beneficial ae bard song %d can't take hold %s -> %s, IBA? %d", spell_id, GetName(), spelltar->GetName(), IsBeneficialAllowed(spelltar));
+				//	} else {
+				//		mlog(SPELLS__CASTING_ERR, "Beneficial spell %d can't take hold %s -> %s, IBA? %d", spell_id, GetName(), spelltar->GetName(), IsBeneficialAllowed(spelltar));
+				//		Message_StringID(MT_SpellFailure, SPELL_NO_HOLD);
+				//	}
+				//	safe_delete(action_packet);
+				//	return false;
+				//}
 			}
 		}
 		else if	( !IsAttackAllowed(spelltar, true) && !IsResurrectionEffects(spell_id)) // Detrimental spells - PVP check
@@ -3465,72 +3472,76 @@ bool Mob::SpellOnTarget(uint16 spell_id, Mob* spelltar, bool reflect, bool use_r
 		{
 			if(spells[recourse_spell].targettype == ST_Group || spells[recourse_spell].targettype == ST_GroupTeleport)
 			{
-				if(IsGrouped())
-				{
-					Group *g = entity_list.GetGroupByMob(this);
-					if(g)
-						g->CastGroupSpell(this, recourse_spell);
-					else{
+				//todo: group
+//				if(IsGrouped())
+//				{
+//					Group *g = entity_list.GetGroupByMob(this);
+//					if(g)
+//						g->CastGroupSpell(this, recourse_spell);
+//					else{
+//						SpellOnTarget(recourse_spell, this);
+//#ifdef GROUP_BUFF_PETS
+//						if (GetPet())
+//							SpellOnTarget(recourse_spell, GetPet());
+//#endif
+//					}
+//				}
+//				else if(IsRaidGrouped() && IsClient())
+//				{
+//					Raid *r = entity_list.GetRaidByClient(CastToClient());
+//					uint32 gid = 0xFFFFFFFF;
+//					if(r)
+//						gid = r->GetGroup(GetName());
+//					else
+//						gid = 13;	// Forces ungrouped spell casting
+//
+//					if(gid < 12)
+//					{
+//						r->CastGroupSpell(this, recourse_spell, gid);
+//					}
+//					else
+					{
 						SpellOnTarget(recourse_spell, this);
 #ifdef GROUP_BUFF_PETS
 						if (GetPet())
 							SpellOnTarget(recourse_spell, GetPet());
 #endif
 					}
-				}
-				else if(IsRaidGrouped() && IsClient())
+//				}
+//				else 
+				if(HasOwner())
 				{
-					Raid *r = entity_list.GetRaidByClient(CastToClient());
-					uint32 gid = 0xFFFFFFFF;
-					if(r)
-						gid = r->GetGroup(GetName());
-					else
-						gid = 13;	// Forces ungrouped spell casting
-
-					if(gid < 12)
-					{
-						r->CastGroupSpell(this, recourse_spell, gid);
-					}
-					else{
-						SpellOnTarget(recourse_spell, this);
-#ifdef GROUP_BUFF_PETS
-						if (GetPet())
-							SpellOnTarget(recourse_spell, GetPet());
-#endif
-					}
-				}
-				else if(HasOwner())
-				{
-					if(GetOwner()->IsGrouped())
-					{
-						Group *g = entity_list.GetGroupByMob(GetOwner());
-						if(g)
-							g->CastGroupSpell(this, recourse_spell);
-						else{
-							SpellOnTarget(recourse_spell, GetOwner());
-							SpellOnTarget(recourse_spell, this);
-						}
-					}
-					else if(GetOwner()->IsRaidGrouped() && GetOwner()->IsClient())
-					{
-						Raid *r = entity_list.GetRaidByClient(GetOwner()->CastToClient());
-						uint32 gid = 0xFFFFFFFF;
-						if(r)
-							gid = r->GetGroup(GetOwner()->GetName());
-						else
-							gid = 13;	// Forces ungrouped spell casting
-
-						if(gid < 12)
-						{
-							r->CastGroupSpell(this, recourse_spell, gid);
-						}
-						else
-						{
-							SpellOnTarget(recourse_spell, GetOwner());
-							SpellOnTarget(recourse_spell, this);
-						}
-					}
-					else
+					//todo: group
+//					if(GetOwner()->IsGrouped())
+//					{
+//						Group *g = entity_list.GetGroupByMob(GetOwner());
+//						if(g)
+//							g->CastGroupSpell(this, recourse_spell);
+//						else{
+//							SpellOnTarget(recourse_spell, GetOwner());
+//							SpellOnTarget(recourse_spell, this);
+//						}
+//					}
+//					else if(GetOwner()->IsRaidGrouped() && GetOwner()->IsClient())
+//					{
+//						Raid *r = entity_list.GetRaidByClient(GetOwner()->CastToClient());
+//						uint32 gid = 0xFFFFFFFF;
+//						if(r)
+//							gid = r->GetGroup(GetOwner()->GetName());
+//						else
+//							gid = 13;	// Forces ungrouped spell casting
+//
+//						if(gid < 12)
+//						{
+//							r->CastGroupSpell(this, recourse_spell, gid);
+//						}
+//						else
+//						{
+//							SpellOnTarget(recourse_spell, GetOwner());
+//							SpellOnTarget(recourse_spell, this);
+//						}
+//					}
+//					else
 					{
 						SpellOnTarget(recourse_spell, GetOwner());
 						SpellOnTarget(recourse_spell, this);

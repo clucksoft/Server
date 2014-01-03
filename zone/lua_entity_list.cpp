@@ -130,35 +130,35 @@ Lua_Door Lua_EntityList::FindDoor(uint32 id) {
 	return Lua_Door(self->FindDoor(id));
 }
 
-Lua_Group Lua_EntityList::GetGroupByMob(Lua_Mob mob) {
-	Lua_Safe_Call_Class(Lua_Group);
-	return Lua_Group(self->GetGroupByMob(mob));
-}
-
-Lua_Group Lua_EntityList::GetGroupByClient(Lua_Client client) {
-	Lua_Safe_Call_Class(Lua_Group);
-	return Lua_Group(self->GetGroupByClient(client));
-}
-
-Lua_Group Lua_EntityList::GetGroupByID(int id) {
-	Lua_Safe_Call_Class(Lua_Group);
-	return Lua_Group(self->GetGroupByID(id));
-}
-
-Lua_Group Lua_EntityList::GetGroupByLeaderName(const char *name) {
-	Lua_Safe_Call_Class(Lua_Group);
-	return Lua_Group(self->GetGroupByLeaderName(name));
-}
-
-Lua_Raid Lua_EntityList::GetRaidByID(int id) {
-	Lua_Safe_Call_Class(Lua_Raid);
-	return Lua_Raid(self->GetRaidByID(id));
-}
-
-Lua_Raid Lua_EntityList::GetRaidByClient(Lua_Client client) {
-	Lua_Safe_Call_Class(Lua_Raid);
-	return Lua_Raid(self->GetRaidByClient(client));
-}
+//Lua_Group Lua_EntityList::GetGroupByMob(Lua_Mob mob) {
+//	Lua_Safe_Call_Class(Lua_Group);
+//	return Lua_Group(self->GetGroupByMob(mob));
+//}
+//
+//Lua_Group Lua_EntityList::GetGroupByClient(Lua_Client client) {
+//	Lua_Safe_Call_Class(Lua_Group);
+//	return Lua_Group(self->GetGroupByClient(client));
+//}
+//
+//Lua_Group Lua_EntityList::GetGroupByID(int id) {
+//	Lua_Safe_Call_Class(Lua_Group);
+//	return Lua_Group(self->GetGroupByID(id));
+//}
+//
+//Lua_Group Lua_EntityList::GetGroupByLeaderName(const char *name) {
+//	Lua_Safe_Call_Class(Lua_Group);
+//	return Lua_Group(self->GetGroupByLeaderName(name));
+//}
+//
+//Lua_Raid Lua_EntityList::GetRaidByID(int id) {
+//	Lua_Safe_Call_Class(Lua_Raid);
+//	return Lua_Raid(self->GetRaidByID(id));
+//}
+//
+//Lua_Raid Lua_EntityList::GetRaidByClient(Lua_Client client) {
+//	Lua_Safe_Call_Class(Lua_Raid);
+//	return Lua_Raid(self->GetRaidByClient(client));
+//}
 
 Lua_Corpse Lua_EntityList::GetCorpseByOwner(Lua_Client client) {
 	Lua_Safe_Call_Class(Lua_Corpse);
@@ -428,12 +428,12 @@ luabind::scope lua_register_entity_list() {
 		.def("GetDoorsByDBID", (Lua_Door(Lua_EntityList::*)(uint32))&Lua_EntityList::GetDoorsByDBID)
 		.def("GetDoorsByDoorID", (Lua_Door(Lua_EntityList::*)(uint32))&Lua_EntityList::GetDoorsByDoorID)
 		.def("FindDoor", (Lua_Door(Lua_EntityList::*)(uint32))&Lua_EntityList::FindDoor)
-		.def("GetGroupByMob", (Lua_Group(Lua_EntityList::*)(Lua_Mob))&Lua_EntityList::GetGroupByMob)
-		.def("GetGroupByClient", (Lua_Group(Lua_EntityList::*)(Lua_Client))&Lua_EntityList::GetGroupByClient)
-		.def("GetGroupByID", (Lua_Group(Lua_EntityList::*)(int))&Lua_EntityList::GetGroupByID)
-		.def("GetGroupByLeaderName", (Lua_Group(Lua_EntityList::*)(const char*))&Lua_EntityList::GetGroupByLeaderName)
-		.def("GetRaidByID", (Lua_Raid(Lua_EntityList::*)(int))&Lua_EntityList::GetRaidByID)
-		.def("GetRaidByClient", (Lua_Raid(Lua_EntityList::*)(Lua_Client))&Lua_EntityList::GetRaidByClient)
+		//.def("GetGroupByMob", (Lua_Group(Lua_EntityList::*)(Lua_Mob))&Lua_EntityList::GetGroupByMob)
+		//.def("GetGroupByClient", (Lua_Group(Lua_EntityList::*)(Lua_Client))&Lua_EntityList::GetGroupByClient)
+		//.def("GetGroupByID", (Lua_Group(Lua_EntityList::*)(int))&Lua_EntityList::GetGroupByID)
+		//.def("GetGroupByLeaderName", (Lua_Group(Lua_EntityList::*)(const char*))&Lua_EntityList::GetGroupByLeaderName)
+		//.def("GetRaidByID", (Lua_Raid(Lua_EntityList::*)(int))&Lua_EntityList::GetRaidByID)
+		//.def("GetRaidByClient", (Lua_Raid(Lua_EntityList::*)(Lua_Client))&Lua_EntityList::GetRaidByClient)
 		.def("GetCorpseByOwner", (Lua_Corpse(Lua_EntityList::*)(Lua_Client))&Lua_EntityList::GetCorpseByOwner)
 		.def("GetCorpseByID", (Lua_Corpse(Lua_EntityList::*)(int))&Lua_EntityList::GetCorpseByID)
 		.def("GetCorpseByName", (Lua_Corpse(Lua_EntityList::*)(const char*))&Lua_EntityList::GetCorpseByName)

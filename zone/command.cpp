@@ -7749,38 +7749,39 @@ void command_undyeme(Client *c, const Seperator *sep)
 
 void command_ginfo(Client *c, const Seperator *sep)
 {
-	Client *t;
-
-	if(c->GetTarget() && c->GetTarget()->IsClient())
-		t = c->GetTarget()->CastToClient();
-	else
-		t = c;
-
-	Group *g = t->GetGroup();
-	if(!g) {
-		c->Message(0, "This client is not in a group");
-		return;
-	}
-
-	c->Message(0, "Player: %s is in Group #%lu: with %i members", t->GetName(), (unsigned long)g->GetID(), g->GroupCount());
-
-	uint32 r;
-	for(r = 0; r < MAX_GROUP_MEMBERS; r++) {
-		if(g->members[r] == nullptr) {
-			if(g->membername[r][0] == '\0')
-				continue;
-			c->Message(0, "...Zoned Member: %s, Roles: %s %s %s", g->membername[r],
-				(g->MemberRoles[r] & RoleAssist) ? "Assist" : "",
-				(g->MemberRoles[r] & RoleTank) ? "Tank" : "",
-				(g->MemberRoles[r] & RolePuller) ? "Puller" : "");
-		} else {
-			c->Message(0, "...In-Zone Member: %s (0x%x) Roles: %s %s %s", g->membername[r], g->members[r],
-				(g->MemberRoles[r] & RoleAssist) ? "Assist" : "",
-				(g->MemberRoles[r] & RoleTank) ? "Tank" : "",
-				(g->MemberRoles[r] & RolePuller) ? "Puller" : "");
-
-		}
-	}
+//todo: group
+//	Client *t;
+//
+//	if(c->GetTarget() && c->GetTarget()->IsClient())
+//		t = c->GetTarget()->CastToClient();
+//	else
+//		t = c;
+//
+//	Group *g = t->GetGroup();
+//	if(!g) {
+//		c->Message(0, "This client is not in a group");
+//		return;
+//	}
+//
+//	c->Message(0, "Player: %s is in Group #%lu: with %i members", t->GetName(), (unsigned long)g->GetID(), g->GroupCount());
+//
+//	uint32 r;
+//	for(r = 0; r < MAX_GROUP_MEMBERS; r++) {
+//		if(g->members[r] == nullptr) {
+//			if(g->membername[r][0] == '\0')
+//				continue;
+//			c->Message(0, "...Zoned Member: %s, Roles: %s %s %s", g->membername[r],
+//				(g->MemberRoles[r] & RoleAssist) ? "Assist" : "",
+//				(g->MemberRoles[r] & RoleTank) ? "Tank" : "",
+//				(g->MemberRoles[r] & RolePuller) ? "Puller" : "");
+//		} else {
+//			c->Message(0, "...In-Zone Member: %s (0x%x) Roles: %s %s %s", g->membername[r], g->members[r],
+//				(g->MemberRoles[r] & RoleAssist) ? "Assist" : "",
+//				(g->MemberRoles[r] & RoleTank) ? "Tank" : "",
+//				(g->MemberRoles[r] & RolePuller) ? "Puller" : "");
+//
+//		}
+//	}
 }
 
 void command_hp(Client *c, const Seperator *sep)
@@ -8796,16 +8797,17 @@ void command_getplayerburriedcorpsecount(Client *c, const Seperator *sep)
 
 void command_refreshgroup(Client *c, const Seperator *sep)
 {
-	if(!c)
-		return;
-
-	Group *g = c->GetGroup();
-
-	if(!g)
-		return;
-
-	database.RefreshGroupFromDB(c);
-	//g->SendUpdate(7, c);
+//todo: group
+//	if(!c)
+//		return;
+//
+//	Group *g = c->GetGroup();
+//
+//	if(!g)
+//		return;
+//
+//	database.RefreshGroupFromDB(c);
+//	//g->SendUpdate(7, c);
 }
 
 void command_advnpcspawn(Client *c, const Seperator *sep)
@@ -10742,58 +10744,59 @@ void command_bot(Client *c, const Seperator *sep) {
 
 void command_raidloot(Client *c, const Seperator *sep)
 {
-	if(!sep->arg[1][0]) {
-		c->Message(0, "Usage: #raidloot [LEADER/GROUPLEADER/SELECTED/ALL]");
-		return;
-	}
-
-	Raid *r = c->GetRaid();
-	if(r)
-	{
-		for(int x = 0; x < 72; ++x)
-		{
-			if(r->members[x].member == c)
-			{
-				if(r->members[x].IsRaidLeader == 0)
-				{
-					c->Message(0, "You must be the raid leader to use this command.");
-				}
-				else
-				{
-					break;
-				}
-			}
-		}
-
-		if(strcasecmp(sep->arg[1], "LEADER") == 0)
-		{
-			c->Message(15, "Loot type changed to: 1");
-			r->ChangeLootType(1);
-		}
-		else if(strcasecmp(sep->arg[1], "GROUPLEADER") == 0)
-		{
-			c->Message(15, "Loot type changed to: 2");
-			r->ChangeLootType(2);
-		}
-		else if(strcasecmp(sep->arg[1], "SELECTED") == 0)
-		{
-			c->Message(15, "Loot type changed to: 3");
-			r->ChangeLootType(3);
-		}
-		else if(strcasecmp(sep->arg[1], "ALL") == 0)
-		{
-			c->Message(15, "Loot type changed to: 4");
-			r->ChangeLootType(4);
-		}
-		else
-		{
-			c->Message(0, "Usage: #raidloot [LEADER/GROUPLEADER/SELECTED/ALL]");
-		}
-	}
-	else
-	{
-		c->Message(0, "You must be in a raid to use that command.");
-	}
+	//todo: group
+	//if(!sep->arg[1][0]) {
+	//	c->Message(0, "Usage: #raidloot [LEADER/GROUPLEADER/SELECTED/ALL]");
+	//	return;
+	//}
+	//
+	//Raid *r = c->GetRaid();
+	//if(r)
+	//{
+	//	for(int x = 0; x < 72; ++x)
+	//	{
+	//		if(r->members[x].member == c)
+	//		{
+	//			if(r->members[x].IsRaidLeader == 0)
+	//			{
+	//				c->Message(0, "You must be the raid leader to use this command.");
+	//			}
+	//			else
+	//			{
+	//				break;
+	//			}
+	//		}
+	//	}
+	//
+	//	if(strcasecmp(sep->arg[1], "LEADER") == 0)
+	//	{
+	//		c->Message(15, "Loot type changed to: 1");
+	//		r->ChangeLootType(1);
+	//	}
+	//	else if(strcasecmp(sep->arg[1], "GROUPLEADER") == 0)
+	//	{
+	//		c->Message(15, "Loot type changed to: 2");
+	//		r->ChangeLootType(2);
+	//	}
+	//	else if(strcasecmp(sep->arg[1], "SELECTED") == 0)
+	//	{
+	//		c->Message(15, "Loot type changed to: 3");
+	//		r->ChangeLootType(3);
+	//	}
+	//	else if(strcasecmp(sep->arg[1], "ALL") == 0)
+	//	{
+	//		c->Message(15, "Loot type changed to: 4");
+	//		r->ChangeLootType(4);
+	//	}
+	//	else
+	//	{
+	//		c->Message(0, "Usage: #raidloot [LEADER/GROUPLEADER/SELECTED/ALL]");
+	//	}
+	//}
+	//else
+	//{
+	//	c->Message(0, "You must be in a raid to use that command.");
+	//}
 }
 
 void command_emoteview(Client *c, const Seperator *sep)

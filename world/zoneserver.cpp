@@ -36,6 +36,7 @@
 #include "AdventureManager.h"
 #include "ucs.h"
 #include "queryserv.h"
+#include "groupserv.h"
 
 extern ClientList client_list;
 extern GroupLFPList LFPGroupList;
@@ -46,6 +47,7 @@ extern volatile bool RunLoops;
 extern AdventureManager adventure_manager;
 extern UCSConnection UCSLink;
 extern QueryServConnection QSLink;
+extern GroupServConnection GSLink;
 void CatchSignal(int sig_num);
 
 ZoneServer::ZoneServer(EmuTCPConnection* itcpc)
@@ -230,185 +232,7 @@ bool ZoneServer::Process() {
 				}
 				break;
 			}
-			case ServerOP_GroupInvite: {
-				if(pack->size != sizeof(GroupInvite_Struct))
-					break;
-
-				GroupInvite_Struct* gis = (GroupInvite_Struct*) pack->pBuffer;
-
-				client_list.SendPacket(gis->invitee_name, pack);
-				break;
-			}
-			case ServerOP_GroupFollow: {
-				if(pack->size != sizeof(ServerGroupFollow_Struct))
-					break;
-
-				ServerGroupFollow_Struct *sgfs = (ServerGroupFollow_Struct *) pack->pBuffer;
-
-				client_list.SendPacket(sgfs->gf.name1, pack);
-				break;
-			}
-			case ServerOP_GroupFollowAck: {
-				if(pack->size != sizeof(ServerGroupFollowAck_Struct))
-					break;
-
-				ServerGroupFollowAck_Struct *sgfas = (ServerGroupFollowAck_Struct *) pack->pBuffer;
-
-				client_list.SendPacket(sgfas->Name, pack);
-				break;
-			}
-			case ServerOP_GroupCancelInvite: {
-				if(pack->size != sizeof(GroupCancel_Struct))
-					break;
-
-				GroupCancel_Struct *gcs = (GroupCancel_Struct *) pack->pBuffer;
-
-				client_list.SendPacket(gcs->name1, pack);
-				break;
-			}
-			case ServerOP_GroupIDReq: {
-				SendGroupIDs();
-				break;
-			}
-			case ServerOP_GroupLeave: {
-				if(pack->size != sizeof(ServerGroupLeave_Struct))
-					break;
-				zoneserver_list.SendPacket(pack); //bounce it to all zones
-				break;
-			}
-
-			case ServerOP_GroupJoin: {
-				if(pack->size != sizeof(ServerGroupJoin_Struct))
-					break;
-				zoneserver_list.SendPacket(pack); //bounce it to all zones
-				break;
-			}
-
-			case ServerOP_ForceGroupUpdate: {
-				if(pack->size != sizeof(ServerForceGroupUpdate_Struct))
-					break;
-				zoneserver_list.SendPacket(pack); //bounce it to all zones
-				break;
-			}
-
-			case ServerOP_OOZGroupMessage: {
-				zoneserver_list.SendPacket(pack); //bounce it to all zones
-				break;
-			}
-
-			case ServerOP_DisbandGroup: {
-				if(pack->size != sizeof(ServerDisbandGroup_Struct))
-					break;
-				zoneserver_list.SendPacket(pack); //bounce it to all zones
-				break;
-			}
-
-			case ServerOP_RaidAdd:{
-				if(pack->size != sizeof(ServerRaidGeneralAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_RaidRemove: {
-				if(pack->size != sizeof(ServerRaidGeneralAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_RaidDisband: {
-				if(pack->size != sizeof(ServerRaidGeneralAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_RaidLockFlag: {
-				if(pack->size != sizeof(ServerRaidGeneralAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_RaidChangeGroup: {
-				if(pack->size != sizeof(ServerRaidGeneralAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_UpdateGroup: {
-				if(pack->size != sizeof(ServerRaidGeneralAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_RaidGroupDisband: {
-				if(pack->size != sizeof(ServerRaidGeneralAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_RaidGroupAdd: {
-				if(pack->size != sizeof(ServerRaidGroupAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_RaidGroupRemove: {
-				if(pack->size != sizeof(ServerRaidGroupAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_RaidGroupSay: {
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_RaidSay: {
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_RaidGroupLeader: {
-				if(pack->size != sizeof(ServerRaidGeneralAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_RaidLeader: {
-				if(pack->size != sizeof(ServerRaidGeneralAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
-			case ServerOP_DetailsChange: {
-				if(pack->size != sizeof(ServerRaidGeneralAction_Struct))
-					break;
-
-				zoneserver_list.SendPacket(pack);
-				break;
-			}
-
+			
 			case ServerOP_SpawnCondition: {
 				if(pack->size != sizeof(ServerSpawnCondition_Struct))
 					break;
@@ -1365,14 +1189,6 @@ void ZoneServer::SendEmoteMessageRaw(const char* to, uint32 to_guilddbid, int16 
 	strcpy(&sem->message[0], message);
 
 	pack->Deflate();
-	SendPacket(pack);
-	delete pack;
-}
-
-void ZoneServer::SendGroupIDs() {
-	ServerPacket* pack = new ServerPacket(ServerOP_GroupIDReply, sizeof(ServerGroupIDReply_Struct));
-	ServerGroupIDReply_Struct* sgi = (ServerGroupIDReply_Struct*)pack->pBuffer;
-	zoneserver_list.NextGroupIDs(sgi->start, sgi->end);
 	SendPacket(pack);
 	delete pack;
 }
