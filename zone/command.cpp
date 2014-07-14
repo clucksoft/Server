@@ -452,7 +452,8 @@ int command_init(void) {
 		command_add("merchant_open_shop", "Opens a merchants shop", 100, command_merchantopenshop) ||
 		command_add("open_shop", nullptr, 100, command_merchantopenshop) ||
 		command_add("merchant_close_shop", "Closes a merchant shop", 100, command_merchantcloseshop) ||
-		command_add("close_shop", nullptr, 100, command_merchantcloseshop)
+		command_add("close_shop", nullptr, 100, command_merchantcloseshop) || 
+		command_add("merchantfilter", "Toggles server-side merchant item filtering by class usability.",0, command_merchantfilter)
 		)
 	{
 		command_deinit();
@@ -11543,4 +11544,14 @@ void command_merchantcloseshop(Client *c, const Seperator *sep)
 	}
 
 	merchant->CastToNPC()->MerchantCloseShop();
+}
+
+void command_merchantfilter(Client *c, const Seperator *sep) 
+{
+	bool filter = c->GetMerchantFilter() ? false : true;
+	c->SetMerchantFilter(filter);
+	if (filter) 
+		c->Message(0, "Now filtering merchant items by class usability.");
+	else
+		c->Message(0, "No longer filtering merchant items.");
 }
