@@ -384,7 +384,7 @@ public:
 	void	SendSingleTraderItem(uint32 char_id, int uniqueid);
 	void	BulkSendMerchantInventory(int merchant_id, int npcid);
   bool	GetMerchantFilter() { return merchant_filter; }
-	void	SetMerchantFilter(bool value) { merchant_filter = value; }
+  void	SetMerchantFilter(bool value) { merchant_filter = value; }
   
 	inline uint8	GetLanguageSkill(uint16 n)	const { return m_pp.languages[n]; }
 

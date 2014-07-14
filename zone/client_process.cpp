@@ -1001,7 +1001,7 @@ void Client::BulkSendMerchantInventory(int merchant_id, int npcid) {
 		item = database.GetItem(ml.item);
 		if(item) {
       if (item->Scroll.Effect && GetMerchantFilter() && this->HasSpellScribed(item->Scroll.Effect)) 
-				continue;
+        continue;
 			if(handychance==0)
 				handyitem=item;
 			else
