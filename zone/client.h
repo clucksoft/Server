@@ -1420,6 +1420,7 @@ private:
 
 
 	void	BulkSendInventoryItems();
+	
 	bool	merchant_filter = false;
   
 	faction_map factionvalues;

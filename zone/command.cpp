@@ -453,7 +453,7 @@ int command_init(void) {
 		command_add("open_shop", nullptr, 100, command_merchantopenshop) ||
 		command_add("merchant_close_shop", "Closes a merchant shop", 100, command_merchantcloseshop) ||
 		command_add("close_shop", nullptr, 100, command_merchantcloseshop) || 
-		command_add("merchantfilter", "Toggles server-side merchant item filtering by class usability.",0, command_merchantfilter)
+		command_add("merchantfilter", "Toggles server-side merchant item filtering by class and spellbook.",0, command_merchantfilter)
 		)
 	{
 		command_deinit();
@@ -11551,7 +11551,7 @@ void command_merchantfilter(Client *c, const Seperator *sep)
 	bool filter = c->GetMerchantFilter() ? false : true;
 	c->SetMerchantFilter(filter);
 	if (filter) 
-		c->Message(0, "Now filtering merchant items by class usability.");
+		c->Message(0, "Now filtering merchant items by class and scribed spells.");
 	else
 		c->Message(0, "No longer filtering merchant items.");
 }
