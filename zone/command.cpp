@@ -11548,7 +11548,7 @@ void command_merchantcloseshop(Client *c, const Seperator *sep)
 
 void command_merchantfilter(Client *c, const Seperator *sep) 
 {
-	bool filter = c->GetMerchantFilter() ? false : true;
+	bool filter = !c->GetMerchantFilter();
 	c->SetMerchantFilter(filter);
 	if (filter) 
 		c->Message(0, "Now filtering merchant items by class and scribed spells.");
